@@ -76,20 +76,27 @@
         </div>
     </div>
 
-    <!-- Islamic Screensaver (Hitam Pekat) -->
+    <!-- Islamic Screensaver (Hitam Pekat + Quotes) -->
     <div id="islamicScreensaver" class="hidden fixed inset-0 z-[9999] bg-black flex flex-col items-center justify-center overflow-hidden font-sans select-none transition-all duration-500 opacity-0">
         <button onclick="deactivateScreensaver()" class="absolute top-6 right-6 z-50 bg-slate-900/80 hover:bg-red-900/80 text-slate-400 hover:text-red-400 border border-slate-700 hover:border-red-500 px-4 py-2 rounded-xl text-xs font-mono-tech transition-all flex items-center gap-2 backdrop-blur-sm cursor-pointer shadow-lg">
             <i class="fa-solid fa-power-off"></i> Tutup
         </button>
 
-        <div class="z-10 text-center px-4 w-full flex flex-col items-center relative mt-8">
+        <div class="z-10 text-center px-4 w-full flex flex-col items-center relative mt-4">
             <h2 class="font-arabic text-4xl sm:text-6xl md:text-8xl text-yellow-400 mb-4 sm:mb-6" style="text-shadow: 0 0 15px rgba(234,179,8,0.8), 0 0 30px rgba(234,179,8,0.4);" dir="rtl">القرآن الكريم</h2>
-            <h3 class="font-arabic text-2xl sm:text-4xl md:text-5xl text-yellow-500 mb-8 sm:mb-12" style="text-shadow: 0 0 12px rgba(234,179,8,0.7), 0 0 20px rgba(234,179,8,0.3);" dir="rtl">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</h3>
+            <h3 class="font-arabic text-2xl sm:text-4xl md:text-5xl text-yellow-500 mb-6 sm:mb-8" style="text-shadow: 0 0 12px rgba(234,179,8,0.7), 0 0 20px rgba(234,179,8,0.3);" dir="rtl">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</h3>
             
             <div id="scClockDisplay" class="text-5xl sm:text-7xl md:text-9xl font-black font-mono-tech text-white tracking-wider filter drop-shadow-[0_0_15px_rgba(255,255,255,0.1)]">00:00:00</div>
-            <div id="scDateDisplay" class="text-[10px] sm:text-sm md:text-base font-mono-tech text-yellow-400 tracking-widest uppercase mt-6 border border-yellow-500/40 px-6 py-2.5 sm:px-8 sm:py-3 rounded-full bg-slate-900/60 backdrop-blur-md shadow-[0_0_15px_rgba(234,179,8,0.2)]">Memuat Kalender...</div>
+            <div id="scDateDisplay" class="text-[10px] sm:text-sm md:text-base font-mono-tech text-yellow-400 tracking-widest uppercase mt-4 border border-yellow-500/40 px-6 py-2.5 sm:px-8 sm:py-3 rounded-full bg-slate-900/60 backdrop-blur-md shadow-[0_0_15px_rgba(234,179,8,0.2)]">Memuat Kalender...</div>
             
-            <div class="mt-12 sm:mt-16 text-slate-400 font-mono-tech text-[9px] sm:text-[11px] tracking-[0.2em] sm:tracking-[0.3em] uppercase animate-pulse px-4">
+            <!-- Tampilan Quotes Glow Statis pada Screensaver -->
+            <div class="mt-8 sm:mt-10 max-w-2xl w-[90%] border border-yellow-500/30 rounded-2xl p-5 sm:p-6 bg-slate-900/50 backdrop-blur-md shadow-[0_0_20px_rgba(234,179,8,0.15)] relative animate-gold-glow-box">
+                <i class="fa-solid fa-quote-left text-yellow-600/40 text-2xl sm:text-3xl absolute top-3 left-4"></i>
+                <p id="screensaverQuoteText" class="text-yellow-100 text-xs sm:text-sm md:text-base font-medium italic leading-relaxed animate-gold-text-glow relative z-10 px-4 sm:px-8 transition-opacity duration-300">Memuat mutiara hikmah...</p>
+                <i class="fa-solid fa-quote-right text-yellow-600/40 text-2xl sm:text-3xl absolute bottom-3 right-4"></i>
+            </div>
+
+            <div class="mt-10 sm:mt-12 text-slate-400 font-mono-tech text-[9px] sm:text-[11px] tracking-[0.2em] sm:tracking-[0.3em] uppercase animate-pulse px-4">
                 <i class="fa-solid fa-keyboard mr-1"></i> Sentuh Layar / Gerakkan Kursor untuk Kembali
             </div>
         </div>
@@ -112,7 +119,7 @@
                 <div class="text-center lg:text-left">
                     <h1 class="text-lg md:text-xl font-bold tracking-wide flex items-center justify-center lg:justify-start gap-2">
                         Al-Qur'an Digital Pro 
-                        <span class="text-[9px] md:text-xs bg-teal-700 dark:bg-slate-800 px-1.5 py-0.5 rounded border border-teal-500/40 text-yellow-400 font-sans font-bold">Versi 1.6</span>
+                        <span class="text-[9px] md:text-xs bg-teal-700 dark:bg-slate-800 px-1.5 py-0.5 rounded border border-teal-500/40 text-yellow-400 font-sans font-bold">Versi 1.7</span>
                     </h1>
                     <p class="text-[10px] md:text-xs text-teal-100 opacity-80 dark:text-slate-400 font-mono-tech">Core-Repository Database Offline</p>
                 </div>
@@ -254,7 +261,7 @@
         </div>
     </div>
 
-    <!-- HELP & METRIC MODAL (FULL VERSION RESTORED) -->
+    <!-- HELP & METRIC MODAL -->
     <div id="helpModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[10005] flex items-center justify-center p-4 hidden">
         <div class="bg-slate-900 border-2 border-teal-500 p-5 sm:p-6 rounded-2xl max-w-4xl w-full flex flex-col gap-4 max-h-[90vh] overflow-hidden shadow-2xl relative">
             <div class="flex justify-between items-center border-b-2 border-slate-800 pb-3 select-none shrink-0 mt-2 sm:mt-0">
@@ -317,19 +324,20 @@
     </div>
 
     <!-- Floating Quote Widget -->
-    <div id="floatingQuoteWidget" class="hidden fixed bottom-20 left-1/2 transform -translate-x-1/2 z-[90] w-[90%] max-w-sm sm:w-96 bg-slate-900/95 backdrop-blur-md p-4 rounded-2xl border-2 border-yellow-600 shadow-2xl flex flex-col gap-3 transition-all animate-gold-glow-box" title="Widget Kutipan Acak">
-        <div class="flex justify-between items-center border-b border-slate-800 pb-2">
-            <h3 class="text-[10px] sm:text-[11px] font-bold text-yellow-400 uppercase tracking-wider flex items-center gap-1.5 font-mono-tech">
-                <i class="fa-solid fa-kaaba text-yellow-500"></i> Mutiara Kearifan Islami
+    <div id="floatingQuoteWidget" class="hidden fixed top-[65%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-[90] w-[90%] max-w-md sm:max-w-lg bg-slate-900/95 backdrop-blur-md p-5 rounded-2xl border-2 border-yellow-600 shadow-2xl flex-col gap-4 transition-all animate-gold-glow-box" title="Widget Kutipan Acak">
+        <div class="flex justify-between items-center border-b border-slate-800 pb-2.5">
+            <h3 class="text-[11px] sm:text-xs font-bold text-yellow-400 uppercase tracking-wider flex items-center gap-2 font-mono-tech">
+                <i class="fa-solid fa-kaaba text-yellow-500 text-sm"></i> Mutiara Kearifan Islami
             </h3>
-            <div class="flex items-center gap-1 text-[10px] sm:text-xs font-mono-tech">
-                <button onclick="navigateQuote(-1)" class="px-2 py-0.5 bg-slate-800 hover:bg-slate-700 text-yellow-400 rounded cursor-pointer transition-all border border-slate-700 shadow-xs">&lt;</button>
-                <button onclick="navigateQuote(1)" class="px-2 py-0.5 bg-slate-800 hover:bg-slate-700 text-yellow-400 rounded cursor-pointer transition-all border border-slate-700 shadow-xs">&gt;</button>
-                <button onclick="toggleFloatingQuotes()" class="ml-1 sm:ml-2 text-slate-400 hover:text-red-500 px-1.5 py-0.5 cursor-pointer rounded-sm bg-slate-800 border border-slate-700 transition-colors"><i class="fa-solid fa-xmark"></i></button>
+            <div class="flex items-center gap-1.5 text-[10px] sm:text-xs font-mono-tech">
+                <span class="hidden sm:inline text-slate-500 mr-2 tracking-widest text-[9px]">Ganti: <i class="fa-solid fa-arrows-left-right mx-1"></i></span>
+                <button onclick="navigateQuote(-1)" class="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-yellow-400 rounded cursor-pointer transition-all border border-slate-700 shadow-xs">&lt;</button>
+                <button onclick="navigateQuote(1)" class="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-yellow-400 rounded cursor-pointer transition-all border border-slate-700 shadow-xs">&gt;</button>
+                <button onclick="toggleFloatingQuotes()" class="ml-1 sm:ml-2 text-slate-400 hover:text-red-500 px-2 py-1 cursor-pointer rounded-sm bg-slate-800 border border-slate-700 transition-colors"><i class="fa-solid fa-xmark"></i></button>
             </div>
         </div>
-        <div class="min-h-[70px] flex items-center justify-center text-center px-1">
-            <p id="dashboardQuoteText" class="quote-fade text-xs sm:text-sm font-medium italic leading-relaxed animate-gold-text-glow">Memuat data kutipan rohani...</p>
+        <div class="min-h-[80px] flex items-center justify-center text-center px-2">
+            <p id="dashboardQuoteText" class="quote-fade text-sm sm:text-base font-medium italic leading-relaxed animate-gold-text-glow">Memuat data kutipan rohani...</p>
         </div>
     </div>
 
@@ -346,7 +354,6 @@
                     </div>
                     <button onclick="toggleChatWindow()" class="text-slate-400 hover:text-white cursor-pointer text-xs p-1"><i class="fa-solid fa-xmark"></i></button>
                 </div>
-                <!-- PANEL WAKTU CHAT DIKEMBALIKAN DISINI -->
                 <div class="flex flex-col sm:flex-row justify-between items-center bg-slate-950/90 px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-xl border border-teal-500/40 font-mono-tech gap-1 shadow-inner mt-2">
                     <span id="chat-top-day" class="text-slate-200 text-[10px] sm:text-[11px] font-bold tracking-wide">Memuat Hari...</span>
                     <span id="chat-top-clock" class="text-xs sm:text-sm font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-teal-300 to-emerald-400 filter drop-shadow-[0_0_8px_rgba(34,211,238,0.4)]">00:00:00</span>
@@ -363,12 +370,13 @@
             <div id="chat-suggestions" class="hidden mx-2 p-1 bg-slate-950 border border-slate-800 rounded-lg max-h-24 overflow-y-auto custom-scroll font-mono-tech text-[10px] sm:text-[11px] space-y-0.5 z-50"></div>
 
             <div class="p-2 bg-slate-900 border-t border-slate-800 flex gap-1.5 overflow-x-auto custom-scroll shrink-0">
-                <button onclick="triggerChatShortcut('help')" class="whitespace-nowrap px-2 py-1 bg-slate-950 hover:bg-emerald-950 text-emerald-400 text-[9px] sm:text-[10px] rounded border border-emerald-900 font-bold cursor-pointer">Help System</button>
-                <button onclick="triggerChatShortcut('cari_surah')" class="whitespace-nowrap px-2 py-1 bg-slate-950 hover:bg-blue-950 text-blue-400 text-[9px] sm:text-[10px] rounded border border-blue-900 font-bold cursor-pointer">Cari Surah</button>
+                <button onclick="triggerChatShortcut('help')" class="whitespace-nowrap px-2 py-1 bg-slate-950 hover:bg-emerald-950 text-emerald-400 text-[9px] sm:text-[10px] rounded border border-emerald-900 font-bold cursor-pointer"><i class="fa-solid fa-circle-question mr-1"></i> Help System</button>
+                <button onclick="triggerChatShortcut('cari_surah')" class="whitespace-nowrap px-2 py-1 bg-slate-950 hover:bg-blue-950 text-blue-400 text-[9px] sm:text-[10px] rounded border border-blue-900 font-bold cursor-pointer"><i class="fa-solid fa-magnifying-glass mr-1"></i> Cari Surah</button>
+                <button onclick="triggerChatShortcut('programmer')" class="whitespace-nowrap px-2 py-1 bg-fuchsia-950 hover:bg-fuchsia-900 text-fuchsia-400 text-[9px] sm:text-[10px] rounded border border-fuchsia-800 font-black cursor-pointer"><i class="fa-solid fa-code mr-1"></i> Data Programmer</button>
             </div>
 
             <div class="p-2 bg-slate-900 border-t border-slate-800 flex gap-1.5">
-                <input type="text" id="chatInput" oninput="showChatInputSuggestions()" onkeydown="if(event.key==='Enter') processChatMessage()" placeholder="Ketik nama surah..." class="flex-1 bg-slate-950 border border-slate-700 rounded-lg p-2 text-[11px] sm:text-xs text-white focus:outline-none focus:border-cyan-400 font-mono-tech">
+                <input type="text" id="chatInput" oninput="showChatInputSuggestions()" onkeydown="if(event.key==='Enter') processChatMessage()" placeholder="Ketik nama surah atau 'programmer'..." class="flex-1 bg-slate-950 border border-slate-700 rounded-lg p-2 text-[11px] sm:text-xs text-white focus:outline-none focus:border-cyan-400 font-mono-tech">
                 <button onclick="processChatMessage()" class="bg-teal-700 hover:bg-teal-600 text-white px-3 sm:px-4 rounded-lg text-xs font-bold cursor-pointer flex items-center justify-center"><i class="fa-solid fa-paper-plane"></i></button>
             </div>
         </div>
@@ -411,6 +419,30 @@
                 </div>
                 <h3 class="text-yellow-400 text-lg sm:text-xl font-extrabold tracking-wide uppercase font-mono-tech filter drop-shadow-[0_0_4px_rgba(234,179,8,0.5)]">MOHAMAD HARTADI (ADI)</h3>
                 <p class="text-slate-400 text-[10px] sm:text-[11px] tracking-wide font-sans mt-0.5 mb-4 sm:mb-5">Geotechnical & Hydraulic Lead System Architecture</p>
+                
+                <div class="w-full bg-[#070b16] border border-slate-800/80 rounded-xl p-4 text-left space-y-3 sm:space-y-4">
+                    <div class="flex items-start gap-3 group">
+                        <div class="text-blue-500 mt-1"><i class="fa-brands fa-facebook text-xl sm:text-2xl"></i></div>
+                        <div class="flex-1">
+                            <span class="text-slate-500 block text-[8px] sm:text-[9px] font-bold tracking-widest uppercase font-sans">PROFIL FACEBOOK RESMI</span>
+                            <a href="https://web.facebook.com/m.hartadi/" target="_blank" class="text-cyan-400 hover:text-cyan-300 font-bold text-xs sm:text-sm underline break-all">facebook.com/m.hartadi/</a>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-3 group">
+                        <div class="text-amber-500 mt-1"><i class="fa-solid fa-globe text-lg sm:text-xl"></i></div>
+                        <div class="flex-1">
+                            <span class="text-slate-500 block text-[8px] sm:text-[9px] font-bold tracking-widest uppercase font-sans">PLATFORM BLOG ILMU HIDROLIKA</span>
+                            <a href="https://newbieonline7.blogspot.com/" target="_blank" class="text-amber-400 hover:text-amber-300 font-bold text-xs sm:text-sm underline break-all tracking-wide">newbieonline7.blogspot.com</a>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-3 group">
+                        <div class="text-emerald-500 mt-1"><i class="fa-brands fa-whatsapp text-xl sm:text-2xl"></i></div>
+                        <div class="flex-1">
+                            <span class="text-slate-500 block text-[8px] sm:text-[9px] font-bold tracking-widest uppercase font-sans">KONTAK ENKRIPSI WHATSAPP</span>
+                            <a href="https://wa.me/6282231036047" target="_blank" class="text-emerald-400 font-bold text-xs sm:text-sm underline">082231036047</a>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -436,7 +468,10 @@
 
         const baseQuotes = [
             "\"Maka sesungguhnya beserta kesulitan ada kemudahan.\" (QS. Al-Insyirah: 5)",
-            "\"Cukuplah Allah bagi kami, dan Dia adalah sebaik-baik pelindung.\" (QS. Ali 'Imran: 173)"
+            "\"Cukuplah Allah bagi kami, dan Dia adalah sebaik-baik pelindung.\" (QS. Ali 'Imran: 173)",
+            "\"Janganlah kamu berduka cita, sesungguhnya Allah beserta kita.\" (QS. At-Taubah: 40)",
+            "\"Allah tidak membebani seseorang melainkan sesuai dengan kesanggupannya.\" (QS. Al-Baqarah: 286)",
+            "\"Barangsiapa bertakwa kepada Allah niscaya Dia akan membukakan jalan keluar baginya.\" (QS. At-Talaq: 2)"
         ];
 
         let islamicQuotesDB = [];
@@ -535,6 +570,27 @@
         document.onclick = resetIdleTimer;
         document.ontouchstart = resetIdleTimer;
 
+        // --- SISTEM NAVIGASI KEYBOARD UNTUK QUOTES ---
+        document.addEventListener('keydown', function(event) {
+            // Hindari memicu navigasi saat pengguna mengetik di input form/chat
+            if (event.target.tagName === 'INPUT' || event.target.tagName === 'TEXTAREA') return;
+            
+            const quoteWidget = document.getElementById('floatingQuoteWidget');
+            // Cek apabila widget sedang terbuka atau screensaver sedang menyala
+            if ((quoteWidget && !quoteWidget.classList.contains('hidden')) || isScreensaverActive) {
+                if (event.key === 'ArrowLeft') {
+                    navigateQuote(-1);
+                } else if (event.key === 'ArrowRight') {
+                    navigateQuote(1);
+                }
+            }
+        });
+
+        // --- ROTASI QUOTE OTOMATIS GLOBAL (SETIAP 20 DETIK) ---
+        setInterval(() => {
+            navigateQuote(1);
+        }, 20000);
+
         function bindAudioHighlightAndScrollEffect(audioEngine) {
             const boxes = document.querySelectorAll('[id^="ayat-box-"]');
             audioEngine.onplay = () => {
@@ -588,7 +644,6 @@
             lastActiveIndex = -1;
         }
 
-        // --- SISTEM PEMBARUAN WAKTU DIPERBAIKI ---
         function updateDateTime() {
             const sekarang = new Date();
             const daysArr = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
@@ -596,7 +651,6 @@
             const dayStr = `${daysArr[sekarang.getDay()]}, ${sekarang.getDate().toString().padStart(2, '0')} ${monthsArr[sekarang.getMonth()]} ${sekarang.getFullYear()}`;
             const timeStr = `${sekarang.getHours().toString().padStart(2, '0')}:${sekarang.getMinutes().toString().padStart(2, '0')}:${sekarang.getSeconds().toString().padStart(2, '0')}`;
             
-            // Penggunaan pengecekan element (null safety) untuk menghindari crash interval Javascript
             const elDashDate = document.getElementById('dashboard-date');
             if (elDashDate) elDashDate.innerText = dayStr;
             
@@ -616,7 +670,6 @@
             if (elScDate) elScDate.innerText = dayStr + " | Waktu Lokal";
         }
         
-        // Memanggil fungsi pertama kali agar tidak menunggu 1 detik terlebih dahulu
         updateDateTime(); 
         setInterval(updateDateTime, 1000);
 
@@ -634,14 +687,22 @@
             document.documentElement.classList.add('dark'); document.getElementById('theme-icon').innerText = '☀️';
         } else { document.documentElement.classList.remove('dark'); document.getElementById('theme-icon').innerText = '🌙'; }
 
+        // --- SISTEM PEMBARUAN QUOTES (TERMASUK SCREENSAVER SINKRONISASI) ---
         function updateDashboardQuote() {
             if(islamicQuotesDB.length === 0) return;
             const textEl = document.getElementById('dashboardQuoteText');
+            const scTextEl = document.getElementById('screensaverQuoteText');
+            
             if(textEl) {
                 textEl.classList.add('quote-hidden');
+                if(scTextEl) scTextEl.classList.add('opacity-0');
+                
                 setTimeout(() => {
                     textEl.innerText = islamicQuotesDB[currentQuoteIndex];
+                    if(scTextEl) scTextEl.innerText = islamicQuotesDB[currentQuoteIndex];
+                    
                     textEl.classList.remove('quote-hidden');
+                    if(scTextEl) scTextEl.classList.remove('opacity-0');
                 }, 300);
             }
         }
@@ -675,6 +736,13 @@
                     renderSidebarMenu(allSurahData);
                     document.getElementById('surah-counter').innerText = `${allSurahData.length}/114`;
                     updateDashboardQuote();
+
+                    // --- OTOMATIS TAMPILKAN WIDGET QUOTES DI AWAL ---
+                    const quoteWidget = document.getElementById('floatingQuoteWidget');
+                    if (quoteWidget) {
+                        quoteWidget.classList.remove('hidden');
+                        quoteWidget.classList.add('flex');
+                    }
                 }, 500);
             } catch (error) { document.getElementById('globalAppLoader').innerHTML = `<p class="text-red-500 font-mono-tech">⚠️ Gagal sinkronisasi data.</p>`; }
         }
@@ -729,7 +797,6 @@
             renderSurahList(filtered);
         }
 
-        /* ----- SISTEM PENANDA TERAKHIR DIBACA (BOOKMARK) ----- */
         function handlePressStart(surahNo, ayatNo) {
             longPressTimer = setTimeout(() => { showBookmarkAction(surahNo, ayatNo); }, 500);
         }
@@ -793,7 +860,6 @@
                 }
             }, 600);
         }
-        /* ----------------------------------------------------- */
 
         function openSurah(nomorSurah) {
             const surah = allSurahData.find(s => s.nomor == nomorSurah);
@@ -887,6 +953,32 @@
             } else { chatSuggestionBox.classList.add('hidden'); }
         }
 
+        function triggerChatShortcut(type) {
+            if(type === 'help') {
+                insertBotReply("<strong>[HELP ADAPTIF]:</strong> Gunakan bilah menu 114 surah di kiri melayang atau ketik langsung nama surah di kolom input chat untuk mencarinya.");
+            } else if(type === 'programmer') {
+                let profilePayload = `
+                    <div class="bg-[#0b1224] border-2 border-yellow-500 rounded-xl p-3 text-slate-200 shadow-xl animate-gold-glow-box">
+                        <div class="flex items-center gap-2 text-yellow-500 font-extrabold font-mono-tech text-[10px] tracking-wider mb-2 uppercase">
+                            <span>&lt;/&gt;</span>
+                            <span>VERIFIED DEVELOPER CREDENTIALS:</span>
+                        </div>
+                        <strong class="text-white text-[13px] sm:text-base block font-bold tracking-wide mb-1 uppercase font-mono-tech">MOHAMAD HARTADI (ADI)</strong>
+                        <p class="text-slate-400 text-[9px] sm:text-[10px] font-sans mb-2 border-b border-slate-800 pb-1">Geotechnical & Hydraulic Lead System Architecture</p>
+                        <div class="space-y-1.5 font-sans text-[11px] sm:text-xs text-slate-300">
+                            <p>💼 <b>Profesi:</b> Geotechnical & Structural Analyst / Dev</p>
+                            <p>🌐 <b>Blog:</b> <a href="https://newbieonline7.blogspot.com/" target="_blank" class="text-amber-400 underline font-bold break-all">newbieonline7.blogspot.com</a></p>
+                            <p>🔵 <b>FB:</b> <a href="https://web.facebook.com/m.hartadi/" target="_blank" class="text-cyan-400 underline font-bold">facebook.com/m.hartadi/</a></p>
+                            <p>📱 <b>WhatsApp:</b> <a href="https://wa.me/6282231036047" target="_blank" class="text-emerald-400 font-bold underline">082231036047</a></p>
+                        </div>
+                    </div>
+                `;
+                insertBotReply(profilePayload);
+            } else if(type === 'cari_surah') {
+                insertBotReply("Ketikkan langsung kata kunci nama surah yang Anda tuju pada kolom teks chat ini.");
+            }
+        }
+
         function processChatMessage() {
             const el = document.getElementById('chatInput');
             const txt = el.value.trim();
@@ -898,35 +990,39 @@
             const textLower = txt.toLowerCase();
             
             setTimeout(() => { 
-                const cleanQuery = textLower.replace('surah', '').trim();
-                const foundSurah = allSurahData.find(s => 
-                    s.nama.toLowerCase().includes(cleanQuery) || s.arti.toLowerCase().includes(cleanQuery)
-                );
-
-                if (foundSurah) {
-                    let surahCardPayload = `
-                        <div class="bg-slate-900 border border-teal-500 rounded-xl p-3 space-y-2.5 shadow-md font-sans text-[11px] sm:text-xs">
-                            <div class="flex justify-between items-center border-b border-slate-800 pb-1.5">
-                                <span class="bg-teal-950 text-teal-400 font-mono-tech font-bold px-2 py-0.5 rounded text-[9px] sm:text-[10px]">${foundSurah.nomor}</span>
-                                <span class="font-arabic text-yellow-500 font-bold text-base sm:text-lg">${foundSurah.asma}</span>
-                            </div>
-                            <div>
-                                <h5 class="text-white font-bold text-xs sm:text-sm font-mono-tech">${foundSurah.nama}</h5>
-                                <p class="text-[10px] sm:text-[11px] text-slate-400">${foundSurah.arti} • ${foundSurah.type} (${foundSurah.ayat.length} Ayat)</p>
-                            </div>
-                            <div class="grid grid-cols-2 gap-2 pt-1 font-mono-tech">
-                                <button onclick="openSurah(${foundSurah.nomor}); toggleChatWindow();" class="py-1.5 bg-teal-700 hover:bg-teal-600 text-white font-bold rounded-lg text-[9px] sm:text-[10px] cursor-pointer text-center transition-colors">
-                                    <i class="fa-solid fa-book-open mr-1"></i> Buka Surah
-                                </button>
-                                <button onclick="playSurahAudio('${foundSurah.audio}', '${foundSurah.nama}', ${foundSurah.nomor});" class="py-1.5 bg-yellow-500 hover:bg-yellow-400 text-slate-950 font-bold rounded-lg text-[9px] sm:text-[10px] cursor-pointer text-center transition-colors">
-                                    <i class="fa-solid fa-play mr-1"></i> Murottal
-                                </button>
-                            </div>
-                        </div>
-                    `;
-                    insertBotReply(`Sistem mendeteksi Surah yang Anda tuju: ${surahCardPayload}`);
+                if (textLower.includes('programmer') || textLower.includes('hartadi') || textLower.includes('dev') || textLower.includes('kredit')) {
+                    triggerChatShortcut('programmer');
                 } else {
-                    insertBotReply("Surah tidak ditemukan. Coba ketikkan nama surah secara spesifik (contoh: *Al-Fatihah* atau *Al-Mulk*)."); 
+                    const cleanQuery = textLower.replace('surah', '').trim();
+                    const foundSurah = allSurahData.find(s => 
+                        s.nama.toLowerCase().includes(cleanQuery) || s.arti.toLowerCase().includes(cleanQuery)
+                    );
+
+                    if (foundSurah) {
+                        let surahCardPayload = `
+                            <div class="bg-slate-900 border border-teal-500 rounded-xl p-3 space-y-2.5 shadow-md font-sans text-[11px] sm:text-xs">
+                                <div class="flex justify-between items-center border-b border-slate-800 pb-1.5">
+                                    <span class="bg-teal-950 text-teal-400 font-mono-tech font-bold px-2 py-0.5 rounded text-[9px] sm:text-[10px]">${foundSurah.nomor}</span>
+                                    <span class="font-arabic text-yellow-500 font-bold text-base sm:text-lg">${foundSurah.asma}</span>
+                                </div>
+                                <div>
+                                    <h5 class="text-white font-bold text-xs sm:text-sm font-mono-tech">${foundSurah.nama}</h5>
+                                    <p class="text-[10px] sm:text-[11px] text-slate-400">${foundSurah.arti} • ${foundSurah.type} (${foundSurah.ayat.length} Ayat)</p>
+                                </div>
+                                <div class="grid grid-cols-2 gap-2 pt-1 font-mono-tech">
+                                    <button onclick="openSurah(${foundSurah.nomor}); toggleChatWindow();" class="py-1.5 bg-teal-700 hover:bg-teal-600 text-white font-bold rounded-lg text-[9px] sm:text-[10px] cursor-pointer text-center transition-colors">
+                                        <i class="fa-solid fa-book-open mr-1"></i> Buka Surah
+                                    </button>
+                                    <button onclick="playSurahAudio('${foundSurah.audio}', '${foundSurah.nama}', ${foundSurah.nomor});" class="py-1.5 bg-yellow-500 hover:bg-yellow-400 text-slate-950 font-bold rounded-lg text-[9px] sm:text-[10px] cursor-pointer text-center transition-colors">
+                                        <i class="fa-solid fa-play mr-1"></i> Murottal
+                                    </button>
+                                </div>
+                            </div>
+                        `;
+                        insertBotReply(`Sistem mendeteksi Surah yang Anda tuju: ${surahCardPayload}`);
+                    } else {
+                        insertBotReply("Surah tidak ditemukan. Coba ketikkan nama surah secara spesifik (contoh: *Al-Fatihah* atau *Al-Mulk*)."); 
+                    }
                 }
             }, 250);
             el.value = '';
