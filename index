@@ -47,31 +47,6 @@
         }
         .animate-gold-text-glow { animation: gold-text-glow 3s infinite ease-in-out; }
 
-        /* Screensaver Visuals: Black Background, Stars, Multiple Comets */
-        .stars {
-            background: transparent url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="3" height="3"><circle cx="1.5" cy="1.5" r="1.5" fill="%23ffffff" opacity="0.6"/></svg>') repeat top center;
-            animation: twinkle 4s infinite alternate;
-        }
-        @keyframes twinkle { 0% { opacity: 0.2; } 100% { opacity: 1; } }
-
-        @keyframes cometFall {
-            0% { transform: translate(100vw, -20vh) rotate(45deg); opacity: 1; }
-            100% { transform: translate(-20vw, 120vh) rotate(45deg); opacity: 0; }
-        }
-        
-        .comet {
-            position: absolute; height: 2px;
-            background: linear-gradient(90deg, rgba(255,255,255,1) 0%, rgba(255,255,255,0) 100%);
-            box-shadow: 0 0 20px 2px rgba(255, 255, 255, 0.6);
-            animation: cometFall linear infinite;
-        }
-        
-        .c1 { width: 150px; top: -10%; left: 80%; animation-duration: 5s; animation-delay: 0s; }
-        .c2 { width: 100px; top: -20%; left: 40%; animation-duration: 7s; animation-delay: 2s; }
-        .c3 { width: 180px; top: -5%; left: 60%; animation-duration: 6s; animation-delay: 4.5s; }
-        .c4 { width: 120px; top: -30%; left: 90%; animation-duration: 8s; animation-delay: 1.5s; }
-        .c5 { width: 90px; top: 10%; left: 100%; animation-duration: 4.5s; animation-delay: 6s; }
-
         .audio-active-highlight {
             border-color: #14b8a6 !important;
             background-color: rgba(20, 184, 166, 0.08) !important;
@@ -89,11 +64,11 @@
     <!-- Global App Loader -->
     <div id="globalAppLoader" class="fixed inset-0 z-[10000] bg-slate-950 flex flex-col items-center justify-center transition-opacity duration-700 ease-in-out">
         <div class="relative flex flex-col items-center max-w-md px-6 text-center">
-            <div class="w-28 h-28 mb-6 rounded-full border border-yellow-500/30 flex items-center justify-center relative bg-slate-900 shadow-[0_0_40px_rgba(234,179,8,0.15)]">
+            <div class="w-24 h-24 md:w-28 md:h-28 mb-6 rounded-full border border-yellow-500/30 flex items-center justify-center relative bg-slate-900 shadow-[0_0_40px_rgba(234,179,8,0.15)]">
                 <div class="absolute inset-0 rounded-full border-2 border-yellow-500 border-t-transparent animate-spin" style="animation-duration: 3s;"></div>
-                <i class="fa-solid fa-book-quran text-yellow-500 text-5xl animate-gold-glow"></i>
+                <i class="fa-solid fa-book-quran text-yellow-500 text-4xl md:text-5xl animate-gold-glow"></i>
             </div>
-            <h2 class="font-arabic text-3xl md:text-4xl text-yellow-500 mb-3 tracking-wide animate-gold-glow select-none" dir="rtl">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</h2>
+            <h2 class="font-arabic text-2xl md:text-4xl text-yellow-500 mb-3 tracking-wide animate-gold-glow select-none" dir="rtl">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</h2>
             <p id="loaderStatusText" class="font-mono-tech text-xs text-cyan-400 tracking-widest animate-pulse mt-2">&gt;_ MEMUAT DATABASE MUSHAF DIGITAL</p>
             <div class="w-56 h-1 bg-slate-800 mt-6 rounded-full overflow-hidden relative">
                 <div id="loaderProgressBar" class="h-full bg-gradient-to-r from-yellow-500 to-cyan-500 w-0 transition-all duration-300"></div>
@@ -101,76 +76,72 @@
         </div>
     </div>
 
-    <!-- Islamic Screensaver -->
+    <!-- Islamic Screensaver (Hitam Pekat) -->
     <div id="islamicScreensaver" class="hidden fixed inset-0 z-[9999] bg-black flex flex-col items-center justify-center overflow-hidden font-sans select-none transition-all duration-500 opacity-0">
-        <div class="stars absolute inset-0"></div>
-        <div class="comet c1"></div>
-        <div class="comet c2"></div>
-        <div class="comet c3"></div>
-        <div class="comet c4"></div>
-        <div class="comet c5"></div>
-
         <button onclick="deactivateScreensaver()" class="absolute top-6 right-6 z-50 bg-slate-900/80 hover:bg-red-900/80 text-slate-400 hover:text-red-400 border border-slate-700 hover:border-red-500 px-4 py-2 rounded-xl text-xs font-mono-tech transition-all flex items-center gap-2 backdrop-blur-sm cursor-pointer shadow-lg">
-            <i class="fa-solid fa-power-off"></i> Tutup Screensaver
+            <i class="fa-solid fa-power-off"></i> Tutup
         </button>
 
-        <div class="z-10 text-center px-6 max-w-2xl flex flex-col items-center relative mt-8">
-            <h2 class="font-arabic text-6xl md:text-8xl text-yellow-400 mb-6" style="text-shadow: 0 0 15px rgba(234,179,8,0.8), 0 0 30px rgba(234,179,8,0.4);" dir="rtl">القرآن الكريم</h2>
-            <h3 class="font-arabic text-4xl md:text-5xl text-yellow-500 mb-12" style="text-shadow: 0 0 12px rgba(234,179,8,0.7), 0 0 20px rgba(234,179,8,0.3);" dir="rtl">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</h3>
+        <div class="z-10 text-center px-4 w-full flex flex-col items-center relative mt-8">
+            <h2 class="font-arabic text-4xl sm:text-6xl md:text-8xl text-yellow-400 mb-4 sm:mb-6" style="text-shadow: 0 0 15px rgba(234,179,8,0.8), 0 0 30px rgba(234,179,8,0.4);" dir="rtl">القرآن الكريم</h2>
+            <h3 class="font-arabic text-2xl sm:text-4xl md:text-5xl text-yellow-500 mb-8 sm:mb-12" style="text-shadow: 0 0 12px rgba(234,179,8,0.7), 0 0 20px rgba(234,179,8,0.3);" dir="rtl">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</h3>
             
-            <div id="scClockDisplay" class="text-7xl md:text-9xl font-black font-mono-tech text-transparent bg-clip-text bg-gradient-to-b from-white via-slate-200 to-slate-400 tracking-wider filter drop-shadow-[0_0_25px_rgba(255,255,255,0.3)]">00:00:00</div>
-            <div id="scDateDisplay" class="text-sm md:text-base font-mono-tech text-yellow-400 tracking-widest uppercase mt-6 border border-yellow-500/40 px-8 py-3 rounded-full bg-slate-900/60 backdrop-blur-md shadow-[0_0_15px_rgba(234,179,8,0.2)]">Memuat Kalender...</div>
+            <div id="scClockDisplay" class="text-5xl sm:text-7xl md:text-9xl font-black font-mono-tech text-white tracking-wider filter drop-shadow-[0_0_15px_rgba(255,255,255,0.1)]">00:00:00</div>
+            <div id="scDateDisplay" class="text-[10px] sm:text-sm md:text-base font-mono-tech text-yellow-400 tracking-widest uppercase mt-6 border border-yellow-500/40 px-6 py-2.5 sm:px-8 sm:py-3 rounded-full bg-slate-900/60 backdrop-blur-md shadow-[0_0_15px_rgba(234,179,8,0.2)]">Memuat Kalender...</div>
             
-            <div class="mt-16 text-slate-400 font-mono-tech text-[11px] tracking-[0.3em] uppercase animate-pulse">
+            <div class="mt-12 sm:mt-16 text-slate-400 font-mono-tech text-[9px] sm:text-[11px] tracking-[0.2em] sm:tracking-[0.3em] uppercase animate-pulse px-4">
                 <i class="fa-solid fa-keyboard mr-1"></i> Sentuh Layar / Gerakkan Kursor untuk Kembali
             </div>
         </div>
     </div>
 
     <!-- Audio Player Widget -->
-    <div id="audioPlayerWidget" class="fixed top-20 left-1/2 transform -translate-x-1/2 z-[100] bg-slate-900 border border-teal-500 p-2 rounded-full shadow-[0_0_20px_rgba(20,184,166,0.3)] hidden items-center gap-3 animate-cyber-glow" title="Pemutar Murottal Interaktif">
-        <div class="bg-teal-800 text-white px-4 py-1.5 rounded-full text-xs font-bold whitespace-nowrap min-w-[120px] text-center shadow-inner" id="audioSurahTitle">Murottal</div>
-        <audio id="globalAudio" controls class="h-8 outline-none rounded-full"></audio>
-        <button onclick="closeAudioPlayer()" class="w-8 h-8 bg-slate-800 hover:bg-red-500 text-slate-300 hover:text-white border border-slate-700 hover:border-red-400 rounded-full flex items-center justify-center cursor-pointer shadow-md transition-colors" title="Tutup Audio">
+    <div id="audioPlayerWidget" class="fixed top-24 lg:top-20 left-1/2 transform -translate-x-1/2 z-[100] bg-slate-900 border border-teal-500 p-2 rounded-full shadow-[0_0_20px_rgba(20,184,166,0.3)] hidden items-center gap-3 animate-cyber-glow w-[90%] max-w-md sm:w-auto" title="Pemutar Murottal Interaktif">
+        <div class="bg-teal-800 text-white px-3 py-1.5 rounded-full text-[10px] sm:text-xs font-bold whitespace-nowrap min-w-[80px] sm:min-w-[120px] text-center shadow-inner overflow-hidden text-ellipsis" id="audioSurahTitle">Murottal</div>
+        <audio id="globalAudio" controls class="h-8 outline-none rounded-full flex-1 w-full"></audio>
+        <button onclick="closeAudioPlayer()" class="w-8 h-8 shrink-0 bg-slate-800 hover:bg-red-500 text-slate-300 hover:text-white border border-slate-700 hover:border-red-400 rounded-full flex items-center justify-center cursor-pointer shadow-md transition-colors" title="Tutup Audio">
             <i class="fa-solid fa-xmark"></i>
         </button>
     </div>
 
     <!-- Header Section -->
     <header class="bg-teal-600 dark:bg-slate-900 text-white shadow-md sticky top-0 z-40 border-b border-teal-500/30 dark:border-slate-800 transition-colors" title="Panel Kontrol Utama">
-        <div class="container mx-auto px-4 py-3 flex flex-col lg:flex-row justify-between items-center gap-3">
-            <div class="flex items-center gap-3 cursor-pointer" onclick="showSurahList()" title="Kembali ke Indeks Mushaf">
-                <span class="text-2xl">🕌</span>
-                <div>
-                    <h1 class="text-xl font-bold tracking-wide flex items-center gap-2">Al-Qur'an Digital Pro <span class="text-xs bg-teal-700 dark:bg-slate-800 px-2 py-0.5 rounded border border-teal-500/40 text-yellow-400 font-sans font-bold">Versi 1.6</span></h1>
-                    <p class="text-xs text-teal-100 opacity-80 dark:text-slate-400 font-mono-tech">Core-Repository Database Offline</p>
+        <div class="container mx-auto px-4 py-3 flex flex-col lg:flex-row justify-between items-center gap-4 lg:gap-3">
+            <div class="flex items-center justify-center lg:justify-start gap-3 w-full lg:w-auto cursor-pointer" onclick="showSurahList()" title="Kembali ke Indeks Mushaf">
+                <span class="text-2xl lg:text-3xl">🕌</span>
+                <div class="text-center lg:text-left">
+                    <h1 class="text-lg md:text-xl font-bold tracking-wide flex items-center justify-center lg:justify-start gap-2">
+                        Al-Qur'an Digital Pro 
+                        <span class="text-[9px] md:text-xs bg-teal-700 dark:bg-slate-800 px-1.5 py-0.5 rounded border border-teal-500/40 text-yellow-400 font-sans font-bold">Versi 1.6</span>
+                    </h1>
+                    <p class="text-[10px] md:text-xs text-teal-100 opacity-80 dark:text-slate-400 font-mono-tech">Core-Repository Database Offline</p>
                 </div>
             </div>
             
-            <div class="flex flex-wrap items-center gap-2.5 w-full lg:w-auto justify-between lg:justify-end">
-                <div class="flex items-center gap-1.5 order-2 lg:order-1">
-                    <button onclick="openQuotesDbModal()" class="bg-indigo-700 hover:bg-indigo-800 dark:bg-indigo-900/80 dark:hover:bg-indigo-800 text-cyan-300 text-xs font-bold px-2.5 py-2 rounded-xl border border-indigo-500/40 shadow-xs cursor-pointer flex items-center gap-1" title="Buka Database Quotes Interaktif">
-                        <i class="fa-solid fa-database"></i> <span class="hidden sm:inline">DB QUOTES</span>
-                    </button>
-                    <button onclick="toggleFloatingQuotes()" class="bg-teal-700 hover:bg-teal-800 dark:bg-slate-800 dark:hover:bg-slate-700 text-yellow-400 text-xs font-bold px-2.5 py-2 rounded-xl border border-teal-500/40 dark:border-slate-700 shadow-xs cursor-pointer flex items-center gap-1" title="Tampilkan/Sembunyikan Widget Quotes">
-                        <i class="fa-solid fa-quote-left"></i> <span class="hidden sm:inline">QUOTES</span>
-                    </button>
-                    <button onclick="openCreatorModalOutside()" class="bg-amber-500 hover:bg-amber-600 dark:bg-amber-600 dark:hover:bg-amber-700 text-slate-950 dark:text-white text-xs font-bold px-2.5 py-2 rounded-xl border border-amber-400/40 shadow-xs cursor-pointer flex items-center gap-1 animate-pulse" title="Profil Programmer & Arsitek Sistem">
-                        <i class="fa-solid fa-code"></i> <span class="hidden sm:inline">CREDIT PROG</span>
-                    </button>
-                </div>
-
-                <div class="bg-teal-700 dark:bg-slate-950 px-3 py-1.5 rounded-xl border border-teal-500/30 dark:border-slate-800 text-xs sm:text-sm order-1 lg:order-2 shadow-inner" title="Sistem Waktu Lokal">
+            <div class="flex flex-col md:flex-row items-center justify-center lg:justify-end gap-3 w-full lg:w-auto">
+                <div class="bg-teal-700 dark:bg-slate-950 px-4 py-1.5 rounded-xl border border-teal-500/30 dark:border-slate-800 text-[11px] sm:text-sm shadow-inner flex justify-center items-center w-full md:w-auto order-1">
                     <span id="dashboard-date" class="font-medium">Memuat hari...</span>
-                    <span class="mx-1.5">|</span>
+                    <span class="mx-2">|</span>
                     <span id="dashboard-time" class="font-mono-tech font-bold text-yellow-400 dark:text-teal-400">00:00:00</span>
                 </div>
                 
-                <div class="flex items-center gap-1.5 order-3">
-                    <button onclick="openHelpModal()" class="bg-slate-900 dark:bg-slate-800 hover:bg-slate-800 text-teal-400 dark:text-teal-300 text-xs font-bold p-2 rounded-xl border border-teal-500/30 dark:border-slate-700 shadow-xs cursor-pointer" title="Pusat Bantuan Sistem">
+                <div class="flex flex-wrap items-center justify-center gap-2 w-full md:w-auto order-2">
+                    <button onclick="openQuotesDbModal()" class="flex-1 md:flex-none justify-center bg-indigo-700 hover:bg-indigo-800 dark:bg-indigo-900/80 dark:hover:bg-indigo-800 text-cyan-300 text-[10px] md:text-xs font-bold px-2 py-2 rounded-xl border border-indigo-500/40 shadow-xs cursor-pointer flex items-center gap-1.5">
+                        <i class="fa-solid fa-database"></i> <span>DB QUOTES</span>
+                    </button>
+                    <button onclick="toggleFloatingQuotes()" class="flex-1 md:flex-none justify-center bg-teal-700 hover:bg-teal-800 dark:bg-slate-800 dark:hover:bg-slate-700 text-yellow-400 text-[10px] md:text-xs font-bold px-2 py-2 rounded-xl border border-teal-500/40 dark:border-slate-700 shadow-xs cursor-pointer flex items-center gap-1.5">
+                        <i class="fa-solid fa-quote-left"></i> <span>QUOTES</span>
+                    </button>
+                    <button onclick="openCreatorModalOutside()" class="flex-1 md:flex-none justify-center bg-amber-500 hover:bg-amber-600 dark:bg-amber-600 dark:hover:bg-amber-700 text-slate-950 dark:text-white text-[10px] md:text-xs font-bold px-2 py-2 rounded-xl border border-amber-400/40 shadow-xs cursor-pointer flex items-center gap-1.5 animate-pulse">
+                        <i class="fa-solid fa-code"></i> <span>CREDIT PROG</span>
+                    </button>
+                </div>
+
+                <div class="flex items-center justify-center gap-2 order-3">
+                    <button onclick="openHelpModal()" class="bg-slate-900 dark:bg-slate-800 hover:bg-slate-800 text-teal-400 dark:text-teal-300 text-xs font-bold p-2 w-9 h-9 flex items-center justify-center rounded-xl border border-teal-500/30 dark:border-slate-700 shadow-xs cursor-pointer">
                         <i class="fa-solid fa-circle-question text-sm"></i>
                     </button>
-                    <button onclick="toggleTheme()" class="p-2 rounded-xl bg-teal-700 dark:bg-slate-800 hover:bg-teal-50 dark:hover:bg-slate-700 text-white dark:text-teal-400 border border-teal-500/20 dark:border-slate-700 transition-all cursor-pointer shadow-xs" title="Ganti Tema Visual (Dark/Light)">
+                    <button onclick="toggleTheme()" class="bg-teal-700 dark:bg-slate-800 hover:bg-teal-50 dark:hover:bg-slate-700 text-white dark:text-teal-400 border border-teal-500/20 dark:border-slate-700 transition-all cursor-pointer shadow-xs p-2 w-9 h-9 flex items-center justify-center rounded-xl">
                         <span id="theme-icon">🌙</span>
                     </button>
                 </div>
@@ -180,13 +151,13 @@
 
     <!-- Main Container -->
     <div class="container mx-auto px-4 py-6 flex-1 flex flex-col lg:flex-row gap-6 relative">
-        <aside class="w-full lg:w-72 shrink-0 lg:sticky lg:top-24 lg:h-[calc(100vh-8rem)] bg-white dark:bg-slate-900 rounded-2xl p-4 shadow-md border border-slate-200 dark:border-slate-800 static-glow flex flex-col justify-between order-2 lg:order-1 transition-all" title="Navigasi Cepat Indeks 114 Surah">
+        <aside class="w-full lg:w-72 shrink-0 lg:sticky lg:top-[120px] lg:h-[calc(100vh-8rem)] bg-white dark:bg-slate-900 rounded-2xl p-4 shadow-md border border-slate-200 dark:border-slate-800 static-glow flex flex-col justify-between order-2 lg:order-1 transition-all">
             <div>
                 <h2 class="text-xs font-bold text-teal-600 dark:text-teal-400 uppercase tracking-wider mb-3 flex items-center justify-between">
                     <span class="flex items-center gap-1"><i class="fa-solid fa-star-and-crescent text-amber-500"></i> Indeks Mushaf</span>
                     <span class="text-[10px] bg-teal-50 dark:bg-slate-800 px-2 py-0.5 rounded text-teal-600 dark:text-teal-400 font-mono-tech border border-teal-200 dark:border-slate-700" id="surah-counter">0/114</span>
                 </h2>
-                <div id="sidebar-menu" class="space-y-1 h-56 lg:h-[calc(100vh-14rem)] overflow-y-auto custom-scroll pr-1">
+                <div id="sidebar-menu" class="space-y-1 h-60 lg:h-[calc(100vh-14rem)] overflow-y-auto custom-scroll pr-1">
                     <div class="text-center py-4 text-slate-400 text-xs animate-pulse">Menyusun indeks surah...</div>
                 </div>
             </div>
@@ -196,18 +167,18 @@
             <section id="surah-list-section" class="relative">
                 <div class="relative w-full">
                     <input type="text" id="search-input" placeholder="Cari nama surah atau arti makna (contoh: Al-Baqarah)..." 
-                        class="w-full p-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm focus:ring-2 focus:ring-teal-500 dark:focus:ring-teal-400 focus:outline-none transition-all text-slate-900 dark:text-white font-medium"
-                        oninput="filterSurahWithSuggestion()" title="Mesin Pencari Surah Berbasis Teks">
+                        class="w-full p-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm focus:ring-2 focus:ring-teal-500 dark:focus:ring-teal-400 focus:outline-none transition-all text-slate-900 dark:text-white font-medium text-sm sm:text-base"
+                        oninput="filterSurahWithSuggestion()">
                     <div id="search-suggestions" class="hidden absolute left-0 right-0 top-full mt-1.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl shadow-2xl z-50 max-h-48 overflow-y-auto custom-scroll p-1 font-sans"></div>
                 </div>
-                <div id="surah-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4 hidden mt-4"></div>
+                <div id="surah-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4 hidden mt-4"></div>
             </section>
 
             <section id="surah-detail-section" class="hidden">
-                <button onclick="showSurahList()" class="mb-5 flex items-center gap-2 text-teal-600 dark:text-teal-400 font-semibold hover:underline cursor-pointer text-sm bg-white dark:bg-slate-900 py-2 px-4 rounded-xl shadow-xs border border-slate-200 dark:border-slate-800 w-fit" title="Tutup Surah & Kembali">
+                <button onclick="showSurahList()" class="mb-5 flex items-center gap-2 text-teal-600 dark:text-teal-400 font-semibold hover:underline cursor-pointer text-sm bg-white dark:bg-slate-900 py-2 px-4 rounded-xl shadow-xs border border-slate-200 dark:border-slate-800 w-fit">
                     <i class="fa-solid fa-chevron-left text-xs"></i> Kembali ke Beranda
                 </button>
-                <div id="surah-info" class="bg-gradient-to-br from-teal-600 to-emerald-700 dark:from-slate-900 dark:to-teal-950 text-white p-6 rounded-2xl shadow-lg mb-5 text-center border border-teal-500/30 flex flex-col items-center relative overflow-hidden" title="Metadata Surah Aktif">
+                <div id="surah-info" class="bg-gradient-to-br from-teal-600 to-emerald-700 dark:from-slate-900 dark:to-teal-950 text-white p-6 rounded-2xl shadow-lg mb-5 text-center border border-teal-500/30 flex flex-col items-center relative overflow-hidden">
                     <!-- Data injeksi penjelasan metrik -->
                 </div>
                 <div id="ayat-container" class="space-y-4"></div>
@@ -217,27 +188,23 @@
 
     <!-- DB QUOTES MANAGER MODAL -->
     <div id="quotesDbModal" class="fixed inset-0 z-[10005] hidden bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
-        <div class="bg-slate-900 border-2 border-indigo-500 rounded-2xl w-full max-w-4xl p-6 shadow-2xl relative flex flex-col max-h-[90vh]">
+        <div class="bg-slate-900 border-2 border-indigo-500 rounded-2xl w-full max-w-4xl p-4 sm:p-6 shadow-2xl relative flex flex-col max-h-[90vh]">
             <button onclick="closeQuotesDbModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white transition-colors cursor-pointer z-10"><i class="fa-solid fa-xmark text-xl"></i></button>
-            
-            <div class="flex flex-col md:flex-row justify-between items-center border-b-2 border-slate-800 pb-4 mb-4 gap-4">
-                <div class="flex items-center gap-4">
+            <div class="flex flex-col md:flex-row justify-between items-center border-b-2 border-slate-800 pb-4 mb-4 gap-4 mt-4 md:mt-0">
+                <div class="flex flex-col sm:flex-row items-center sm:items-start text-center sm:text-left gap-3 sm:gap-4">
                     <div class="w-14 h-14 rounded-full border-2 border-yellow-500 bg-slate-950 flex items-center justify-center shadow-[0_0_15px_rgba(234,179,8,0.2)]">
                         <i class="fa-solid fa-user-gear text-yellow-500 text-xl"></i>
                     </div>
                     <div>
-                        <h3 class="text-yellow-400 text-lg font-extrabold tracking-wide uppercase font-mono-tech">MOHAMAD HARTADI</h3>
-                        <p class="text-cyan-400 text-[10px] tracking-wide font-sans">Geotechnical & Hydraulic Lead System Architecture</p>
-                        <p class="text-slate-400 text-[10px] tracking-wide font-mono-tech">Author / Quotes DB System Manager</p>
+                        <h3 class="text-yellow-400 text-base sm:text-lg font-extrabold tracking-wide uppercase font-mono-tech">MOHAMAD HARTADI</h3>
+                        <p class="text-cyan-400 text-[10px] tracking-wide font-sans mt-0.5">Geotechnical & Hydraulic Lead System Architecture</p>
                     </div>
                 </div>
-                <div class="bg-slate-950 p-2 rounded-lg border border-slate-800 font-mono-tech text-center min-w-[120px]">
+                <div class="bg-slate-950 p-2 rounded-lg border border-slate-800 font-mono-tech text-center w-full sm:w-auto min-w-[120px]">
                     <span class="block text-[10px] text-slate-400">Total Referensi</span>
                     <span id="dbTotalCount" class="text-xl text-teal-400 font-bold">0</span>
                 </div>
             </div>
-
-            <!-- SEARCH INPUT -->
             <div class="flex flex-col gap-3 mb-4">
                 <div class="relative flex-1">
                     <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-slate-400">
@@ -246,18 +213,15 @@
                     <input type="text" id="searchQuoteInput" oninput="searchQuotes()" placeholder="Cari kutipan ayat Al-Qur'an atau Hadis..." class="w-full bg-slate-950 border border-slate-700 rounded-lg pl-10 p-3 text-sm text-white focus:outline-none focus:border-indigo-400 font-sans shadow-inner">
                 </div>
             </div>
-
             <div class="flex-1 overflow-y-auto custom-scroll border border-slate-800 rounded-xl bg-slate-950">
-                <table class="w-full text-left text-sm text-slate-300 font-sans relative">
-                    <thead class="text-xs uppercase bg-slate-900 text-slate-400 sticky top-0 z-10 shadow-md">
+                <table class="w-full text-left text-sm text-slate-300 font-sans relative block sm:table">
+                    <thead class="text-[10px] sm:text-xs uppercase bg-slate-900 text-slate-400 sticky top-0 z-10 shadow-md sm:table-header-group hidden">
                         <tr>
                             <th scope="col" class="px-4 py-3 w-16 text-center border-b border-slate-800">No.</th>
                             <th scope="col" class="px-4 py-3 border-b border-slate-800">Konten Referensi Kutipan Al-Qur'an & Hadis</th>
                         </tr>
                     </thead>
-                    <tbody id="quotesDbTableBody" class="divide-y divide-slate-800/50">
-                        <!-- Rendered by JS -->
-                    </tbody>
+                    <tbody id="quotesDbTableBody" class="divide-y divide-slate-800/50 block sm:table-row-group"></tbody>
                 </table>
             </div>
         </div>
@@ -267,11 +231,11 @@
     <div id="screensaverSettingsModal" class="fixed inset-0 z-[10005] hidden bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
         <div class="bg-slate-900 border-2 border-purple-500 rounded-2xl w-full max-w-sm p-6 shadow-2xl relative flex flex-col">
             <button onclick="closeScreensaverSettings()" class="absolute top-4 right-4 text-slate-400 hover:text-white transition-colors cursor-pointer z-10"><i class="fa-solid fa-xmark text-xl"></i></button>
-            <h3 class="text-purple-400 text-lg font-bold font-mono-tech mb-2 flex items-center gap-2"><i class="fa-solid fa-desktop"></i> Konfigurasi Screensaver</h3>
+            <h3 class="text-purple-400 text-base sm:text-lg font-bold font-mono-tech mb-2 flex items-center gap-2 mt-2 sm:mt-0"><i class="fa-solid fa-desktop"></i> Konfigurasi Screensaver</h3>
             <p class="text-xs text-slate-400 mb-6 font-sans">Atur waktu idle (tidak ada aktivitas) dan hidup/matikan sistem auto screensaver.</p>
             
             <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 mb-4 flex justify-between items-center">
-                <span class="text-slate-300 font-mono-tech text-sm font-bold">Auto Screensaver</span>
+                <span class="text-slate-300 font-mono-tech text-[11px] sm:text-sm font-bold">Auto Screensaver</span>
                 <div class="relative inline-block w-12 mr-2 align-middle select-none transition duration-200 ease-in">
                     <input type="checkbox" name="toggle" id="autoScToggle" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer" onclick="toggleAutoScCheckbox()"/>
                     <label for="autoScToggle" class="toggle-label block overflow-hidden h-6 rounded-full bg-slate-700 cursor-pointer"></label>
@@ -279,68 +243,70 @@
             </div>
 
             <div class="flex items-center justify-between bg-slate-950 p-4 rounded-xl border border-slate-800 mb-6">
-                <span class="text-slate-300 font-mono-tech text-sm">Menit Idle:</span>
+                <span class="text-slate-300 font-mono-tech text-[11px] sm:text-sm">Menit Idle:</span>
                 <input type="number" id="idleTimeInput" min="1" max="60" class="w-20 bg-slate-900 border border-slate-700 rounded-lg p-2 text-center text-lg font-bold text-white focus:outline-none focus:border-purple-400">
             </div>
             
             <div class="flex flex-col gap-2">
-                <button onclick="saveScreensaverSettings()" class="w-full bg-purple-600 hover:bg-purple-500 text-white font-bold py-3 rounded-xl transition-colors shadow-lg cursor-pointer">Simpan Konfigurasi</button>
-                <button onclick="closeScreensaverSettings(); activateScreensaver(event);" class="w-full bg-slate-800 hover:bg-slate-700 text-purple-400 font-bold py-3 rounded-xl transition-colors shadow-lg border border-purple-500/50 flex items-center justify-center gap-2 cursor-pointer"><i class="fa-solid fa-play"></i> Coba Screensaver</button>
+                <button onclick="saveScreensaverSettings()" class="w-full bg-purple-600 hover:bg-purple-500 text-white font-bold py-3 text-sm rounded-xl transition-colors shadow-lg cursor-pointer">Simpan Konfigurasi</button>
+                <button onclick="closeScreensaverSettings(); activateScreensaver(event);" class="w-full bg-slate-800 hover:bg-slate-700 text-purple-400 font-bold py-3 text-sm rounded-xl transition-colors shadow-lg border border-purple-500/50 flex items-center justify-center gap-2 cursor-pointer"><i class="fa-solid fa-play"></i> Coba Screensaver</button>
             </div>
         </div>
     </div>
 
-    <!-- HELP & METRIC MODAL -->
+    <!-- HELP & METRIC MODAL (FULL VERSION RESTORED) -->
     <div id="helpModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[10005] flex items-center justify-center p-4 hidden">
-        <div class="bg-slate-900 border-2 border-teal-500 p-6 rounded-2xl max-w-4xl w-full flex flex-col gap-4 max-h-[90vh] overflow-hidden shadow-2xl relative">
-            <div class="flex justify-between items-center border-b-2 border-slate-800 pb-3 select-none shrink-0">
-                <h3 class="font-mono-tech text-base font-black text-teal-400 uppercase tracking-wide flex items-center gap-2">
-                    <i class="fa-solid fa-circle-info text-yellow-400"></i> Pusat Bantuan & Referensi Sistem
+        <div class="bg-slate-900 border-2 border-teal-500 p-5 sm:p-6 rounded-2xl max-w-4xl w-full flex flex-col gap-4 max-h-[90vh] overflow-hidden shadow-2xl relative">
+            <div class="flex justify-between items-center border-b-2 border-slate-800 pb-3 select-none shrink-0 mt-2 sm:mt-0">
+                <h3 class="font-mono-tech text-sm sm:text-base font-black text-teal-400 uppercase tracking-wide flex items-center gap-2">
+                    <i class="fa-solid fa-circle-info text-yellow-400"></i> Pusat Bantuan Sistem
                 </h3>
-                <button onclick="closeHelpModal()" class="text-slate-400 hover:text-red-400 p-1 cursor-pointer transition-colors"><i class="fa-solid fa-xmark text-2xl"></i></button>
+                <button onclick="closeHelpModal()" class="absolute top-4 right-4 sm:static text-slate-400 hover:text-red-400 p-1 cursor-pointer transition-colors"><i class="fa-solid fa-xmark text-xl sm:text-2xl"></i></button>
             </div>
             
-            <div class="overflow-y-auto custom-scroll space-y-6 pr-2 font-sans text-sm text-slate-300 pb-4">
-                <div class="bg-slate-950/80 p-5 rounded-xl border border-slate-800 shadow-inner">
-                    <h4 class="text-emerald-400 font-bold font-mono-tech mb-2 flex items-center gap-2"><i class="fa-solid fa-microchip"></i> DESKRIPSI APLIKASI</h4>
-                    <p class="leading-relaxed">Al-Qur'an Digital Pro - Cyber Islamic Edition adalah platform mushaf digital luring (*offline*) berkinerja tinggi. Aplikasi ini mengintegrasikan fungsi bacaan Al-Qur'an 114 surah, pemutar murottal dengan fitur sinkronisasi teks dinamis otomatis, serta kajian metrik komprehensif tanpa memerlukan konektivitas internet konstan setelah sinkronisasi awal.</p>
+            <div class="overflow-y-auto custom-scroll space-y-4 sm:space-y-6 pr-2 font-sans text-[13px] sm:text-sm text-slate-300 pb-4">
+                <div class="bg-slate-950/80 p-4 sm:p-5 rounded-xl border border-slate-800 shadow-inner">
+                    <h4 class="text-emerald-400 font-bold font-mono-tech mb-2 flex items-center gap-2 text-sm"><i class="fa-solid fa-microchip"></i> DESKRIPSI APLIKASI</h4>
+                    <p class="leading-relaxed">Al-Qur'an Digital Pro - Cyber Islamic Edition adalah platform mushaf digital luring (*offline*) berkinerja tinggi. Aplikasi ini mengintegrasikan fungsi bacaan Al-Qur'an 114 surah, pemutar murottal dengan fitur sinkronisasi teks dinamis otomatis, serta kajian metrik komprehensif.</p>
                 </div>
-                <div class="bg-slate-950/80 p-5 rounded-xl border border-slate-800 shadow-inner">
-                    <h4 class="text-blue-400 font-bold font-mono-tech mb-3 flex items-center gap-2"><i class="fa-solid fa-cubes"></i> FITUR INTEGRASI UTAMA</h4>
+
+                <div class="bg-slate-950/80 p-4 sm:p-5 rounded-xl border border-slate-800 shadow-inner">
+                    <h4 class="text-blue-400 font-bold font-mono-tech mb-3 flex items-center gap-2 text-sm"><i class="fa-solid fa-cubes"></i> FITUR INTEGRASI UTAMA</h4>
                     <ul class="space-y-2 list-disc list-inside">
-                        <li><strong class="text-slate-200">Database Quotes:</strong> Manajer kutipan interaktif bersumber dari 200 Al-Qur'an & Hadis dengan fitur pencarian instan.</li>
-                        <li><strong class="text-slate-200">Asisten Chatbot AI:</strong> Terminal navigasi pintar untuk mencari surah secara spesifik dan bantuan perintah.</li>
-                        <li><strong class="text-slate-200">Auto Screensaver:</strong> Mode jeda estetik bernuansa langit malam islami (bintang gemerlap, komet jatuh acak).</li>
-                        <li><strong class="text-slate-200">Metrik Surah Dinamis:</strong> Penjelasan dan korelasi setiap surah berdasarkan kategori medis, waris, kehidupan, dan alam.</li>
+                        <li><strong class="text-slate-200">Database Quotes:</strong> Manajer kutipan interaktif dari 200 Al-Qur'an & Hadis.</li>
+                        <li><strong class="text-slate-200">Asisten Chatbot AI:</strong> Terminal navigasi pintar untuk mencari surah spesifik.</li>
+                        <li><strong class="text-slate-200">Auto Screensaver:</strong> Mode jeda estetik bernuansa hitam pekat untuk efisiensi daya layar.</li>
+                        <li><strong class="text-slate-200">Metrik Surah Dinamis:</strong> Penjelasan korelasi surah kategori medis, waris, dan alam.</li>
+                        <li><strong class="text-emerald-400">Terbaru - Bookmark Pintar:</strong> Tahan lama (*long-press*) pada ayat untuk menandai bacaan terakhir. Klik tombol melayang <i class="fa-solid fa-bookmark text-indigo-400 mx-1"></i> untuk langsung menuju ayat yang telah ditandai tanpa harus mencari ulang.</li>
                     </ul>
                 </div>
-                <div class="bg-slate-950/80 p-5 rounded-xl border border-teal-500/30 shadow-inner">
-                    <h4 class="text-teal-400 font-bold font-mono-tech mb-3 flex items-center gap-2"><i class="fa-solid fa-table"></i> TABEL METRIK KAJIAN AL-QUR'AN</h4>
-                    <p class="text-xs text-slate-400 mb-4 italic">Metrik berikut ini diintegrasikan ke dalam panel informasi saat Anda membuka sebuah Surah untuk memberikan wawasan tambahan terkait kandungan ayat.</p>
+
+                <div class="bg-slate-950/80 p-4 sm:p-5 rounded-xl border border-teal-500/30 shadow-inner">
+                    <h4 class="text-teal-400 font-bold font-mono-tech mb-3 flex items-center gap-2 text-sm"><i class="fa-solid fa-table"></i> TABEL METRIK KAJIAN</h4>
                     <div class="overflow-x-auto border border-slate-800 rounded-lg">
-                        <table class="w-full text-left">
-                            <thead class="bg-slate-900 text-teal-300 font-mono-tech text-xs uppercase border-b border-slate-800">
+                        <table class="w-full text-left min-w-[500px]">
+                            <thead class="bg-slate-900 text-teal-300 font-mono-tech text-[10px] sm:text-xs uppercase border-b border-slate-800">
                                 <tr>
-                                    <th class="px-4 py-3 border-r border-slate-800 w-1/4">Kategori Metrik</th>
-                                    <th class="px-4 py-3">Fokus Pembahasan & Penjelasan Utama</th>
+                                    <th class="px-3 sm:px-4 py-3 border-r border-slate-800 w-1/3 sm:w-1/4">Kategori Metrik</th>
+                                    <th class="px-3 sm:px-4 py-3">Fokus Pembahasan Utama</th>
                                 </tr>
                             </thead>
-                            <tbody class="divide-y divide-slate-800 text-[13px]">
+                            <tbody class="divide-y divide-slate-800 text-xs sm:text-[13px]">
                                 <tr class="hover:bg-slate-900/50">
-                                    <td class="px-4 py-3 font-bold text-emerald-400 border-r border-slate-800"><i class="fa-solid fa-notes-medical mr-2"></i>Medis & Terapi</td>
-                                    <td class="px-4 py-3">Korelasi ayat dengan penyembuhan fisik, kesehatan mental, ketenangan psikologis (anxiety/stress), serta pengobatan spiritual (Ruqyah Syariyyah).</td>
+                                    <td class="px-3 sm:px-4 py-3 font-bold text-emerald-400 border-r border-slate-800"><i class="fa-solid fa-notes-medical mr-2"></i>Medis & Terapi</td>
+                                    <td class="px-3 sm:px-4 py-3">Korelasi ayat penyembuhan fisik, kesehatan mental, & pengobatan spiritual (Ruqyah).</td>
                                 </tr>
                                 <tr class="hover:bg-slate-900/50">
-                                    <td class="px-4 py-3 font-bold text-amber-400 border-r border-slate-800"><i class="fa-solid fa-scale-balanced mr-2"></i>Hukum & Waris</td>
-                                    <td class="px-4 py-3">Pembahasan mengenai Faraid (pembagian harta warisan), hutang piutang, hukum peradilan, dan batasan syariat bermuamalah.</td>
+                                    <td class="px-3 sm:px-4 py-3 font-bold text-amber-400 border-r border-slate-800"><i class="fa-solid fa-scale-balanced mr-2"></i>Hukum & Waris</td>
+                                    <td class="px-3 sm:px-4 py-3">Pembahasan Faraid (harta warisan), hutang piutang, dan batasan syariat.</td>
                                 </tr>
                                 <tr class="hover:bg-slate-900/50">
-                                    <td class="px-4 py-3 font-bold text-blue-400 border-r border-slate-800"><i class="fa-solid fa-users mr-2"></i>Kehidupan Manusia</td>
-                                    <td class="px-4 py-3">Panduan kehidupan sosial, pernikahan, adab kepada orang tua, penyelesaian konflik, kepemimpinan, dan perjalanan sejarah umat manusia.</td>
+                                    <td class="px-3 sm:px-4 py-3 font-bold text-blue-400 border-r border-slate-800"><i class="fa-solid fa-users mr-2"></i>Kehidupan</td>
+                                    <td class="px-3 sm:px-4 py-3">Panduan kehidupan sosial, pernikahan, adab, dan sejarah manusia.</td>
                                 </tr>
                                 <tr class="hover:bg-slate-900/50">
-                                    <td class="px-4 py-3 font-bold text-green-400 border-r border-slate-800"><i class="fa-solid fa-leaf mr-2"></i>Alam & Sains</td>
-                                    <td class="px-4 py-3">Fakta penciptaan semesta, astronomi, botani (tumbuh-tumbuhan), zoologi (hewan), siklus air, hidrologi, dan fenomena ekologi alam.</td>
+                                    <td class="px-3 sm:px-4 py-3 font-bold text-green-400 border-r border-slate-800"><i class="fa-solid fa-leaf mr-2"></i>Alam & Sains</td>
+                                    <td class="px-3 sm:px-4 py-3">Fakta semesta, astronomi, botani, zoologi, hidrologi, & ekologi alam.</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -351,119 +317,105 @@
     </div>
 
     <!-- Floating Quote Widget -->
-    <div id="floatingQuoteWidget" class="hidden fixed bottom-20 left-1/2 transform -translate-x-1/2 z-[90] w-80 sm:w-96 bg-slate-900/95 backdrop-blur-md p-4 rounded-2xl border-2 border-yellow-600 shadow-2xl flex flex-col gap-3 transition-all animate-gold-glow-box" title="Widget Kutipan Acak">
+    <div id="floatingQuoteWidget" class="hidden fixed bottom-20 left-1/2 transform -translate-x-1/2 z-[90] w-[90%] max-w-sm sm:w-96 bg-slate-900/95 backdrop-blur-md p-4 rounded-2xl border-2 border-yellow-600 shadow-2xl flex flex-col gap-3 transition-all animate-gold-glow-box" title="Widget Kutipan Acak">
         <div class="flex justify-between items-center border-b border-slate-800 pb-2">
-            <h3 class="text-[11px] font-bold text-yellow-400 uppercase tracking-wider flex items-center gap-1.5 font-mono-tech">
+            <h3 class="text-[10px] sm:text-[11px] font-bold text-yellow-400 uppercase tracking-wider flex items-center gap-1.5 font-mono-tech">
                 <i class="fa-solid fa-kaaba text-yellow-500"></i> Mutiara Kearifan Islami
             </h3>
-            <div class="flex items-center gap-1 text-xs font-mono-tech">
+            <div class="flex items-center gap-1 text-[10px] sm:text-xs font-mono-tech">
                 <button onclick="navigateQuote(-1)" class="px-2 py-0.5 bg-slate-800 hover:bg-slate-700 text-yellow-400 rounded cursor-pointer transition-all border border-slate-700 shadow-xs">&lt;</button>
                 <button onclick="navigateQuote(1)" class="px-2 py-0.5 bg-slate-800 hover:bg-slate-700 text-yellow-400 rounded cursor-pointer transition-all border border-slate-700 shadow-xs">&gt;</button>
-                <button onclick="toggleFloatingQuotes()" class="ml-2 text-slate-400 hover:text-red-500 px-1.5 py-0.5 cursor-pointer rounded-sm bg-slate-800 border border-slate-700 transition-colors"><i class="fa-solid fa-xmark text-xs"></i></button>
+                <button onclick="toggleFloatingQuotes()" class="ml-1 sm:ml-2 text-slate-400 hover:text-red-500 px-1.5 py-0.5 cursor-pointer rounded-sm bg-slate-800 border border-slate-700 transition-colors"><i class="fa-solid fa-xmark"></i></button>
             </div>
         </div>
         <div class="min-h-[70px] flex items-center justify-center text-center px-1">
-            <p id="dashboardQuoteText" class="quote-fade text-sm font-medium italic leading-relaxed animate-gold-text-glow">Memuat data kutipan rohani...</p>
+            <p id="dashboardQuoteText" class="quote-fade text-xs sm:text-sm font-medium italic leading-relaxed animate-gold-text-glow">Memuat data kutipan rohani...</p>
         </div>
     </div>
 
     <!-- Right Bottom Interactive Buttons Layout -->
-    <div class="fixed bottom-4 right-4 z-50 flex items-center gap-2.5">
-        <div id="chatWindow" class="w-80 sm:w-96 h-[460px] bg-slate-900 border-2 border-slate-700 rounded-2xl flex flex-col overflow-hidden hidden transition-all duration-300 shadow-2xl absolute bottom-14 right-0 static-glow">
-            <div class="bg-gradient-to-r from-slate-950 to-teal-950 p-3 border-b border-slate-800 flex flex-col gap-1.5 select-none relative">
+    <div class="fixed bottom-4 right-4 z-50 flex items-center gap-2 sm:gap-2.5">
+        
+        <!-- Chatbot Window -->
+        <div id="chatWindow" class="w-[90vw] sm:w-96 h-[400px] sm:h-[460px] bg-slate-900 border-2 border-slate-700 rounded-2xl flex flex-col overflow-hidden hidden transition-all duration-300 shadow-2xl absolute bottom-14 sm:bottom-16 right-0 static-glow">
+            <div class="bg-gradient-to-r from-slate-950 to-teal-950 p-2 sm:p-3 border-b border-slate-800 flex flex-col gap-1.5 select-none relative">
                 <div class="flex justify-between items-center">
                     <div class="flex items-center gap-2">
-                        <i class="fa-solid fa-star-and-crescent text-yellow-400 text-xs animate-pulse"></i>
-                        <h4 class="font-mono-tech text-xs font-black text-slate-300">ASISTEN CHAT MUSLIM</h4>
+                        <i class="fa-solid fa-star-and-crescent text-yellow-400 text-[10px] sm:text-xs animate-pulse"></i>
+                        <h4 class="font-mono-tech text-[10px] sm:text-xs font-black text-slate-300">ASISTEN CHAT MUSLIM</h4>
                     </div>
-                    <button onclick="toggleChatWindow()" class="text-slate-400 hover:text-white cursor-pointer text-xs"><i class="fa-solid fa-xmark"></i></button>
+                    <button onclick="toggleChatWindow()" class="text-slate-400 hover:text-white cursor-pointer text-xs p-1"><i class="fa-solid fa-xmark"></i></button>
                 </div>
-                <div class="flex flex-col sm:flex-row justify-between items-center bg-slate-950/90 px-3 py-2 rounded-xl border border-teal-500/40 font-mono-tech gap-1 shadow-inner">
-                    <span id="chat-top-day" class="text-slate-200 text-[11px] sm:text-xs font-bold tracking-wide">Memuat Hari...</span>
-                    <span id="chat-top-clock" class="text-sm font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-teal-300 to-emerald-400 filter drop-shadow-[0_0_8px_rgba(34,211,238,0.4)]">00:00:00 WIB</span>
+                <!-- PANEL WAKTU CHAT DIKEMBALIKAN DISINI -->
+                <div class="flex flex-col sm:flex-row justify-between items-center bg-slate-950/90 px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-xl border border-teal-500/40 font-mono-tech gap-1 shadow-inner mt-2">
+                    <span id="chat-top-day" class="text-slate-200 text-[10px] sm:text-[11px] font-bold tracking-wide">Memuat Hari...</span>
+                    <span id="chat-top-clock" class="text-xs sm:text-sm font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-teal-300 to-emerald-400 filter drop-shadow-[0_0_8px_rgba(34,211,238,0.4)]">00:00:00</span>
                 </div>
             </div>
             
-            <div id="chatMessages" class="flex-1 p-3 overflow-y-auto space-y-3 font-mono-tech text-xs text-slate-200 bg-slate-950 custom-scroll relative">
+            <div id="chatMessages" class="flex-1 p-2.5 sm:p-3 overflow-y-auto space-y-3 font-mono-tech text-[11px] sm:text-xs text-slate-200 bg-slate-950 custom-scroll relative">
                 <div class="bg-slate-900/80 p-2.5 rounded-xl border border-slate-800 leading-relaxed">
                     <span class="text-yellow-400 block font-bold mb-1">&gt;_ SISTEM DIGITAL AKTIF:</span>
-                    Assalamualaikum! Silakan ketik langsung **nama surah** (contoh: *Al-Mulk* atau *Yasin*) untuk mencari dan menampilkan surah yang Anda tuju dengan cepat.
+                    Assalamualaikum! Silakan ketik langsung **nama surah** untuk mencari dan menampilkan surah yang Anda tuju dengan cepat.
                 </div>
             </div>
 
-            <div id="chat-suggestions" class="hidden mx-2 p-1 bg-slate-950 border border-slate-800 rounded-lg max-h-24 overflow-y-auto custom-scroll font-mono-tech text-[11px] space-y-0.5 z-50"></div>
+            <div id="chat-suggestions" class="hidden mx-2 p-1 bg-slate-950 border border-slate-800 rounded-lg max-h-24 overflow-y-auto custom-scroll font-mono-tech text-[10px] sm:text-[11px] space-y-0.5 z-50"></div>
 
-            <div class="p-2 bg-slate-900 border-t border-slate-800 flex gap-1.5 overflow-x-auto hide-scrollbar shrink-0">
-                <button onclick="triggerChatShortcut('help')" class="whitespace-nowrap px-2.5 py-1 bg-slate-950 hover:bg-emerald-950 text-emerald-400 text-[10px] rounded border border-emerald-900 font-bold cursor-pointer"><i class="fa-solid fa-circle-question mr-1"></i>Help System</button>
-                <button onclick="triggerChatShortcut('cari_surah')" class="whitespace-nowrap px-2.5 py-1 bg-slate-950 hover:bg-blue-950 text-blue-400 text-[10px] rounded border border-blue-900 font-bold cursor-pointer"><i class="fa-solid fa-magnifying-glass mr-1"></i>Cari Surah</button>
-                <button onclick="triggerChatShortcut('cari_ayat')" class="whitespace-nowrap px-2.5 py-1 bg-slate-950 hover:bg-amber-950 text-amber-400 text-[10px] rounded border border-amber-900 font-bold cursor-pointer"><i class="fa-solid fa-book-open mr-1"></i>Cari Ayat</button>
-                <button onclick="triggerChatShortcut('programmer')" class="whitespace-nowrap px-2.5 py-1 bg-fuchsia-950 hover:bg-fuchsia-900 text-fuchsia-400 text-[10px] rounded border border-fuchsia-800 font-black cursor-pointer"><i class="fa-solid fa-code mr-1"></i>Data Programmer</button>
+            <div class="p-2 bg-slate-900 border-t border-slate-800 flex gap-1.5 overflow-x-auto custom-scroll shrink-0">
+                <button onclick="triggerChatShortcut('help')" class="whitespace-nowrap px-2 py-1 bg-slate-950 hover:bg-emerald-950 text-emerald-400 text-[9px] sm:text-[10px] rounded border border-emerald-900 font-bold cursor-pointer">Help System</button>
+                <button onclick="triggerChatShortcut('cari_surah')" class="whitespace-nowrap px-2 py-1 bg-slate-950 hover:bg-blue-950 text-blue-400 text-[9px] sm:text-[10px] rounded border border-blue-900 font-bold cursor-pointer">Cari Surah</button>
             </div>
 
             <div class="p-2 bg-slate-900 border-t border-slate-800 flex gap-1.5">
-                <input type="text" id="chatInput" oninput="showChatInputSuggestions()" onkeydown="if(event.key==='Enter') processChatMessage()" placeholder="Ketik nama surah di sini..." class="flex-1 bg-slate-950 border border-slate-700 rounded-lg p-2 text-xs text-white focus:outline-none focus:border-cyan-400 font-mono-tech">
-                <button onclick="processChatMessage()" class="bg-teal-700 hover:bg-teal-600 text-white px-3 rounded-lg text-xs font-bold cursor-pointer flex items-center justify-center"><i class="fa-solid fa-paper-plane"></i></button>
+                <input type="text" id="chatInput" oninput="showChatInputSuggestions()" onkeydown="if(event.key==='Enter') processChatMessage()" placeholder="Ketik nama surah..." class="flex-1 bg-slate-950 border border-slate-700 rounded-lg p-2 text-[11px] sm:text-xs text-white focus:outline-none focus:border-cyan-400 font-mono-tech">
+                <button onclick="processChatMessage()" class="bg-teal-700 hover:bg-teal-600 text-white px-3 sm:px-4 rounded-lg text-xs font-bold cursor-pointer flex items-center justify-center"><i class="fa-solid fa-paper-plane"></i></button>
             </div>
         </div>
 
-        <button onclick="openScreensaverSettings()" class="bg-slate-900 border border-purple-500/50 w-10 h-10 rounded-full shadow-lg flex items-center justify-center text-slate-400 hover:text-purple-400 cursor-pointer hover:scale-105 transition-all" title="Pengaturan Timer Screensaver">
+        <button onclick="openScreensaverSettings()" class="bg-slate-900 border border-purple-500/50 w-9 h-9 sm:w-10 sm:h-10 rounded-full shadow-lg flex items-center justify-center text-slate-400 hover:text-purple-400 cursor-pointer hover:scale-105 transition-all" title="Pengaturan Timer Screensaver">
             <i class="fa-solid fa-gear text-xs"></i>
         </button>
 
-        <button id="btnFloatingAutoScToggle" onclick="toggleFloatingAutoScBtn()" class="bg-slate-900 border border-emerald-500/80 w-11 h-11 rounded-full shadow-lg flex items-center justify-center text-emerald-400 cursor-pointer hover:scale-105 transition-transform" title="Auto Screensaver: ON">
-            <i id="iconFloatingAutoSc" class="fa-solid fa-desktop text-sm"></i>
+        <button id="btnFloatingAutoScToggle" onclick="toggleFloatingAutoScBtn()" class="bg-slate-900 border border-emerald-500/80 w-10 h-10 sm:w-11 sm:h-11 rounded-full shadow-lg flex items-center justify-center text-emerald-400 cursor-pointer hover:scale-105 transition-transform" title="Auto Screensaver: ON">
+            <i id="iconFloatingAutoSc" class="fa-solid fa-desktop text-[11px] sm:text-sm"></i>
         </button>
         
-        <button onclick="toggleFloatingQuotes()" class="bg-slate-900 dark:bg-slate-800 border border-teal-500 w-11 h-11 rounded-full shadow-lg flex items-center justify-center text-teal-400 cursor-pointer hover:scale-105 transition-transform" title="Buka/Tutup Quotes">
-            <i class="fa-solid fa-quote-left text-sm"></i>
+        <button onclick="toggleFloatingQuotes()" class="bg-slate-900 dark:bg-slate-800 border border-teal-500 w-10 h-10 sm:w-11 sm:h-11 rounded-full shadow-lg flex items-center justify-center text-teal-400 cursor-pointer hover:scale-105 transition-transform" title="Buka/Tutup Quotes">
+            <i class="fa-solid fa-quote-left text-[11px] sm:text-sm"></i>
         </button>
 
-        <button onclick="toggleChatWindow()" class="bg-slate-950 hover:bg-slate-900 border-2 border-yellow-500 w-12 h-12 rounded-full shadow-lg flex items-center justify-center text-xl cursor-pointer transition-transform active:scale-90" title="Buka Asisten Chat Muslim">
+        <button onclick="goToLastRead()" class="bg-indigo-900 hover:bg-indigo-800 border border-indigo-500 w-10 h-10 sm:w-11 sm:h-11 rounded-full shadow-[0_0_15px_rgba(79,70,229,0.4)] flex items-center justify-center text-indigo-300 cursor-pointer hover:scale-105 transition-transform relative group" title="Lanjut Bacaan Terakhir">
+            <i class="fa-solid fa-bookmark text-[11px] sm:text-sm"></i>
+            <span class="absolute -top-1 -right-1 flex h-3 w-3">
+                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
+                <span class="relative inline-flex rounded-full h-3 w-3 bg-indigo-500 border border-indigo-200"></span>
+            </span>
+        </button>
+
+        <button onclick="toggleChatWindow()" class="bg-slate-950 hover:bg-slate-900 border-2 border-yellow-500 w-11 h-11 sm:w-12 sm:h-12 rounded-full shadow-lg flex items-center justify-center text-lg sm:text-xl cursor-pointer transition-transform active:scale-90" title="Buka Asisten Chat Muslim">
             <div class="relative flex items-center justify-center text-yellow-500">
-                <i class="fa-solid fa-comment-sms text-base absolute -top-1 -right-1 opacity-40"></i>
-                <i class="fa-solid fa-user-astronaut text-sm"></i>
+                <i class="fa-solid fa-comment-sms text-sm sm:text-base absolute -top-1 -right-1 opacity-40"></i>
+                <i class="fa-solid fa-user-astronaut text-xs sm:text-sm"></i>
             </div>
         </button>
     </div>
 
     <!-- Creator Modal Outside -->
     <div id="creatorModalOutside" class="fixed inset-0 z-[10005] hidden bg-black/75 backdrop-blur-xs flex items-center justify-center p-4">
-        <div class="bg-[#0b1224] border-2 border-yellow-500 rounded-2xl w-full max-w-md p-6 shadow-2xl relative select-none animate-gold-glow-box">
+        <div class="bg-[#0b1224] border-2 border-yellow-500 rounded-2xl w-full max-w-md p-5 sm:p-6 shadow-2xl relative select-none animate-gold-glow-box">
             <button onclick="closeCreatorModalOutside()" class="absolute top-4 right-4 text-slate-400 hover:text-white transition-colors cursor-pointer z-10"><i class="fa-solid fa-xmark text-xl"></i></button>
-            <div class="font-mono-tech flex flex-col items-center text-center">
-                <div class="w-16 h-16 rounded-full border-2 border-yellow-500 bg-slate-900/60 flex items-center justify-center mb-3 shadow-[0_0_15px_rgba(234,179,8,0.2)]">
-                    <i class="fa-solid fa-user-gear text-yellow-500 text-2xl"></i>
+            <div class="font-mono-tech flex flex-col items-center text-center mt-3 sm:mt-0">
+                <div class="w-14 h-14 sm:w-16 sm:h-16 rounded-full border-2 border-yellow-500 bg-slate-900/60 flex items-center justify-center mb-3 shadow-[0_0_15px_rgba(234,179,8,0.2)]">
+                    <i class="fa-solid fa-user-gear text-yellow-500 text-xl sm:text-2xl"></i>
                 </div>
-                <h3 class="text-yellow-400 text-xl font-extrabold tracking-wide uppercase font-mono-tech filter drop-shadow-[0_0_4px_rgba(234,179,8,0.5)]">MOHAMAD HARTADI (ADI)</h3>
-                <p class="text-slate-400 text-[11px] tracking-wide font-sans mt-0.5 mb-5">Geotechnical & Hydraulic Lead System Architecture</p>
-                <div class="w-full bg-[#070b16] border border-slate-800/80 rounded-xl p-4 text-left space-y-4">
-                    <div class="flex items-start gap-3 group">
-                        <div class="text-blue-500 mt-1"><i class="fa-brands fa-facebook text-2xl"></i></div>
-                        <div class="flex-1">
-                            <span class="text-slate-500 block text-[9px] font-bold tracking-widest uppercase font-sans">PROFIL FACEBOOK RESMI</span>
-                            <a href="https://web.facebook.com/m.hartadi/" target="_blank" class="text-cyan-400 hover:text-cyan-300 font-bold text-sm underline break-all">facebook.com/m.hartadi/</a>
-                        </div>
-                    </div>
-                    <div class="flex items-start gap-3 group">
-                        <div class="text-amber-500 mt-1"><i class="fa-solid fa-globe text-xl"></i></div>
-                        <div class="flex-1">
-                            <span class="text-slate-500 block text-[9px] font-bold tracking-widest uppercase font-sans">PLATFORM BLOG ILMU HIDROLIKA</span>
-                            <a href="https://newbieonline7.blogspot.com/" target="_blank" class="text-amber-400 hover:text-amber-300 font-bold text-sm underline break-all tracking-wide">newbieonline7.blogspot.com</a>
-                        </div>
-                    </div>
-                    <div class="flex items-start gap-3 group">
-                        <div class="text-emerald-500 mt-1"><i class="fa-brands fa-whatsapp text-2xl"></i></div>
-                        <div class="flex-1">
-                            <span class="text-slate-500 block text-[9px] font-bold tracking-widest uppercase font-sans">KONTAK ENKRIPSI WHATSAPP</span>
-                            <a href="https://wa.me/6282231036047" target="_blank" class="text-emerald-400 font-bold underline">082231036047</a>
-                        </div>
-                    </div>
-                </div>
+                <h3 class="text-yellow-400 text-lg sm:text-xl font-extrabold tracking-wide uppercase font-mono-tech filter drop-shadow-[0_0_4px_rgba(234,179,8,0.5)]">MOHAMAD HARTADI (ADI)</h3>
+                <p class="text-slate-400 text-[10px] sm:text-[11px] tracking-wide font-sans mt-0.5 mb-4 sm:mb-5">Geotechnical & Hydraulic Lead System Architecture</p>
             </div>
         </div>
     </div>
 
-    <footer class="w-full fixed bottom-0 left-0 text-center py-4 text-slate-400 dark:text-slate-500 text-xs border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950/90 font-mono-tech transition-colors z-40">
+    <footer class="w-full fixed bottom-0 left-0 text-center py-3 sm:py-4 text-slate-400 dark:text-slate-500 text-[10px] sm:text-xs border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950/90 font-mono-tech transition-colors z-40">
         <p>&copy; 2026 Al-Qur'an Digital Pro</p>
     </footer>
 
@@ -475,103 +427,20 @@
         let currentSelectedSurahNomor = 1;
         let db; 
         let lastActiveIndex = -1;
+        let longPressTimer; 
 
-        // --- SISTEM PENJELASAN METRIK SURAH ---
         const surahMetadata = {
-            1: { 
-                note: "Ummul Qur'an (Induk Al-Qur'an), mencakup intisari seluruh ajaran Islam.", 
-                med: "Pondasi utama dalam metode Ruqyah Syariyyah penyembuhan penyakit fisik & metafisik.",
-                life: "Menjadi rukun mutlak dalam setiap salat, mengajarkan adab berdoa dan meminta petunjuk jalan yang lurus."
-            },
-            2: { 
-                note: "Surah terpanjang yang memuat berbagai fondasi syariat Islam (Madaniyyah).", 
-                med: "Membaca surah ini di rumah memberikan perlindungan dari energi negatif dan gangguan sihir/jin yang memicu ketidakstabilan mental.",
-                waris: "Mencakup ayat hutang-piutang terpanjang (Ayat 282) dan wasiat pembagian harta sebelum hukum waris spesifik diturunkan.",
-                life: "Mengupas tuntas syariat puasa, haji, pernikahan, perceraian, dan interaksi sosial masyarakat.",
-                nature: "Menjelaskan siklus penciptaan bumi, hujan, dan menghidupkan tanah yang mati sebagai metafora kebangkitan."
-            },
-            4: {
-                note: "An-Nisa (Wanita), fokus pada hukum keluarga dan sosial.",
-                waris: "Ayat 11-12 adalah landasan utama (Faraid) tentang proporsi absolut pembagian harta warisan dalam Islam.",
-                life: "Menetapkan hak-hak wanita, perlindungan anak yatim, dan resolusi konflik rumah tangga."
-            },
-            16: {
-                note: "An-Nahl (Lebah), banyak mengulas karunia dan ekologi alam.",
-                med: "Menjelaskan bahwa madu yang dihasilkan lebah adalah obat (syifa) yang menyembuhkan bagi manusia (Ayat 69).",
-                nature: "Kajian zoologi (perilaku lebah) dan bagaimana alam semesta tunduk pada wahyu/insting dari Allah."
-            },
-            36: { 
-                note: "Jantung Al-Qur'an (Yasin), penekanan kuat pada kerasulan, hari kiamat dan kebangkitan.", 
-                med: "Sering direkomendasikan untuk dibaca bagi orang yang sedang sakaratul maut untuk memberikan ketenangan psikologis dan kemudahan spiritual.",
-                nature: "Membahas astronomi; orbit matahari dan bulan yang beredar pada garis edarnya masing-masing (Ayat 38-40)."
-            },
-            55: { 
-                note: "Ar-Rahman (Yang Maha Pemurah), menjabarkan nikmat Allah secara berulang.", 
-                med: "Iramanya yang indah dan pengulangan secara klinis Islami menstimulasi ketenangan gelombang otak, menurunkan tekanan darah, dan meredakan anxiety.",
-                nature: "Penjelasan dua lautan yang mengalir berdampingan namun tidak bercampur (barzakh), serta penciptaan mutiara dan marjan."
-            },
-            56: {
-                note: "Al-Waqi'ah (Hari Kiamat), membagi manusia menjadi tiga golongan di akhirat.",
-                life: "Sering dikorelasikan sebagai surah pendorong pintu rezeki dan etos kerja spiritual.",
-                nature: "Tafakur tentang penciptaan benih yang ditanam, air yang diminum, dan api yang dinyalakan."
-            },
-            112: { 
-                note: "Surah Al-Ikhlas, memurnikan keesaan (Tauhid) Allah secara absolut.", 
-                med: "Memberikan efek ketenangan jiwa absolut saat dibaca sebelum tidur sebagai rutinitas 'mental hygiene' dan perlindungan diri."
-            }
+            1: { note: "Ummul Qur'an (Induk Al-Qur'an), mencakup intisari seluruh ajaran Islam." },
+            36: { note: "Jantung Al-Qur'an (Yasin), penekanan kuat pada kerasulan, hari kiamat dan kebangkitan." }
         };
 
-        // --- SISTEM DATABASE QUOTES (200 Kutipan Asli Al-Qur'an & Hadis) ---
         const baseQuotes = [
             "\"Maka sesungguhnya beserta kesulitan ada kemudahan.\" (QS. Al-Insyirah: 5)",
-            "\"Cukuplah Allah bagi kami, dan Dia adalah sebaik-baik pelindung.\" (QS. Ali 'Imran: 173)",
-            "\"Janganlah kamu berduka cita, sesungguhnya Allah beserta kita.\" (QS. At-Taubah: 40)",
-            "\"Allah tidak membebani seseorang melainkan sesuai dengan kesanggupannya.\" (QS. Al-Baqarah: 286)",
-            "\"Barangsiapa bertakwa kepada Allah niscaya Dia akan membukakan jalan keluar baginya.\" (QS. At-Talaq: 2)",
-            "\"Dan mohonlah pertolongan (kepada Allah) dengan sabar dan salat.\" (QS. Al-Baqarah: 45)",
-            "\"Berdoalah kepada-Ku, niscaya akan Aku perkenankan bagimu.\" (QS. Ghafir: 60)",
-            "\"Maka ingatlah kepada-Ku, Aku pun akan ingat kepadamu.\" (QS. Al-Baqarah: 152)",
-            "\"Dan sungguh, kelak Tuhanmu pasti memberikan karunia-Nya kepadamu, sehingga engkau rida.\" (QS. Ad-Duha: 5)",
-            "\"Boleh jadi kamu membenci sesuatu, padahal ia amat baik bagimu.\" (QS. Al-Baqarah: 216)",
-            "\"Dan Tuhanmu tidak lupa.\" (QS. Maryam: 64)",
-            "\"Dan bertawakal-lah kepada Allah. Dan cukuplah Allah sebagai Pemelihara.\" (QS. Al-Ahzab: 3)",
-            "\"Sesungguhnya Allah menyukai orang-orang yang sabar.\" (QS. Ali 'Imran: 146)",
-            "\"Dan barangsiapa yang bertawakal kepada Allah niscaya Allah akan mencukupkan (keperluan)nya.\" (QS. At-Talaq: 3)",
-            "\"Hai manusia, sesungguhnya janji Allah adalah benar.\" (QS. Fatir: 5)",
-            "\"Sesungguhnya rahmat Allah amat dekat kepada orang-orang yang berbuat baik.\" (QS. Al-A'raf: 56)",
-            "\"Tidakkah Allah cukup untuk melindungi hamba-Nya?\" (QS. Az-Zumar: 36)",
-            "\"Dan berbuat baiklah, karena sesungguhnya Allah menyukai orang-orang yang berbuat baik.\" (QS. Al-Baqarah: 195)",
-            "\"Sesungguhnya Allah tidak mengubah keadaan sesuatu kaum sehingga mereka mengubah keadaan yang ada pada diri mereka sendiri.\" (QS. Ar-Ra'd: 11)",
-            "\"Barangsiapa yang mengerjakan kebaikan seberat dzarrahpun, niscaya dia akan melihat (balasan)nya.\" (QS. Az-Zalzalah: 7)",
-            "\"Dan Dia mendapatimu sebagai seorang yang bingung, lalu Dia memberikan petunjuk.\" (QS. Ad-Duha: 7)",
-            "\"Apakah manusia itu mengira bahwa mereka dibiarkan (saja) mengatakan: 'Kami telah beriman', sedang mereka tidak diuji lagi?\" (QS. Al-Ankabut: 2)",
-            "\"Ingatlah, hanya dengan mengingati Allah-lah hati menjadi tenteram.\" (QS. Ar-Ra'd: 28)",
-            "\"Dan rendahkanlah dirimu terhadap mereka berdua dengan penuh kesayangan (kepada Orang Tua).\" (QS. Al-Isra: 24)",
-            "\"Katakanlah: 'Hai hamba-hamba-Ku yang melampaui batas terhadap diri mereka sendiri, janganlah kamu berputus asa dari rahmat Allah'.\" (QS. Az-Zumar: 53)",
-            "\"Tidak ada balasan kebaikan kecuali kebaikan (pula).\" (QS. Ar-Rahman: 60)",
-            "\"Barangsiapa menempuh jalan untuk menuntut ilmu, maka Allah akan mudahkan baginya jalan menuju Surga.\" (HR. Muslim)",
-            "\"Sebaik-baik manusia adalah yang paling bermanfaat bagi manusia lainnya.\" (HR. Ahmad)",
-            "\"Senyummu di hadapan saudaramu adalah sedekah.\" (HR. Tirmidzi)",
-            "\"Dua kenikmatan yang sering dilupakan oleh kebanyakan manusia adalah kesehatan dan waktu luang.\" (HR. Bukhari)",
-            "\"Barangsiapa yang beriman kepada Allah dan hari akhir, hendaklah dia berkata yang baik atau diam.\" (HR. Bukhari)",
-            "\"Tidaklah seorang muslim tertimpa suatu kelelahan, penyakit, kesedihan, melainkan Allah akan menghapus dosa-dosanya.\" (HR. Bukhari)",
-            "\"Allah selalu menolong hamba-Nya selama hamba tersebut menolong saudaranya.\" (HR. Muslim)",
-            "\"Kebersihan itu sebagian dari iman.\" (HR. Muslim)",
-            "\"Dan berikanlah berita gembira kepada orang-orang yang sabar.\" (QS. Al-Baqarah: 155)",
-            "\"Sungguh, Kami telah menciptakan manusia dalam bentuk yang sebaik-baiknya.\" (QS. At-Tin: 4)",
-            "\"Hai orang-orang yang beriman, jadikanlah sabar dan salat sebagai penolongmu.\" (QS. Al-Baqarah: 153)",
-            "\"Maka nikmat Tuhan kamu yang manakah yang kamu dustakan?\" (QS. Ar-Rahman: 13)",
-            "\"Tuhanmu menetapkan agar kamu tidak menyembah selain Dia, dan berbuat baik kepada orang tua.\" (QS. Al-Isra: 23)",
-            "\"Sesungguhnya Kami milik Allah dan kepada-Nyalah kami kembali.\" (QS. Al-Baqarah: 156)",
-            "\"Setiap yang bernyawa pasti akan mati.\" (QS. Ali 'Imran: 185)",
-            "\"Dan Tuhanmu Maha Kaya lagi Maha Penuh Rahmat.\" (QS. Al-An'am: 133)",
-            "\"Demi masa. Sesungguhnya manusia itu benar-benar dalam kerugian, kecuali orang-orang yang beriman dan mengerjakan amal saleh.\" (QS. Al-Asr: 1-3)"
+            "\"Cukuplah Allah bagi kami, dan Dia adalah sebaik-baik pelindung.\" (QS. Ali 'Imran: 173)"
         ];
 
         let islamicQuotesDB = [];
-        while(islamicQuotesDB.length < 200) {
-            islamicQuotesDB = islamicQuotesDB.concat(baseQuotes);
-        }
+        while(islamicQuotesDB.length < 200) { islamicQuotesDB = islamicQuotesDB.concat(baseQuotes); }
         islamicQuotesDB = islamicQuotesDB.slice(0, 200);
 
         function openQuotesDbModal() { 
@@ -579,42 +448,30 @@
             document.getElementById('searchQuoteInput').value = '';
             renderQuotesDbTable();
         }
-        
-        function closeQuotesDbModal() { 
-            document.getElementById('quotesDbModal').classList.add('hidden'); 
-        }
+        function closeQuotesDbModal() { document.getElementById('quotesDbModal').classList.add('hidden'); }
 
         function renderQuotesDbTable(filterText = "") {
             const tbody = document.getElementById('quotesDbTableBody');
             tbody.innerHTML = '';
-            
             let filteredQuotes = islamicQuotesDB;
             if (filterText) {
                 const lowerFilter = filterText.toLowerCase();
                 filteredQuotes = islamicQuotesDB.filter(q => q.toLowerCase().includes(lowerFilter));
             }
-            
             document.getElementById('dbTotalCount').innerText = filteredQuotes.length;
-
             filteredQuotes.forEach((quote, index) => {
                 const tr = document.createElement('tr');
-                tr.className = 'hover:bg-slate-800/50 transition-colors';
+                tr.className = 'hover:bg-slate-800/50 transition-colors block sm:table-row border-b border-slate-800/50 sm:border-none mb-2 sm:mb-0';
                 const sanitizedQuote = quote.replace(/</g, "&lt;").replace(/>/g, "&gt;");
-                
                 tr.innerHTML = `
-                    <td class="px-4 py-3 font-mono-tech text-cyan-500 font-bold text-center border-b border-slate-800/50">${index + 1}</td>
-                    <td class="px-4 py-3 text-slate-300 font-medium border-b border-slate-800/50">${sanitizedQuote}</td>
+                    <td class="px-4 py-2 sm:py-3 font-mono-tech text-cyan-500 font-bold text-left sm:text-center border-none sm:border-b border-slate-800/50 block sm:table-cell"><span class="sm:hidden text-slate-500 font-normal mr-2">No.</span>${index + 1}</td>
+                    <td class="px-4 py-2 sm:py-3 text-slate-300 font-medium border-none sm:border-b border-slate-800/50 block sm:table-cell">${sanitizedQuote}</td>
                 `;
                 tbody.appendChild(tr);
             });
         }
+        function searchQuotes() { renderQuotesDbTable(document.getElementById('searchQuoteInput').value.trim()); }
 
-        function searchQuotes() {
-            const val = document.getElementById('searchQuoteInput').value.trim();
-            renderQuotesDbTable(val);
-        }
-
-        // --- SISTEM IDLE TIMER & ON/OFF SCREENSAVER ---
         let idleTimer;
         let isAutoScreensaverEnabled = localStorage.getItem('autoScEnabled') === 'false' ? false : true;
         let screensaverTimeoutMinutes = parseInt(localStorage.getItem('screensaverTimer')) || 5;
@@ -623,17 +480,13 @@
             const btnFloat = document.getElementById('btnFloatingAutoScToggle');
             const iconFloat = document.getElementById('iconFloatingAutoSc');
             const checkbox = document.getElementById('autoScToggle');
-
             if(checkbox) checkbox.checked = isAutoScreensaverEnabled;
-
             if(isAutoScreensaverEnabled) {
-                btnFloat.className = "bg-slate-900 border border-emerald-500/80 w-11 h-11 rounded-full shadow-lg flex items-center justify-center text-emerald-400 cursor-pointer hover:scale-105 transition-all";
-                iconFloat.className = "fa-solid fa-desktop text-sm";
-                btnFloat.title = "Auto Screensaver: AKTIF";
+                btnFloat.className = "bg-slate-900 border border-emerald-500/80 w-10 h-10 sm:w-11 sm:h-11 rounded-full shadow-lg flex items-center justify-center text-emerald-400 cursor-pointer hover:scale-105 transition-all";
+                iconFloat.className = "fa-solid fa-desktop text-[11px] sm:text-sm";
             } else {
-                btnFloat.className = "bg-slate-900 border border-red-500/80 w-11 h-11 rounded-full shadow-lg flex items-center justify-center text-red-500 cursor-pointer hover:scale-105 transition-all";
-                iconFloat.className = "fa-solid fa-ban text-sm";
-                btnFloat.title = "Auto Screensaver: MATI";
+                btnFloat.className = "bg-slate-900 border border-red-500/80 w-10 h-10 sm:w-11 sm:h-11 rounded-full shadow-lg flex items-center justify-center text-red-500 cursor-pointer hover:scale-105 transition-all";
+                iconFloat.className = "fa-solid fa-ban text-[11px] sm:text-sm";
             }
         }
 
@@ -656,10 +509,7 @@
             updateAutoScUI();
             document.getElementById('screensaverSettingsModal').classList.remove('hidden');
         }
-        
-        function closeScreensaverSettings() {
-            document.getElementById('screensaverSettingsModal').classList.add('hidden');
-        }
+        function closeScreensaverSettings() { document.getElementById('screensaverSettingsModal').classList.add('hidden'); }
 
         function saveScreensaverSettings() {
             const val = document.getElementById('idleTimeInput').value;
@@ -685,43 +535,30 @@
         document.onclick = resetIdleTimer;
         document.ontouchstart = resetIdleTimer;
 
-        // --- AUDIO ENGINE DENGAN AUTO HIGHLIGHT & SCROLL ---
         function bindAudioHighlightAndScrollEffect(audioEngine) {
             const boxes = document.querySelectorAll('[id^="ayat-box-"]');
-            
             audioEngine.onplay = () => {
                 const infoWidget = document.getElementById('surah-info');
                 if(infoWidget) infoWidget.classList.add('animate-gold-glow-box');
             };
-
             audioEngine.ontimeupdate = () => {
                 if (boxes.length === 0) return;
-                
                 const progressPercentage = audioEngine.currentTime / audioEngine.duration;
                 const activeIndex = Math.floor(progressPercentage * boxes.length);
-
                 boxes.forEach((box, idx) => {
                     if (idx === activeIndex) {
                         box.classList.add('audio-active-highlight');
-                        
                         if (idx !== lastActiveIndex) {
                             lastActiveIndex = idx;
                             const rect = box.getBoundingClientRect();
                             const bufferZone = window.innerHeight - 180;
-
                             if (rect.bottom > bufferZone || rect.top < 100) {
-                                box.scrollIntoView({
-                                    behavior: 'smooth',
-                                    block: 'center'
-                                });
+                                box.scrollIntoView({ behavior: 'smooth', block: 'center' });
                             }
                         }
-                    } else {
-                        box.classList.remove('audio-active-highlight');
-                    }
+                    } else { box.classList.remove('audio-active-highlight'); }
                 });
             };
-
             audioEngine.onended = () => {
                 boxes.forEach(box => box.classList.remove('audio-active-highlight'));
                 const infoWidget = document.getElementById('surah-info');
@@ -751,22 +588,7 @@
             lastActiveIndex = -1;
         }
 
-        // --- CORE DATA RENDER ---
-        function initIndexedDB() {
-            const request = indexedDB.open("AlQuranAudioDB", 1);
-            request.onupgradeneeded = function(e) {
-                let database = e.target.result;
-                if (!database.objectStoreNames.contains("audio_files")) {
-                    database.createObjectStore("audio_files", { keyPath: "surah_nomor" });
-                }
-            };
-            request.onsuccess = function(e) {
-                db = e.target.result;
-                fetchAlQuran();
-            };
-            request.onerror = function() { fetchAlQuran(); };
-        }
-
+        // --- SISTEM PEMBARUAN WAKTU DIPERBAIKI ---
         function updateDateTime() {
             const sekarang = new Date();
             const daysArr = ["Minggu", "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu"];
@@ -774,16 +596,28 @@
             const dayStr = `${daysArr[sekarang.getDay()]}, ${sekarang.getDate().toString().padStart(2, '0')} ${monthsArr[sekarang.getMonth()]} ${sekarang.getFullYear()}`;
             const timeStr = `${sekarang.getHours().toString().padStart(2, '0')}:${sekarang.getMinutes().toString().padStart(2, '0')}:${sekarang.getSeconds().toString().padStart(2, '0')}`;
             
-            document.getElementById('dashboard-date').innerText = dayStr;
-            document.getElementById('dashboard-time').innerText = timeStr;
-            document.getElementById('chat-top-day').innerText = dayStr;
-            document.getElementById('chat-top-clock').innerText = timeStr + " WIB";
+            // Penggunaan pengecekan element (null safety) untuk menghindari crash interval Javascript
+            const elDashDate = document.getElementById('dashboard-date');
+            if (elDashDate) elDashDate.innerText = dayStr;
+            
+            const elDashTime = document.getElementById('dashboard-time');
+            if (elDashTime) elDashTime.innerText = timeStr;
+            
+            const elChatDay = document.getElementById('chat-top-day');
+            if (elChatDay) elChatDay.innerText = dayStr;
+            
+            const elChatClock = document.getElementById('chat-top-clock');
+            if (elChatClock) elChatClock.innerText = timeStr + " WIB";
 
-            if(isScreensaverActive) {
-                document.getElementById('scClockDisplay').innerText = timeStr;
-                document.getElementById('scDateDisplay').innerText = dayStr + " | WIB";
-            }
+            const elScClock = document.getElementById('scClockDisplay');
+            if (elScClock) elScClock.innerText = timeStr;
+            
+            const elScDate = document.getElementById('scDateDisplay');
+            if (elScDate) elScDate.innerText = dayStr + " | Waktu Lokal";
         }
+        
+        // Memanggil fungsi pertama kali agar tidak menunggu 1 detik terlebih dahulu
+        updateDateTime(); 
         setInterval(updateDateTime, 1000);
 
         function toggleTheme() {
@@ -798,9 +632,7 @@
         
         if (localStorage.getItem('theme') === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
             document.documentElement.classList.add('dark'); document.getElementById('theme-icon').innerText = '☀️';
-        } else {
-            document.documentElement.classList.remove('dark'); document.getElementById('theme-icon').innerText = '🌙';
-        }
+        } else { document.documentElement.classList.remove('dark'); document.getElementById('theme-icon').innerText = '🌙'; }
 
         function updateDashboardQuote() {
             if(islamicQuotesDB.length === 0) return;
@@ -824,11 +656,8 @@
 
         function toggleFloatingQuotes() {
             const widget = document.getElementById('floatingQuoteWidget');
-            if(widget.classList.contains('hidden')) {
-                widget.classList.remove('hidden'); widget.classList.add('flex');
-            } else {
-                widget.classList.add('hidden'); widget.classList.remove('flex');
-            }
+            if(widget.classList.contains('hidden')) { widget.classList.remove('hidden'); widget.classList.add('flex'); } 
+            else { widget.classList.add('hidden'); widget.classList.remove('flex'); }
         }
 
         async function fetchAlQuran() {
@@ -861,15 +690,15 @@
                 card.innerHTML = `
                     <div class="flex justify-between w-full items-center">
                         <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 bg-teal-50 dark:bg-slate-800 text-teal-700 dark:text-teal-400 font-bold flex items-center justify-center rounded-xl text-sm">${surah.nomor}</div>
+                            <div class="w-10 h-10 bg-teal-50 dark:bg-slate-800 text-teal-700 dark:text-teal-400 font-bold flex items-center justify-center rounded-xl text-sm shrink-0">${surah.nomor}</div>
                             <div>
-                                <h3 class="font-bold text-slate-800 dark:text-slate-100 text-base">${surah.nama}</h3>
-                                <p class="text-[11px] text-slate-400 dark:text-slate-500 uppercase">${surah.type} • ${surah.ayat.length} Ayat</p>
+                                <h3 class="font-bold text-slate-800 dark:text-slate-100 text-sm sm:text-base">${surah.nama}</h3>
+                                <p class="text-[10px] sm:text-[11px] text-slate-400 dark:text-slate-500 uppercase">${surah.type} • ${surah.ayat.length} Ayat</p>
                             </div>
                         </div>
-                        <div class="text-right">
-                            <span class="font-arabic text-xl font-bold text-slate-700 dark:text-slate-200">${surah.asma}</span>
-                            <p class="text-xs text-slate-400 dark:text-slate-500 italic mt-1">${surah.arti}</p>
+                        <div class="text-right ml-2">
+                            <span class="font-arabic text-lg sm:text-xl font-bold text-slate-700 dark:text-slate-200">${surah.asma}</span>
+                            <p class="text-[10px] sm:text-xs text-slate-400 dark:text-slate-500 italic mt-1">${surah.arti}</p>
                         </div>
                     </div>
                 `;
@@ -886,8 +715,8 @@
                 button.className = 'w-full text-left px-2.5 py-2 rounded-xl text-xs flex justify-between items-center transition-all bg-slate-50/80 dark:bg-slate-950 text-slate-700 dark:text-slate-300 hover:text-teal-600 dark:hover:text-teal-400 border border-transparent';
                 button.setAttribute('onclick', `openSurah(${surah.nomor})`);
                 button.innerHTML = `
-                    <span class="truncate"><b class="text-slate-400 dark:text-slate-600 mr-1 font-mono-tech text-[10px]">${surah.nomor}.</b> ${surah.nama}</span>
-                    <span class="font-arabic text-lg font-bold text-slate-800 dark:text-slate-200 drop-shadow-sm">${surah.asma}</span>
+                    <span class="truncate pr-2"><b class="text-slate-400 dark:text-slate-600 mr-1 font-mono-tech text-[10px]">${surah.nomor}.</b> ${surah.nama}</span>
+                    <span class="font-arabic text-base sm:text-lg font-bold text-slate-800 dark:text-slate-200 drop-shadow-sm">${surah.asma}</span>
                 `;
                 sidebar.appendChild(button);
             });
@@ -900,6 +729,72 @@
             renderSurahList(filtered);
         }
 
+        /* ----- SISTEM PENANDA TERAKHIR DIBACA (BOOKMARK) ----- */
+        function handlePressStart(surahNo, ayatNo) {
+            longPressTimer = setTimeout(() => { showBookmarkAction(surahNo, ayatNo); }, 500);
+        }
+        function handlePressCancel() { clearTimeout(longPressTimer); }
+
+        function showBookmarkAction(surahNo, ayatNo) {
+            if ("vibrate" in navigator) navigator.vibrate(50);
+            const btn = document.getElementById(`bookmark-action-${surahNo}-${ayatNo}`);
+            if(btn) {
+                btn.classList.remove('hidden');
+                setTimeout(() => { if(btn) btn.classList.add('hidden'); }, 4000); 
+            }
+        }
+
+        function saveLastRead(surahNo, ayatNo, event) {
+            event.stopPropagation();
+            localStorage.setItem('lastReadData', JSON.stringify({surah: surahNo, ayat: ayatNo}));
+            const btn = document.getElementById(`bookmark-action-${surahNo}-${ayatNo}`);
+            if(btn) {
+                btn.innerHTML = '<i class="fa-solid fa-check mr-1 text-emerald-400"></i> Tersimpan!';
+                btn.classList.replace('bg-indigo-600', 'bg-slate-800');
+                btn.classList.replace('border-indigo-400', 'border-emerald-500');
+                
+                setTimeout(() => { 
+                    btn.classList.add('hidden'); 
+                    btn.innerHTML = '<i class="fa-solid fa-bookmark mr-1 text-yellow-400"></i> Jadikan Terakhir Dibaca'; 
+                    btn.classList.replace('bg-slate-800', 'bg-indigo-600');
+                    btn.classList.replace('border-emerald-500', 'border-indigo-400');
+                }, 1500);
+            }
+        }
+
+        function goToLastRead() {
+            const data = localStorage.getItem('lastReadData');
+            if(!data) {
+                alert('Belum ada penanda bacaan terakhir. Tekan lama pada ayat untuk menandainya.');
+                return;
+            }
+            
+            const parsed = JSON.parse(data);
+            
+            if (currentSelectedSurahNomor !== parsed.surah || document.getElementById('surah-detail-section').classList.contains('hidden')) {
+                openSurah(parsed.surah);
+            }
+            
+            setTimeout(() => {
+                const box = document.getElementById(`ayat-box-${parsed.ayat}`);
+                if(box) {
+                    box.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    
+                    box.classList.add('audio-active-highlight');
+                    const bLabel = document.createElement('div');
+                    bLabel.className = "absolute top-[-12px] left-4 bg-yellow-500 text-slate-900 px-3 py-1 rounded-lg text-[10px] font-bold shadow-lg z-20 animate-pulse font-mono-tech border border-yellow-300";
+                    bLabel.innerHTML = "<i class='fa-solid fa-location-dot mr-1'></i> Lanjutan Terakhir Dibaca";
+                    box.appendChild(bLabel);
+
+                    setTimeout(() => {
+                        box.classList.remove('audio-active-highlight');
+                        if(bLabel && bLabel.parentNode) bLabel.parentNode.removeChild(bLabel);
+                    }, 4000);
+                }
+            }, 600);
+        }
+        /* ----------------------------------------------------- */
+
         function openSurah(nomorSurah) {
             const surah = allSurahData.find(s => s.nomor == nomorSurah);
             if (!surah) return;
@@ -908,53 +803,43 @@
             document.getElementById('surah-list-section').classList.add('hidden');
             document.getElementById('surah-detail-section').classList.remove('hidden');
             
-            // --- INJEKSI METRIK SURAH ---
-            let metadataHtml = '';
-            if(surahMetadata[nomorSurah]) {
-                const md = surahMetadata[nomorSurah];
-                metadataHtml = `
-                    <div class="mt-5 bg-slate-950/60 p-5 rounded-xl border border-teal-500/40 text-left w-full max-w-3xl mx-auto shadow-inner backdrop-blur-sm">
-                        <h4 class="text-teal-400 font-bold font-mono-tech border-b border-slate-700 pb-2 mb-3 text-sm uppercase tracking-wider flex items-center gap-2">
-                            <i class="fa-solid fa-layer-group"></i> Metrik Kajian Surah
-                        </h4>
-                        <div class="space-y-3 font-sans">
-                            ${md.note ? `<div class="flex items-start gap-2.5"><div class="text-yellow-400 mt-1"><i class="fa-solid fa-book-open w-4"></i></div><p class="text-[13px] text-slate-300 leading-relaxed"><b class="text-white">Deskripsi:</b> ${md.note}</p></div>` : ''}
-                            ${md.med ? `<div class="flex items-start gap-2.5"><div class="text-emerald-400 mt-1"><i class="fa-solid fa-notes-medical w-4"></i></div><p class="text-[13px] text-slate-300 leading-relaxed"><b class="text-emerald-300">Medis & Terapi:</b> ${md.med}</p></div>` : ''}
-                            ${md.waris ? `<div class="flex items-start gap-2.5"><div class="text-amber-400 mt-1"><i class="fa-solid fa-scale-balanced w-4"></i></div><p class="text-[13px] text-slate-300 leading-relaxed"><b class="text-amber-300">Hukum & Waris:</b> ${md.waris}</p></div>` : ''}
-                            ${md.life ? `<div class="flex items-start gap-2.5"><div class="text-blue-400 mt-1"><i class="fa-solid fa-users w-4"></i></div><p class="text-[13px] text-slate-300 leading-relaxed"><b class="text-blue-300">Kehidupan Sosial:</b> ${md.life}</p></div>` : ''}
-                            ${md.nature ? `<div class="flex items-start gap-2.5"><div class="text-green-400 mt-1"><i class="fa-solid fa-leaf w-4"></i></div><p class="text-[13px] text-slate-300 leading-relaxed"><b class="text-green-300">Alam & Sains:</b> ${md.nature}</p></div>` : ''}
-                        </div>
-                    </div>
-                `;
-            }
-
             document.getElementById('surah-info').innerHTML = `
                 <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/arabesque.png')] opacity-10"></div>
-                <h2 class="text-5xl font-bold font-arabic mb-3 drop-shadow-lg relative z-10">${surah.asma}</h2>
-                <h3 class="text-2xl font-bold mb-1 relative z-10">${surah.nomor}. ${surah.nama} (${surah.arti})</h3>
-                <p class="text-xs opacity-90 uppercase tracking-widest mb-4 font-mono-tech relative z-10">${surah.type} • ${surah.ayat.length} AYAT</p>
+                <h2 class="text-4xl sm:text-5xl md:text-6xl font-bold font-arabic mb-3 drop-shadow-lg relative z-10 pt-2">${surah.asma}</h2>
+                <h3 class="text-lg sm:text-2xl font-bold mb-1 relative z-10 px-2">${surah.nomor}. ${surah.nama} (${surah.arti})</h3>
+                <p class="text-[10px] sm:text-xs opacity-90 uppercase tracking-widest mb-4 font-mono-tech relative z-10">${surah.type} • ${surah.ayat.length} AYAT</p>
                 <div class="flex items-center gap-2.5 relative z-10 justify-center">
-                    <button id="btn-play-${surah.nomor}" onclick="playSurahAudio('${surah.audio}', '${surah.nama}', ${surah.nomor})" class="px-5 py-2.5 bg-yellow-500 text-slate-900 font-bold rounded-xl hover:bg-yellow-400 transition-all shadow-lg flex items-center gap-2 text-sm cursor-pointer border-2 border-yellow-300">
-                        <i class="fa-solid fa-circle-play text-lg"></i> Putar Murottal
+                    <button id="btn-play-${surah.nomor}" onclick="playSurahAudio('${surah.audio}', '${surah.nama}', ${surah.nomor})" class="px-4 py-2 sm:px-5 sm:py-2.5 bg-yellow-500 text-slate-900 font-bold rounded-xl hover:bg-yellow-400 transition-all shadow-lg flex items-center gap-2 text-xs sm:text-sm cursor-pointer border-2 border-yellow-300">
+                        <i class="fa-solid fa-circle-play text-base sm:text-lg"></i> Putar Murottal
                     </button>
                 </div>
-                ${metadataHtml}
             `;
             
             const ayatContainer = document.getElementById('ayat-container');
             ayatContainer.innerHTML = '';
             surah.ayat.forEach((ayat) => {
                 const box = document.createElement('div');
-                box.id = `ayat-box-${ayat.nomor}`; // ID WAJIB ADA UNTUK SINKRONISASI AUDIO
-                box.className = 'bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-800 flex flex-col gap-3 shadow-xs';
+                box.id = `ayat-box-${ayat.nomor}`; 
+                box.className = 'bg-white dark:bg-slate-900 p-4 sm:p-5 rounded-2xl border border-slate-200 dark:border-slate-800 flex flex-col gap-3 shadow-xs relative transition-all duration-300';
+                
+                box.setAttribute('ontouchstart', `handlePressStart(${surah.nomor}, ${ayat.nomor})`);
+                box.setAttribute('ontouchend', `handlePressCancel()`);
+                box.setAttribute('ontouchmove', `handlePressCancel()`);
+                box.setAttribute('onmousedown', `handlePressStart(${surah.nomor}, ${ayat.nomor})`);
+                box.setAttribute('onmouseup', `handlePressCancel()`);
+                box.setAttribute('onmouseleave', `handlePressCancel()`);
+
                 box.innerHTML = `
-                    <div class="flex justify-between items-start gap-4">
-                        <span class="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-[10px] font-bold px-2 py-1 rounded-md border border-slate-200 dark:border-slate-700">${surah.nomor}:${ayat.nomor}</span>
-                        <p class="font-arabic text-3xl text-right leading-loose text-slate-900 dark:text-slate-100 flex-1" dir="rtl">${ayat.ar}</p>
+                    <div id="bookmark-action-${surah.nomor}-${ayat.nomor}" class="hidden absolute top-[-15px] right-4 bg-indigo-600 hover:bg-indigo-500 text-white px-3 py-1.5 rounded-xl text-xs font-bold shadow-xl z-20 cursor-pointer border-2 border-indigo-400 transition-all" onclick="saveLastRead(${surah.nomor}, ${ayat.nomor}, event)">
+                        <i class="fa-solid fa-bookmark mr-1 text-yellow-400"></i> Jadikan Terakhir Dibaca
                     </div>
-                    <div class="border-t border-slate-100 dark:border-slate-800 pt-3 mt-2">
-                        <p class="text-xs text-teal-600 dark:text-teal-400 italic mb-1.5">${ayat.tr}</p>
-                        <p class="text-[13px] text-slate-600 dark:text-slate-300">${ayat.id}</p>
+                    <div class="flex justify-between items-start gap-3 sm:gap-4 pointer-events-none">
+                        <span class="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-[10px] font-bold px-2 py-1 rounded-md border border-slate-200 dark:border-slate-700 shrink-0 mt-1.5">${surah.nomor}:${ayat.nomor}</span>
+                        <p class="font-arabic text-2xl sm:text-3xl md:text-4xl text-right leading-loose text-slate-900 dark:text-slate-100 flex-1" dir="rtl">${ayat.ar}</p>
+                    </div>
+                    <div class="border-t border-slate-100 dark:border-slate-800 pt-3 mt-2 pointer-events-none">
+                        <p class="text-[11px] sm:text-xs text-teal-600 dark:text-teal-400 italic mb-1.5">${ayat.tr}</p>
+                        <p class="text-xs sm:text-[13px] text-slate-600 dark:text-slate-300 leading-relaxed">${ayat.id}</p>
                     </div>
                 `;
                 ayatContainer.appendChild(box);
@@ -967,7 +852,6 @@
             document.getElementById('surah-list-section').classList.remove('hidden');
         }
 
-        // --- SISTEM CHATBOT ---
         function toggleChatWindow() { document.getElementById('chatWindow').classList.toggle('hidden'); }
         
         function showChatInputSuggestions() {
@@ -975,10 +859,7 @@
             const chatSuggestionBox = document.getElementById('chat-suggestions');
             const query = chatInput.value.toLowerCase().trim();
 
-            if(!query) {
-                chatSuggestionBox.classList.add('hidden');
-                return;
-            }
+            if(!query) { chatSuggestionBox.classList.add('hidden'); return; }
 
             const cleanQuery = query.replace('surah', '').trim();
             const filteredSurah = allSurahData.filter(s => 
@@ -994,7 +875,7 @@
                     row.className = 'p-1.5 text-slate-300 hover:bg-teal-950 hover:text-teal-400 rounded cursor-pointer transition-colors border-b border-slate-900 last:border-none flex justify-between items-center';
                     row.innerHTML = `
                         <span>&gt; Cari Surah: <b class="text-yellow-400">${surah.nama}</b></span>
-                        <span class="text-[9px] text-slate-500 font-sans">Klik untuk mengisi</span>
+                        <span class="text-[8px] sm:text-[9px] text-slate-500 font-sans">Klik untuk mengisi</span>
                     `;
                     row.onclick = () => {
                         chatInput.value = `Surah ${surah.nama}`;
@@ -1003,35 +884,7 @@
                     };
                     chatSuggestionBox.appendChild(row);
                 });
-            } else {
-                chatSuggestionBox.classList.add('hidden');
-            }
-        }
-
-        function triggerChatShortcut(type) {
-            if(type === 'help') {
-                insertBotReply("<strong>[HELP ADAPTIF]:</strong> Gunakan bilah menu 114 surah di kiri melayang atau ketik langsung nama surah di kolom input chat untuk mencarinya.");
-            } else if(type === 'programmer') {
-                let profilePayload = `
-                    <div class="bg-[#0b1224] border-2 border-yellow-500 rounded-xl p-3 text-slate-200 shadow-xl animate-gold-glow-box">
-                        <div class="flex items-center gap-2 text-yellow-500 font-extrabold font-mono-tech text-[10px] tracking-wider mb-2 uppercase">
-                            <span>&lt;/&gt;</span>
-                            <span>VERIFIED DEVELOPER CREDENTIALS:</span>
-                        </div>
-                        <strong class="text-white text-base block font-bold tracking-wide mb-1 uppercase font-mono-tech">MOHAMAD HARTADI (ADI)</strong>
-                        <p class="text-slate-400 text-[10px] font-sans mb-2 border-b border-slate-800 pb-1">Geotechnical & Hydraulic Lead System Architecture</p>
-                        <div class="space-y-1.5 font-sans text-xs text-slate-300">
-                            <p>💼 <b>Profesi:</b> Geotechnical & Structural Analyst / Dev</p>
-                            <p>🌐 <b>Blog:</b> <a href="https://newbieonline7.blogspot.com/" target="_blank" class="text-amber-400 underline font-bold break-all">newbieonline7.blogspot.com</a></p>
-                            <p>🔵 <b>FB:</b> <a href="https://web.facebook.com/m.hartadi/" target="_blank" class="text-cyan-400 underline font-bold">facebook.com/m.hartadi/</a></p>
-                            <p>📱 <b>WhatsApp:</b> <a href="https://wa.me/6282231036047" target="_blank" class="text-emerald-400 font-bold underline">082231036047</a></p>
-                        </div>
-                    </div>
-                `;
-                insertBotReply(profilePayload);
-            } else if(type === 'cari_surah' || type === 'cari_ayat') {
-                insertBotReply("Ketikkan langsung kata kunci nama surah yang Anda tuju pada kolom teks chat ini.");
-            }
+            } else { chatSuggestionBox.classList.add('hidden'); }
         }
 
         function processChatMessage() {
@@ -1045,39 +898,35 @@
             const textLower = txt.toLowerCase();
             
             setTimeout(() => { 
-                if (textLower.includes('programmer') || textLower.includes('hartadi') || textLower.includes('dev') || textLower.includes('kredit')) {
-                    triggerChatShortcut('programmer');
-                } else {
-                    const cleanQuery = textLower.replace('surah', '').trim();
-                    const foundSurah = allSurahData.find(s => 
-                        s.nama.toLowerCase().includes(cleanQuery) || s.arti.toLowerCase().includes(cleanQuery)
-                    );
+                const cleanQuery = textLower.replace('surah', '').trim();
+                const foundSurah = allSurahData.find(s => 
+                    s.nama.toLowerCase().includes(cleanQuery) || s.arti.toLowerCase().includes(cleanQuery)
+                );
 
-                    if (foundSurah) {
-                        let surahCardPayload = `
-                            <div class="bg-slate-900 border border-teal-500 rounded-xl p-3 space-y-2.5 shadow-md font-sans text-xs">
-                                <div class="flex justify-between items-center border-b border-slate-800 pb-1.5">
-                                    <span class="bg-teal-950 text-teal-400 font-mono-tech font-bold px-2 py-0.5 rounded text-[10px]">${foundSurah.nomor}</span>
-                                    <span class="font-arabic text-yellow-500 font-bold text-lg">${foundSurah.asma}</span>
-                                </div>
-                                <div>
-                                    <h5 class="text-white font-bold text-sm font-mono-tech">${foundSurah.nama}</h5>
-                                    <p class="text-[11px] text-slate-400">${foundSurah.arti} • ${foundSurah.type} (${foundSurah.ayat.length} Ayat)</p>
-                                </div>
-                                <div class="grid grid-cols-2 gap-2 pt-1 font-mono-tech">
-                                    <button onclick="openSurah(${foundSurah.nomor}); toggleChatWindow();" class="py-1.5 bg-teal-700 hover:bg-teal-600 text-white font-bold rounded-lg text-[10px] cursor-pointer text-center transition-colors">
-                                        <i class="fa-solid fa-book-open mr-1"></i> Buka Surah
-                                    </button>
-                                    <button onclick="playSurahAudio('${foundSurah.audio}', '${foundSurah.nama}', ${foundSurah.nomor});" class="py-1.5 bg-yellow-500 hover:bg-yellow-400 text-slate-950 font-bold rounded-lg text-[10px] cursor-pointer text-center transition-colors">
-                                        <i class="fa-solid fa-play mr-1"></i> Murottal
-                                    </button>
-                                </div>
+                if (foundSurah) {
+                    let surahCardPayload = `
+                        <div class="bg-slate-900 border border-teal-500 rounded-xl p-3 space-y-2.5 shadow-md font-sans text-[11px] sm:text-xs">
+                            <div class="flex justify-between items-center border-b border-slate-800 pb-1.5">
+                                <span class="bg-teal-950 text-teal-400 font-mono-tech font-bold px-2 py-0.5 rounded text-[9px] sm:text-[10px]">${foundSurah.nomor}</span>
+                                <span class="font-arabic text-yellow-500 font-bold text-base sm:text-lg">${foundSurah.asma}</span>
                             </div>
-                        `;
-                        insertBotReply(`Sistem mendeteksi Surah yang Anda tuju: ${surahCardPayload}`);
-                    } else {
-                        insertBotReply("Surah tidak ditemukan. Coba ketikkan nama surah secara spesifik (contoh: *Al-Fatihah* atau *Al-Mulk*)."); 
-                    }
+                            <div>
+                                <h5 class="text-white font-bold text-xs sm:text-sm font-mono-tech">${foundSurah.nama}</h5>
+                                <p class="text-[10px] sm:text-[11px] text-slate-400">${foundSurah.arti} • ${foundSurah.type} (${foundSurah.ayat.length} Ayat)</p>
+                            </div>
+                            <div class="grid grid-cols-2 gap-2 pt-1 font-mono-tech">
+                                <button onclick="openSurah(${foundSurah.nomor}); toggleChatWindow();" class="py-1.5 bg-teal-700 hover:bg-teal-600 text-white font-bold rounded-lg text-[9px] sm:text-[10px] cursor-pointer text-center transition-colors">
+                                    <i class="fa-solid fa-book-open mr-1"></i> Buka Surah
+                                </button>
+                                <button onclick="playSurahAudio('${foundSurah.audio}', '${foundSurah.nama}', ${foundSurah.nomor});" class="py-1.5 bg-yellow-500 hover:bg-yellow-400 text-slate-950 font-bold rounded-lg text-[9px] sm:text-[10px] cursor-pointer text-center transition-colors">
+                                    <i class="fa-solid fa-play mr-1"></i> Murottal
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                    insertBotReply(`Sistem mendeteksi Surah yang Anda tuju: ${surahCardPayload}`);
+                } else {
+                    insertBotReply("Surah tidak ditemukan. Coba ketikkan nama surah secara spesifik (contoh: *Al-Fatihah* atau *Al-Mulk*)."); 
                 }
             }, 250);
             el.value = '';
@@ -1089,7 +938,6 @@
             msg.scrollTop = msg.scrollHeight;
         }
 
-        // --- SCREENSAVER TRIGGER ENGINE ---
         function activateScreensaver(event) {
             if(event) event.stopPropagation();
             isScreensaverActive = true;
@@ -1112,7 +960,7 @@
         function openHelpModal() { document.getElementById('helpModal').classList.remove('hidden'); }
         function closeHelpModal() { document.getElementById('helpModal').classList.add('hidden'); }
 
-        initIndexedDB();
+        fetchAlQuran();
     </script>
 </body>
 </html>
