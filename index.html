@@ -7,6 +7,7 @@
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <link href="https://fonts.googleapis.com/css2?family=Amiri&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     
     <style>
         .font-arabic { font-family: 'Amiri', serif; }
@@ -119,7 +120,7 @@
                 <div class="text-center lg:text-left">
                     <h1 class="text-lg md:text-xl font-bold tracking-wide flex items-center justify-center lg:justify-start gap-2">
                         Al-Qur'an Digital Pro 
-                        <span class="text-[9px] md:text-xs bg-teal-700 dark:bg-slate-800 px-1.5 py-0.5 rounded border border-teal-500/40 text-yellow-400 font-sans font-bold">Versi 1.7</span>
+                        <span class="text-[9px] md:text-xs bg-teal-700 dark:bg-slate-800 px-1.5 py-0.5 rounded border border-teal-500/40 text-yellow-400 font-sans font-bold">Versi 1.9</span>
                     </h1>
                     <p class="text-[10px] md:text-xs text-teal-100 opacity-80 dark:text-slate-400 font-mono-tech">Core-Repository Database Offline</p>
                 </div>
@@ -277,7 +278,7 @@
                     <p class="leading-relaxed">Al-Qur'an Digital Pro - Cyber Islamic Edition adalah platform mushaf digital luring (*offline*) berkinerja tinggi. Aplikasi ini mengintegrasikan fungsi bacaan Al-Qur'an 114 surah, pemutar murottal dengan fitur sinkronisasi teks dinamis otomatis, serta kajian metrik komprehensif.</p>
                 </div>
 
-                <div class="bg-slate-950/80 p-4 sm:p-5 rounded-xl border border-slate-800 shadow-inner">
+                <div class="bg-slate-950/80 p-4 sm:p-5 rounded-xl border border-blue-400/80 shadow-inner">
                     <h4 class="text-blue-400 font-bold font-mono-tech mb-3 flex items-center gap-2 text-sm"><i class="fa-solid fa-cubes"></i> FITUR INTEGRASI UTAMA</h4>
                     <ul class="space-y-2 list-disc list-inside">
                         <li><strong class="text-slate-200">Database Quotes:</strong> Manajer kutipan interaktif dari 200 Al-Qur'an & Hadis.</li>
@@ -285,6 +286,7 @@
                         <li><strong class="text-slate-200">Auto Screensaver:</strong> Mode jeda estetik bernuansa hitam pekat untuk efisiensi daya layar.</li>
                         <li><strong class="text-slate-200">Metrik Surah Dinamis:</strong> Penjelasan korelasi surah kategori medis, waris, dan alam.</li>
                         <li><strong class="text-emerald-400">Terbaru - Bookmark Pintar:</strong> Tahan lama (*long-press*) pada ayat untuk menandai bacaan terakhir. Klik tombol melayang <i class="fa-solid fa-bookmark text-indigo-400 mx-1"></i> untuk langsung menuju ayat yang telah ditandai tanpa harus mencari ulang.</li>
+                        <li><strong class="text-teal-400">Terbaru - Fitur Berbagi Ayat:</strong> Klik ikon share pada setiap ayat untuk mengekspor teks ayat, terjemahan, atau keduanya ke dalam format gambar kustom dengan latar belakang dinamis.</li>
                     </ul>
                 </div>
 
@@ -341,6 +343,66 @@
         </div>
     </div>
 
+    <!-- SHARE MODAL -->
+    <div id="shareModal" class="fixed inset-0 z-[10010] hidden bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-slate-900 border-2 border-teal-500 rounded-2xl w-full max-w-2xl p-5 sm:p-6 shadow-2xl relative flex flex-col max-h-[90vh] overflow-hidden">
+            <button onclick="closeShareModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white transition-colors cursor-pointer z-10"><i class="fa-solid fa-xmark text-xl"></i></button>
+            <h3 class="text-teal-400 text-lg font-bold font-mono-tech mb-4 flex items-center gap-2"><i class="fa-solid fa-share-nodes"></i> Bagikan Ayat</h3>
+            
+            <div class="flex flex-col md:flex-row gap-6 overflow-y-auto custom-scroll pr-2 pb-2">
+                <!-- Kontrol Panel -->
+                <div class="w-full md:w-1/3 flex flex-col gap-4 font-sans text-sm text-slate-300">
+                    <div class="bg-slate-950 p-3 rounded-xl border border-slate-800">
+                        <span class="block text-xs font-bold text-slate-400 mb-2 font-mono-tech">KONTEN TEKS</span>
+                        <label class="flex items-center gap-2 mb-2 cursor-pointer hover:text-teal-400 transition-colors">
+                            <input type="radio" name="shareOption" value="both" checked onchange="updateSharePreview()" class="accent-teal-500"> Ayat & Terjemah
+                        </label>
+                        <label class="flex items-center gap-2 mb-2 cursor-pointer hover:text-teal-400 transition-colors">
+                            <input type="radio" name="shareOption" value="ayat" onchange="updateSharePreview()" class="accent-teal-500"> Hanya Ayat
+                        </label>
+                        <label class="flex items-center gap-2 cursor-pointer hover:text-teal-400 transition-colors">
+                            <input type="radio" name="shareOption" value="terjemah" onchange="updateSharePreview()" class="accent-teal-500"> Hanya Terjemah
+                        </label>
+                    </div>
+
+                    <div class="bg-slate-950 p-3 rounded-xl border border-slate-800">
+                        <span class="block text-xs font-bold text-slate-400 mb-2 font-mono-tech">BACKGROUND GAMBAR</span>
+                        <input type="file" id="bgImageUpload" accept="image/*" onchange="handleBgUpload(event)" class="block w-full text-xs text-slate-400 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-teal-900 file:text-teal-300 hover:file:bg-teal-800 cursor-pointer">
+                        <button onclick="removeBgImage()" class="mt-2 text-[10px] text-red-400 hover:text-red-300 cursor-pointer hidden" id="btnRemoveBg"><i class="fa-solid fa-trash mr-1"></i> Hapus Gambar</button>
+                    </div>
+
+                    <button onclick="downloadShareImage()" class="w-full bg-teal-600 hover:bg-teal-500 text-white font-bold py-3 text-sm rounded-xl transition-colors shadow-lg mt-auto flex items-center justify-center gap-2 cursor-pointer">
+                        <i class="fa-solid fa-download"></i> Unduh Gambar
+                    </button>
+                </div>
+
+                <!-- Preview Area -->
+                <div class="w-full md:w-2/3 bg-slate-950 border border-slate-800 rounded-xl flex items-center justify-center overflow-hidden relative min-h-[300px]">
+                    <span class="absolute top-2 left-2 text-[10px] text-slate-500 font-mono-tech z-20">PRATINJAU GAMBAR</span>
+                    
+                    <!-- Area yang akan dirender menjadi gambar -->
+                    <div id="shareCanvasArea" class="w-full max-w-[500px] bg-slate-900 relative p-8 flex flex-col justify-center min-h-[400px] overflow-hidden" style="background-size: cover; background-position: center;">
+                        <!-- Overlay Hitam Transparan untuk keterbacaan teks jika ada gambar -->
+                        <div id="shareOverlay" class="absolute inset-0 bg-slate-900/80 hidden z-0"></div>
+                        
+                        <div class="relative z-10 flex flex-col gap-4 text-center">
+                            <span id="shareSurahInfo" class="text-teal-400 font-mono-tech text-xs font-bold tracking-widest border-b border-teal-500/30 pb-2 mx-auto inline-block">Surah Info</span>
+                            
+                            <p id="shareAyatText" class="font-arabic text-3xl md:text-4xl text-slate-100 leading-loose py-2" dir="rtl"></p>
+                            
+                            <p id="shareTerjemahText" class="text-sm md:text-base text-slate-300 italic leading-relaxed"></p>
+                        </div>
+                        
+                        <div class="relative z-10 mt-6 pt-4 border-t border-slate-800 flex justify-between items-center w-full">
+                            <span class="text-yellow-500/80 font-mono-tech text-[9px] font-bold">Al-Qur'an Digital Pro</span>
+                            <span class="text-slate-500/80 font-mono-tech text-[9px]">Cyber Islamic Edition</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Right Bottom Interactive Buttons Layout -->
     <div class="fixed bottom-4 right-4 z-50 flex items-center gap-2 sm:gap-2.5">
         
@@ -350,7 +412,7 @@
                 <div class="flex justify-between items-center">
                     <div class="flex items-center gap-2">
                         <i class="fa-solid fa-star-and-crescent text-yellow-400 text-[10px] sm:text-xs animate-pulse"></i>
-                        <h4 class="font-mono-tech text-[10px] sm:text-xs font-black text-slate-300">ASISTEN CHAT MUSLIM</h4>
+                        <h4 class="font-mono-tech text-[10px] sm:text-xs font-black text-slate-300">HYDROBOT ASSISTANT</h4>
                     </div>
                     <button onclick="toggleChatWindow()" class="text-slate-400 hover:text-white cursor-pointer text-xs p-1"><i class="fa-solid fa-xmark"></i></button>
                 </div>
@@ -361,7 +423,7 @@
             </div>
             
             <div id="chatMessages" class="flex-1 p-2.5 sm:p-3 overflow-y-auto space-y-3 font-mono-tech text-[11px] sm:text-xs text-slate-200 bg-slate-950 custom-scroll relative">
-                <div class="bg-slate-900/80 p-2.5 rounded-xl border border-slate-800 leading-relaxed">
+                <div class="bg-slate-900/80 p-2.5 rounded-xl border border-slate-800/80 leading-relaxed">
                     <span class="text-yellow-400 block font-bold mb-1">&gt;_ SISTEM DIGITAL AKTIF:</span>
                     Assalamualaikum! Silakan ketik langsung **nama surah** untuk mencari dan menampilkan surah yang Anda tuju dengan cepat.
                 </div>
@@ -460,6 +522,7 @@
         let db; 
         let lastActiveIndex = -1;
         let longPressTimer; 
+        let currentShareData = null;
 
         const surahMetadata = {
             1: { note: "Ummul Qur'an (Induk Al-Qur'an), mencakup intisari seluruh ajaran Islam." },
@@ -570,13 +633,10 @@
         document.onclick = resetIdleTimer;
         document.ontouchstart = resetIdleTimer;
 
-        // --- SISTEM NAVIGASI KEYBOARD UNTUK QUOTES ---
         document.addEventListener('keydown', function(event) {
-            // Hindari memicu navigasi saat pengguna mengetik di input form/chat
             if (event.target.tagName === 'INPUT' || event.target.tagName === 'TEXTAREA') return;
             
             const quoteWidget = document.getElementById('floatingQuoteWidget');
-            // Cek apabila widget sedang terbuka atau screensaver sedang menyala
             if ((quoteWidget && !quoteWidget.classList.contains('hidden')) || isScreensaverActive) {
                 if (event.key === 'ArrowLeft') {
                     navigateQuote(-1);
@@ -586,7 +646,6 @@
             }
         });
 
-        // --- ROTASI QUOTE OTOMATIS GLOBAL (SETIAP 20 DETIK) ---
         setInterval(() => {
             navigateQuote(1);
         }, 20000);
@@ -687,7 +746,6 @@
             document.documentElement.classList.add('dark'); document.getElementById('theme-icon').innerText = '☀️';
         } else { document.documentElement.classList.remove('dark'); document.getElementById('theme-icon').innerText = '🌙'; }
 
-        // --- SISTEM PEMBARUAN QUOTES (TERMASUK SCREENSAVER SINKRONISASI) ---
         function updateDashboardQuote() {
             if(islamicQuotesDB.length === 0) return;
             const textEl = document.getElementById('dashboardQuoteText');
@@ -737,7 +795,6 @@
                     document.getElementById('surah-counter').innerText = `${allSurahData.length}/114`;
                     updateDashboardQuote();
 
-                    // --- OTOMATIS TAMPILKAN WIDGET QUOTES DI AWAL ---
                     const quoteWidget = document.getElementById('floatingQuoteWidget');
                     if (quoteWidget) {
                         quoteWidget.classList.remove('hidden');
@@ -895,15 +952,43 @@
                 box.setAttribute('onmouseup', `handlePressCancel()`);
                 box.setAttribute('onmouseleave', `handlePressCancel()`);
 
+                const safeAr = ayat.ar.replace(/'/g, "\\\'").replace(/"/g, "&quot;");
+                const safeId = ayat.id.replace(/'/g, "\\\'").replace(/"/g, "&quot;");
+
                 box.innerHTML = `
                     <div id="bookmark-action-${surah.nomor}-${ayat.nomor}" class="hidden absolute top-[-15px] right-4 bg-indigo-600 hover:bg-indigo-500 text-white px-3 py-1.5 rounded-xl text-xs font-bold shadow-xl z-20 cursor-pointer border-2 border-indigo-400 transition-all" onclick="saveLastRead(${surah.nomor}, ${ayat.nomor}, event)">
                         <i class="fa-solid fa-bookmark mr-1 text-yellow-400"></i> Jadikan Terakhir Dibaca
                     </div>
-                    <div class="flex justify-between items-start gap-3 sm:gap-4 pointer-events-none">
-                        <span class="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-[10px] font-bold px-2 py-1 rounded-md border border-slate-200 dark:border-slate-700 shrink-0 mt-1.5">${surah.nomor}:${ayat.nomor}</span>
-                        <p class="font-arabic text-2xl sm:text-3xl md:text-4xl text-right leading-loose text-slate-900 dark:text-slate-100 flex-1" dir="rtl">${ayat.ar}</p>
+                    
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-slate-100 dark:border-slate-800/80 pb-3 mb-3 gap-3 relative z-20">
+                        <span class="bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400 text-[10px] sm:text-xs font-bold px-2.5 py-1 rounded-md border border-slate-200 dark:border-slate-700 shrink-0">
+                            Ayat ${ayat.nomor}
+                        </span>
+                        
+                        <div class="flex items-center gap-1 w-full sm:w-auto justify-end sm:justify-start">
+                            <button onclick="shareToWhatsApp('${safeAr}', '${safeId}', ${surah.nomor}, ${ayat.nomor})" class="text-slate-400 hover:text-green-500 p-1.5 transition-colors cursor-pointer" title="Bagikan ke WhatsApp">
+                                <i class="fa-brands fa-whatsapp text-base sm:text-lg"></i>
+                            </button>
+                            <button onclick="shareToFacebook('${safeAr}', '${safeId}', ${surah.nomor}, ${ayat.nomor})" class="text-slate-400 hover:text-blue-500 p-1.5 transition-colors cursor-pointer" title="Bagikan ke Facebook">
+                                <i class="fa-brands fa-facebook text-base sm:text-lg"></i>
+                            </button>
+                            <button onclick="shareToTwitter('${safeAr}', '${safeId}', ${surah.nomor}, ${ayat.nomor})" class="text-slate-400 hover:text-sky-400 p-1.5 transition-colors cursor-pointer" title="Bagikan ke X/Twitter">
+                                <i class="fa-brands fa-x-twitter text-base sm:text-lg"></i>
+                            </button>
+                            <button onclick="copyToClipboard('${safeAr}', '${safeId}', ${ayat.nomor})" class="text-slate-400 hover:text-emerald-500 p-1.5 transition-colors cursor-pointer" title="Salin Ayat">
+                                <i class="fa-regular fa-copy text-base sm:text-lg"></i>
+                            </button>
+                            <div class="w-px h-4 bg-slate-200 dark:bg-slate-700 mx-1"></div>
+                            <button onclick="openShareModal(${surah.nomor}, ${ayat.nomor})" class="bg-teal-50 dark:bg-slate-800 hover:bg-teal-600 dark:hover:bg-teal-500 text-teal-600 dark:text-teal-400 hover:text-white dark:hover:text-slate-100 px-2 py-1 sm:px-2.5 sm:py-1.5 rounded-lg text-[10px] sm:text-xs font-bold shadow-xs border border-teal-200 dark:border-slate-700 transition-all cursor-pointer flex items-center gap-1.5" title="Buat Gambar Ayat">
+                                <i class="fa-solid fa-image"></i> <span class="hidden sm:inline">Gambar</span>
+                            </button>
+                        </div>
                     </div>
-                    <div class="border-t border-slate-100 dark:border-slate-800 pt-3 mt-2 pointer-events-none">
+                    
+                    <div class="pointer-events-none">
+                        <p class="font-arabic text-2xl sm:text-3xl md:text-4xl text-right leading-loose text-slate-900 dark:text-slate-100 mb-2 selection:bg-teal-500/30" dir="rtl">${ayat.ar}</p>
+                    </div>
+                    <div class="pt-3 pointer-events-none">
                         <p class="text-[11px] sm:text-xs text-teal-600 dark:text-teal-400 italic mb-1.5">${ayat.tr}</p>
                         <p class="text-xs sm:text-[13px] text-slate-600 dark:text-slate-300 leading-relaxed">${ayat.id}</p>
                     </div>
@@ -1055,6 +1140,148 @@
         function closeCreatorModalOutside() { document.getElementById('creatorModalOutside').classList.add('hidden'); }
         function openHelpModal() { document.getElementById('helpModal').classList.remove('hidden'); }
         function closeHelpModal() { document.getElementById('helpModal').classList.add('hidden'); }
+
+        // --- MANAJEMEN PREVIEW & EXPORT FITUR BAGIKAN ---
+        function openShareModal(surahNo, ayatNo) {
+            const surah = allSurahData.find(s => s.nomor == surahNo);
+            const ayat = surah.ayat.find(a => a.nomor == ayatNo);
+            
+            if(!surah || !ayat) return;
+
+            currentShareData = {
+                surahNama: surah.nama,
+                surahNo: surah.nomor,
+                ayatNo: ayat.nomor,
+                teksArab: ayat.ar,
+                teksTerjemah: ayat.id
+            };
+
+            document.querySelector('input[name="shareOption"][value="both"]').checked = true;
+            removeBgImage();
+            
+            updateSharePreview();
+            document.getElementById('shareModal').classList.remove('hidden');
+        }
+
+        function closeShareModal() {
+            document.getElementById('shareModal').classList.add('hidden');
+        }
+
+        function updateSharePreview() {
+            if(!currentShareData) return;
+            
+            const option = document.querySelector('input[name="shareOption"]:checked').value;
+            const elArab = document.getElementById('shareAyatText');
+            const elTerjemah = document.getElementById('shareTerjemahText');
+            
+            document.getElementById('shareSurahInfo').innerText = `QS. ${currentShareData.surahNama}: ${currentShareData.ayatNo}`;
+            elArab.innerText = currentShareData.teksArab;
+            elTerjemah.innerText = currentShareData.teksTerjemah;
+
+            if (option === 'ayat') {
+                elArab.style.display = 'block';
+                elTerjemah.style.display = 'none';
+            } else if (option === 'terjemah') {
+                elArab.style.display = 'none';
+                elTerjemah.style.display = 'block';
+            } else {
+                elArab.style.display = 'block';
+                elTerjemah.style.display = 'block';
+            }
+        }
+
+        function handleBgUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const canvasArea = document.getElementById('shareCanvasArea');
+                    canvasArea.style.backgroundImage = `url(\${e.target.result})`;
+                    document.getElementById('shareOverlay').classList.remove('hidden');
+                    document.getElementById('btnRemoveBg').classList.remove('hidden');
+                }
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function removeBgImage() {
+            const canvasArea = document.getElementById('shareCanvasArea');
+            canvasArea.style.backgroundImage = 'none';
+            document.getElementById('shareOverlay').classList.add('hidden');
+            document.getElementById('btnRemoveBg').classList.add('hidden');
+            document.getElementById('bgImageUpload').value = '';
+        }
+
+        function downloadShareImage() {
+            const canvasArea = document.getElementById('shareCanvasArea');
+            const originalBorderRadius = canvasArea.style.borderRadius;
+            
+            canvasArea.style.borderRadius = '0px'; 
+            
+            html2canvas(canvasArea, {
+                scale: 2, 
+                backgroundColor: '#0f172a', 
+                useCORS: true
+            }).then(canvas => {
+                canvasArea.style.borderRadius = originalBorderRadius;
+                
+                const link = document.createElement('a');
+                link.download = `Ayat_\${currentShareData.surahNama}_\${currentShareData.ayatNo}.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            });
+        }
+
+
+        // --- FITUR SOCIAL MEDIA SHARING ---
+        function formatShareText(arab, arti, surahNo, noAyat) {
+            const surah = allSurahData.find(s => s.nomor == surahNo);
+            const surahNama = surah ? surah.nama : '';
+            const teksLengkap = `QS. ${surahNama}: Ayat ${noAyat}\n\n${arab}\n\nArtinya: "${arti}"\n\nShared via Al-Qur'an Digital Pro`;
+            return encodeURIComponent(teksLengkap);
+        }
+
+        function shareToWhatsApp(arab, arti, surahNo, noAyat) {
+            const teks = formatShareText(arab, arti, surahNo, noAyat);
+            const url = `https://api.whatsapp.com/send?text=${teks}`;
+            window.open(url, '_blank');
+        }
+
+        function shareToFacebook(arab, arti, surahNo, noAyat) {
+            const surah = allSurahData.find(s => s.nomor == surahNo);
+            const surahNama = surah ? surah.nama : '';
+            const teksLengkap = `QS. ${surahNama} Ayat ${noAyat}: ${arab} - Artinya: "${arti}"`;
+            
+            if (navigator.share) {
+                navigator.share({
+                    title: `Kutipan Ayat ${noAyat}`,
+                    text: teksLengkap,
+                    url: window.location.href
+                }).catch(console.error);
+            } else {
+                const urlApp = encodeURIComponent(window.location.href);
+                const fbUrl = `https://www.facebook.com/sharer/sharer.php?u=${urlApp}&quote=${encodeURIComponent(teksLengkap)}`;
+                window.open(fbUrl, '_blank');
+            }
+        }
+
+        function shareToTwitter(arab, arti, surahNo, noAyat) {
+            const surah = allSurahData.find(s => s.nomor == surahNo);
+            const surahNama = surah ? surah.nama : '';
+            const teksLengkap = `QS. ${surahNama} Ayat ${noAyat}\n${arab}\nArtinya: "${arti}"`;
+            const teksMaksimal = teksLengkap.length > 250 ? teksLengkap.substring(0, 250) + "..." : teksLengkap;
+            const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(teksMaksimal)}&url=${encodeURIComponent(window.location.href)}`;
+            window.open(url, '_blank');
+        }
+
+        function copyToClipboard(arab, arti, noAyat) {
+            const teksLengkap = `${arab}\n\nArtinya: "${arti}" (Ayat ${noAyat})`;
+            navigator.clipboard.writeText(teksLengkap).then(() => {
+                alert(`Ayat ${noAyat} berhasil disalin ke clipboard!`);
+            }).catch(err => {
+                console.error('Gagal menyalin teks: ', err);
+            });
+        }
 
         fetchAlQuran();
     </script>
