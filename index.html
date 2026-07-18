@@ -4,23 +4,41 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Al-Qur'an Digital Pro - Cyber Islamic Edition</title>
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    
+    <!-- CSS & Fonts -->
+    <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Amiri&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     
+    <!-- Scripts (html2canvas & Three.js) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        arabic: ['Amiri', 'serif'],
+                        'mono-tech': ['JetBrains Mono', 'monospace'],
+                    }
+                }
+            }
+        }
+    </script>
+
     <style>
-        .font-arabic { font-family: 'Amiri', serif; }
-        .font-sans { font-family: 'Plus Jakarta Sans', sans-serif; }
-        .font-mono-tech { font-family: 'JetBrains Mono', monospace; }
-        
         .custom-scroll::-webkit-scrollbar { width: 6px; height: 6px; }
         .custom-scroll::-webkit-scrollbar-track { background: transparent; }
         .custom-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
         .dark .custom-scroll::-webkit-scrollbar-thumb { background: #475569; }
 
+        /* Konfigurasi Dasar Latar Belakang */
         html.dark body { background-color: #020617; color: #f8fafc; }
-        
+
         .static-glow { box-shadow: 0 0 15px rgba(20, 184, 166, 0.2); }
         .dark .static-glow { box-shadow: 0 0 20px rgba(20, 184, 166, 0.15), inset 0 0 10px rgba(20, 184, 166, 0.05); }
 
@@ -50,19 +68,22 @@
 
         .audio-active-highlight {
             border-color: #14b8a6 !important;
-            background-color: rgba(20, 184, 166, 0.08) !important;
-            box-shadow: 0 0 25px rgba(20, 184, 166, 0.2) !important;
+            background-color: rgba(20, 184, 166, 0.15) !important;
+            box-shadow: 0 0 25px rgba(20, 184, 166, 0.3) !important;
             transition: all 0.4s ease-in-out;
-            transform: scale(1.01);
+            transform: scale(1.02);
         }
 
         .toggle-checkbox:checked { right: 0; border-color: #10b981; }
         .toggle-checkbox:checked + .toggle-label { background-color: #10b981; }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800 dark:text-slate-100 transition-colors duration-300 min-h-screen flex flex-col font-sans relative pb-32">
+<body class="bg-slate-50 dark:bg-slate-950 transition-colors duration-300 min-h-screen flex flex-col font-sans relative pb-32">
 
-    <!-- Global App Loader -->
+    <!-- 3D Earth Background Container (Fixed Opacity & Blend Mode for Text Contrast) -->
+    <div id="earth-3d-bg" class="fixed inset-0 z-[-1] pointer-events-none opacity-15 dark:opacity-30 transition-opacity duration-500"></div>
+
+    <!-- App Loader -->
     <div id="globalAppLoader" class="fixed inset-0 z-[10000] bg-slate-950 flex flex-col items-center justify-center transition-opacity duration-700 ease-in-out">
         <div class="relative flex flex-col items-center max-w-md px-6 text-center">
             <div class="w-24 h-24 md:w-28 md:h-28 mb-6 rounded-full border border-yellow-500/30 flex items-center justify-center relative bg-slate-900 shadow-[0_0_40px_rgba(234,179,8,0.15)]">
@@ -70,15 +91,15 @@
                 <i class="fa-solid fa-book-quran text-yellow-500 text-4xl md:text-5xl animate-gold-glow"></i>
             </div>
             <h2 class="font-arabic text-2xl md:text-4xl text-yellow-500 mb-3 tracking-wide animate-gold-glow select-none" dir="rtl">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</h2>
-            <p id="loaderStatusText" class="font-mono-tech text-xs text-cyan-400 tracking-widest animate-pulse mt-2">&gt;_ MEMUAT DATABASE MUSHAF DIGITAL</p>
+            <p id="loaderStatusText" class="font-mono-tech text-xs text-cyan-400 tracking-widest animate-pulse mt-2">&gt;_ MEMUAT DATABASE MUSHAF DIGITAL (CACHE ENABLED)</p>
             <div class="w-56 h-1 bg-slate-800 mt-6 rounded-full overflow-hidden relative">
                 <div id="loaderProgressBar" class="h-full bg-gradient-to-r from-yellow-500 to-cyan-500 w-0 transition-all duration-300"></div>
             </div>
         </div>
     </div>
 
-    <!-- Islamic Screensaver (Hitam Pekat + Quotes) -->
-    <div id="islamicScreensaver" class="hidden fixed inset-0 z-[9999] bg-black flex flex-col items-center justify-center overflow-hidden font-sans select-none transition-all duration-500 opacity-0">
+    <!-- Screensaver -->
+    <div id="islamicScreensaver" class="hidden fixed inset-0 z-[9999] bg-black/50 backdrop-blur-md flex flex-col items-center justify-center overflow-hidden font-sans select-none transition-all duration-500 opacity-0">
         <button onclick="deactivateScreensaver()" class="absolute top-6 right-6 z-50 bg-slate-900/80 hover:bg-red-900/80 text-slate-400 hover:text-red-400 border border-slate-700 hover:border-red-500 px-4 py-2 rounded-xl text-xs font-mono-tech transition-all flex items-center gap-2 backdrop-blur-sm cursor-pointer shadow-lg">
             <i class="fa-solid fa-power-off"></i> Tutup
         </button>
@@ -90,7 +111,6 @@
             <div id="scClockDisplay" class="text-5xl sm:text-7xl md:text-9xl font-black font-mono-tech text-white tracking-wider filter drop-shadow-[0_0_15px_rgba(255,255,255,0.1)]">00:00:00</div>
             <div id="scDateDisplay" class="text-[10px] sm:text-sm md:text-base font-mono-tech text-yellow-400 tracking-widest uppercase mt-4 border border-yellow-500/40 px-6 py-2.5 sm:px-8 sm:py-3 rounded-full bg-slate-900/60 backdrop-blur-md shadow-[0_0_15px_rgba(234,179,8,0.2)]">Memuat Kalender...</div>
             
-            <!-- Tampilan Quotes Glow Statis pada Screensaver -->
             <div class="mt-8 sm:mt-10 max-w-2xl w-[90%] border border-yellow-500/30 rounded-2xl p-5 sm:p-6 bg-slate-900/50 backdrop-blur-md shadow-[0_0_20px_rgba(234,179,8,0.15)] relative animate-gold-glow-box">
                 <i class="fa-solid fa-quote-left text-yellow-600/40 text-2xl sm:text-3xl absolute top-3 left-4"></i>
                 <p id="screensaverQuoteText" class="text-yellow-100 text-xs sm:text-sm md:text-base font-medium italic leading-relaxed animate-gold-text-glow relative z-10 px-4 sm:px-8 transition-opacity duration-300">Memuat mutiara hikmah...</p>
@@ -103,7 +123,7 @@
         </div>
     </div>
 
-    <!-- Audio Player Widget -->
+    <!-- Audio Player -->
     <div id="audioPlayerWidget" class="fixed top-24 lg:top-20 left-1/2 transform -translate-x-1/2 z-[100] bg-slate-900 border border-teal-500 p-2 rounded-full shadow-[0_0_20px_rgba(20,184,166,0.3)] hidden items-center gap-3 animate-cyber-glow w-[90%] max-w-md sm:w-auto" title="Pemutar Murottal Interaktif">
         <div class="bg-teal-800 text-white px-3 py-1.5 rounded-full text-[10px] sm:text-xs font-bold whitespace-nowrap min-w-[80px] sm:min-w-[120px] text-center shadow-inner overflow-hidden text-ellipsis" id="audioSurahTitle">Murottal</div>
         <audio id="globalAudio" controls class="h-8 outline-none rounded-full flex-1 w-full"></audio>
@@ -112,10 +132,12 @@
         </button>
     </div>
 
-    <!-- Header Section -->
-    <header class="bg-teal-600 dark:bg-slate-900 text-white shadow-md sticky top-0 z-40 border-b border-teal-500/30 dark:border-slate-800 transition-colors" title="Panel Kontrol Utama">
-        <div class="container mx-auto px-4 py-3 flex flex-col lg:flex-row justify-between items-center gap-4 lg:gap-3">
-            <div class="flex items-center justify-center lg:justify-start gap-3 w-full lg:w-auto cursor-pointer" onclick="showSurahList()" title="Kembali ke Indeks Mushaf">
+    <!-- Header / Navigation -->
+    <header class="bg-teal-600/95 dark:bg-slate-900/90 backdrop-blur-md text-white shadow-md sticky top-0 z-40 border-b border-teal-500/30 dark:border-slate-800 transition-colors" title="Panel Kontrol Utama">
+        <div class="container mx-auto px-4 py-3 flex flex-col lg:flex-row justify-between items-center gap-4 lg:gap-3 relative">
+            
+            <!-- Left Side -->
+            <div class="flex items-center justify-center lg:justify-start gap-3 w-full lg:w-1/3 cursor-pointer z-10" onclick="showSurahList()" title="Kembali ke Indeks Mushaf">
                 <span class="text-2xl lg:text-3xl">🕌</span>
                 <div class="text-center lg:text-left">
                     <h1 class="text-lg md:text-xl font-bold tracking-wide flex items-center justify-center lg:justify-start gap-2">
@@ -126,26 +148,27 @@
                 </div>
             </div>
             
-            <div class="flex flex-col md:flex-row items-center justify-center lg:justify-end gap-3 w-full lg:w-auto">
-                <div class="bg-teal-700 dark:bg-slate-950 px-4 py-1.5 rounded-xl border border-teal-500/30 dark:border-slate-800 text-[11px] sm:text-sm shadow-inner flex justify-center items-center w-full md:w-auto order-1">
-                    <span id="dashboard-date" class="font-medium">Memuat hari...</span>
-                    <span class="mx-2">|</span>
-                    <span id="dashboard-time" class="font-mono-tech font-bold text-yellow-400 dark:text-teal-400">00:00:00</span>
+            <!-- Center Side: Day & Time -->
+            <div class="flex flex-col items-center justify-center w-full lg:w-1/3 order-first lg:order-none z-10">
+                <div class="bg-slate-950/80 border-2 border-cyan-400/80 px-6 py-2 rounded-full shadow-[0_0_15px_rgba(34,211,238,0.5)] animate-pulse flex flex-col items-center justify-center w-full max-w-[280px]">
+                    <span id="dashboard-date" class="text-emerald-400 font-bold text-[11px] sm:text-sm tracking-widest uppercase font-mono-tech">Memuat hari...</span>
+                    <span id="dashboard-time" class="text-cyan-400 font-black text-2xl sm:text-3xl font-mono-tech tracking-widest drop-shadow-[0_0_8px_rgba(34,211,238,0.8)] mt-0.5">00:00:00</span>
                 </div>
-                
-                <div class="flex flex-wrap items-center justify-center gap-2 w-full md:w-auto order-2">
-                    <button onclick="openQuotesDbModal()" class="flex-1 md:flex-none justify-center bg-indigo-700 hover:bg-indigo-800 dark:bg-indigo-900/80 dark:hover:bg-indigo-800 text-cyan-300 text-[10px] md:text-xs font-bold px-2 py-2 rounded-xl border border-indigo-500/40 shadow-xs cursor-pointer flex items-center gap-1.5">
-                        <i class="fa-solid fa-database"></i> <span>DB QUOTES</span>
-                    </button>
-                    <button onclick="toggleFloatingQuotes()" class="flex-1 md:flex-none justify-center bg-teal-700 hover:bg-teal-800 dark:bg-slate-800 dark:hover:bg-slate-700 text-yellow-400 text-[10px] md:text-xs font-bold px-2 py-2 rounded-xl border border-teal-500/40 dark:border-slate-700 shadow-xs cursor-pointer flex items-center gap-1.5">
-                        <i class="fa-solid fa-quote-left"></i> <span>QUOTES</span>
-                    </button>
-                    <button onclick="openCreatorModalOutside()" class="flex-1 md:flex-none justify-center bg-amber-500 hover:bg-amber-600 dark:bg-amber-600 dark:hover:bg-amber-700 text-slate-950 dark:text-white text-[10px] md:text-xs font-bold px-2 py-2 rounded-xl border border-amber-400/40 shadow-xs cursor-pointer flex items-center gap-1.5 animate-pulse">
-                        <i class="fa-solid fa-code"></i> <span>CREDIT PROG</span>
-                    </button>
-                </div>
+            </div>
+            
+            <!-- Right Side -->
+            <div class="flex flex-wrap items-center justify-center lg:justify-end gap-2 w-full lg:w-1/3 z-10">
+                <button onclick="openQuotesDbModal()" class="flex-1 md:flex-none justify-center bg-indigo-700 hover:bg-indigo-800 dark:bg-indigo-900/80 dark:hover:bg-indigo-800 text-cyan-300 text-[10px] md:text-xs font-bold px-2 py-2 rounded-xl border border-indigo-500/40 shadow-xs cursor-pointer flex items-center gap-1.5">
+                    <i class="fa-solid fa-database"></i> <span>DB QUOTES</span>
+                </button>
+                <button onclick="toggleFloatingQuotes()" class="flex-1 md:flex-none justify-center bg-teal-700 hover:bg-teal-800 dark:bg-slate-800 dark:hover:bg-slate-700 text-yellow-400 text-[10px] md:text-xs font-bold px-2 py-2 rounded-xl border border-teal-500/40 dark:border-slate-700 shadow-xs cursor-pointer flex items-center gap-1.5">
+                    <i class="fa-solid fa-quote-left"></i> <span>QUOTES</span>
+                </button>
+                <button onclick="openCreatorModalOutside()" class="flex-1 md:flex-none justify-center bg-amber-500 hover:bg-amber-600 dark:bg-amber-600 dark:hover:bg-amber-700 text-slate-950 dark:text-white text-[10px] md:text-xs font-bold px-2 py-2 rounded-xl border border-amber-400/40 shadow-xs cursor-pointer flex items-center gap-1.5 animate-pulse">
+                    <i class="fa-solid fa-code"></i> <span>CREDIT PROG</span>
+                </button>
 
-                <div class="flex items-center justify-center gap-2 order-3">
+                <div class="flex items-center justify-center gap-2">
                     <button onclick="openHelpModal()" class="bg-slate-900 dark:bg-slate-800 hover:bg-slate-800 text-teal-400 dark:text-teal-300 text-xs font-bold p-2 w-9 h-9 flex items-center justify-center rounded-xl border border-teal-500/30 dark:border-slate-700 shadow-xs cursor-pointer">
                         <i class="fa-solid fa-circle-question text-sm"></i>
                     </button>
@@ -157,45 +180,49 @@
         </div>
     </header>
 
-    <!-- Main Container -->
-    <div class="container mx-auto px-4 py-6 flex-1 flex flex-col lg:flex-row gap-6 relative">
-        <aside class="w-full lg:w-72 shrink-0 lg:sticky lg:top-[120px] lg:h-[calc(100vh-8rem)] bg-white dark:bg-slate-900 rounded-2xl p-4 shadow-md border border-slate-200 dark:border-slate-800 static-glow flex flex-col justify-between order-2 lg:order-1 transition-all">
+    <!-- Main Content Area -->
+    <div class="container mx-auto px-4 py-6 flex-1 flex flex-col lg:flex-row gap-6 relative z-10">
+        <!-- Sidebar -->
+        <aside class="w-full lg:w-72 shrink-0 lg:sticky lg:top-[150px] lg:h-[calc(100vh-10rem)] bg-white/95 dark:bg-slate-900/85 backdrop-blur-md rounded-2xl p-4 shadow-md border border-slate-200 dark:border-slate-800 static-glow flex flex-col justify-between order-2 lg:order-1 transition-all">
             <div>
                 <h2 class="text-xs font-bold text-teal-600 dark:text-teal-400 uppercase tracking-wider mb-3 flex items-center justify-between">
                     <span class="flex items-center gap-1"><i class="fa-solid fa-star-and-crescent text-amber-500"></i> Indeks Mushaf</span>
                     <span class="text-[10px] bg-teal-50 dark:bg-slate-800 px-2 py-0.5 rounded text-teal-600 dark:text-teal-400 font-mono-tech border border-teal-200 dark:border-slate-700" id="surah-counter">0/114</span>
                 </h2>
-                <div id="sidebar-menu" class="space-y-1 h-60 lg:h-[calc(100vh-14rem)] overflow-y-auto custom-scroll pr-1">
+                <div id="sidebar-menu" class="space-y-1 h-60 lg:h-[calc(100vh-15rem)] overflow-y-auto custom-scroll pr-1">
                     <div class="text-center py-4 text-slate-400 text-xs animate-pulse">Menyusun indeks surah...</div>
                 </div>
             </div>
         </aside>
 
+        <!-- Main Workspace -->
         <main class="flex-1 order-1 lg:order-2 min-w-0 flex flex-col gap-5 static-glow bg-transparent rounded-2xl">
+            <!-- Surah Grid (Beranda) -->
             <section id="surah-list-section" class="relative">
                 <div class="relative w-full">
                     <input type="text" id="search-input" placeholder="Cari nama surah atau arti makna (contoh: Al-Baqarah)..." 
-                        class="w-full p-4 rounded-xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-sm focus:ring-2 focus:ring-teal-500 dark:focus:ring-teal-400 focus:outline-none transition-all text-slate-900 dark:text-white font-medium text-sm sm:text-base"
+                        class="w-full p-4 rounded-xl bg-white/95 dark:bg-slate-900/85 backdrop-blur-md border border-slate-200 dark:border-slate-800 shadow-sm focus:ring-2 focus:ring-teal-500 dark:focus:ring-teal-400 focus:outline-none transition-all text-slate-900 dark:text-white font-medium text-sm sm:text-base"
                         oninput="filterSurahWithSuggestion()">
                     <div id="search-suggestions" class="hidden absolute left-0 right-0 top-full mt-1.5 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl shadow-2xl z-50 max-h-48 overflow-y-auto custom-scroll p-1 font-sans"></div>
                 </div>
                 <div id="surah-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4 hidden mt-4"></div>
             </section>
 
+            <!-- Surah Detail (Interface Ayat) -->
             <section id="surah-detail-section" class="hidden">
-                <button onclick="showSurahList()" class="mb-5 flex items-center gap-2 text-teal-600 dark:text-teal-400 font-semibold hover:underline cursor-pointer text-sm bg-white dark:bg-slate-900 py-2 px-4 rounded-xl shadow-xs border border-slate-200 dark:border-slate-800 w-fit">
+                <button onclick="showSurahList()" class="mb-5 flex items-center gap-2 text-teal-600 dark:text-teal-400 font-semibold hover:underline cursor-pointer text-sm bg-white/95 dark:bg-slate-900/85 py-2 px-4 rounded-xl shadow-xs border border-slate-200 dark:border-slate-800 w-fit backdrop-blur-md transition-all">
                     <i class="fa-solid fa-chevron-left text-xs"></i> Kembali ke Beranda
                 </button>
-                <div id="surah-info" class="bg-gradient-to-br from-teal-600 to-emerald-700 dark:from-slate-900 dark:to-teal-950 text-white p-6 rounded-2xl shadow-lg mb-5 text-center border border-teal-500/30 flex flex-col items-center relative overflow-hidden">
-                    <!-- Data injeksi penjelasan metrik -->
+                <div id="surah-info" class="bg-gradient-to-br from-teal-600/90 to-emerald-700/90 dark:from-slate-900/90 dark:to-teal-950/90 backdrop-blur-md text-white p-6 rounded-2xl shadow-lg mb-5 text-center border border-teal-500/30 flex flex-col items-center relative overflow-hidden">
                 </div>
                 <div id="ayat-container" class="space-y-4"></div>
             </section>
         </main>
     </div>
 
-    <!-- DB QUOTES MANAGER MODAL -->
+    <!-- Modals and Floating Widgets -->
     <div id="quotesDbModal" class="fixed inset-0 z-[10005] hidden bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+        <!-- DB Quotes Content -->
         <div class="bg-slate-900 border-2 border-indigo-500 rounded-2xl w-full max-w-4xl p-4 sm:p-6 shadow-2xl relative flex flex-col max-h-[90vh]">
             <button onclick="closeQuotesDbModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white transition-colors cursor-pointer z-10"><i class="fa-solid fa-xmark text-xl"></i></button>
             <div class="flex flex-col md:flex-row justify-between items-center border-b-2 border-slate-800 pb-4 mb-4 gap-4 mt-4 md:mt-0">
@@ -235,7 +262,6 @@
         </div>
     </div>
 
-    <!-- SCREENSAVER SETTINGS MODAL -->
     <div id="screensaverSettingsModal" class="fixed inset-0 z-[10005] hidden bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
         <div class="bg-slate-900 border-2 border-purple-500 rounded-2xl w-full max-w-sm p-6 shadow-2xl relative flex flex-col">
             <button onclick="closeScreensaverSettings()" class="absolute top-4 right-4 text-slate-400 hover:text-white transition-colors cursor-pointer z-10"><i class="fa-solid fa-xmark text-xl"></i></button>
@@ -262,8 +288,8 @@
         </div>
     </div>
 
-    <!-- HELP & METRIC MODAL -->
     <div id="helpModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[10005] flex items-center justify-center p-4 hidden">
+        <!-- Help Content -->
         <div class="bg-slate-900 border-2 border-teal-500 p-5 sm:p-6 rounded-2xl max-w-4xl w-full flex flex-col gap-4 max-h-[90vh] overflow-hidden shadow-2xl relative">
             <div class="flex justify-between items-center border-b-2 border-slate-800 pb-3 select-none shrink-0 mt-2 sm:mt-0">
                 <h3 class="font-mono-tech text-sm sm:text-base font-black text-teal-400 uppercase tracking-wide flex items-center gap-2">
@@ -271,61 +297,27 @@
                 </h3>
                 <button onclick="closeHelpModal()" class="absolute top-4 right-4 sm:static text-slate-400 hover:text-red-400 p-1 cursor-pointer transition-colors"><i class="fa-solid fa-xmark text-xl sm:text-2xl"></i></button>
             </div>
-            
             <div class="overflow-y-auto custom-scroll space-y-4 sm:space-y-6 pr-2 font-sans text-[13px] sm:text-sm text-slate-300 pb-4">
                 <div class="bg-slate-950/80 p-4 sm:p-5 rounded-xl border border-slate-800 shadow-inner">
                     <h4 class="text-emerald-400 font-bold font-mono-tech mb-2 flex items-center gap-2 text-sm"><i class="fa-solid fa-microchip"></i> DESKRIPSI APLIKASI</h4>
                     <p class="leading-relaxed">Al-Qur'an Digital Pro - Cyber Islamic Edition adalah platform mushaf digital luring (*offline*) berkinerja tinggi. Aplikasi ini mengintegrasikan fungsi bacaan Al-Qur'an 114 surah, pemutar murottal dengan fitur sinkronisasi teks dinamis otomatis, serta kajian metrik komprehensif.</p>
                 </div>
-
                 <div class="bg-slate-950/80 p-4 sm:p-5 rounded-xl border border-blue-400/80 shadow-inner">
                     <h4 class="text-blue-400 font-bold font-mono-tech mb-3 flex items-center gap-2 text-sm"><i class="fa-solid fa-cubes"></i> FITUR INTEGRASI UTAMA</h4>
                     <ul class="space-y-2 list-disc list-inside">
-                        <li><strong class="text-slate-200">Database Quotes:</strong> Manajer kutipan interaktif dari 200 Al-Qur'an & Hadis.</li>
+                        <li><strong class="text-slate-200">Database Offline & Caching:</strong> Tetap fungsional dan bisa diakses saat tidak ada jaringan internet setelah sinkronisasi pertama.</li>
                         <li><strong class="text-slate-200">Asisten Chatbot AI:</strong> Terminal navigasi pintar untuk mencari surah spesifik.</li>
-                        <li><strong class="text-slate-200">Auto Screensaver:</strong> Mode jeda estetik bernuansa hitam pekat untuk efisiensi daya layar.</li>
+                        <li><strong class="text-slate-200">3D Earth Integration:</strong> Tampilan visual geospasial ala Cyberpunk HUD di semua antarmuka.</li>
                         <li><strong class="text-slate-200">Metrik Surah Dinamis:</strong> Penjelasan korelasi surah kategori medis, waris, dan alam.</li>
-                        <li><strong class="text-emerald-400">Terbaru - Bookmark Pintar:</strong> Tahan lama (*long-press*) pada ayat untuk menandai bacaan terakhir. Klik tombol melayang <i class="fa-solid fa-bookmark text-indigo-400 mx-1"></i> untuk langsung menuju ayat yang telah ditandai tanpa harus mencari ulang.</li>
-                        <li><strong class="text-teal-400">Terbaru - Fitur Berbagi Ayat:</strong> Klik ikon share pada setiap ayat untuk mengekspor teks ayat, terjemahan, atau keduanya ke dalam format gambar kustom dengan latar belakang dinamis.</li>
+                        <li><strong class="text-emerald-400">Bookmark Pintar:</strong> Tahan lama (*long-press*) pada ayat untuk menandai bacaan terakhir.</li>
+                        <li><strong class="text-teal-400">Fitur Berbagi Ayat:</strong> Ekspor teks ayat ke format gambar yang disempurnakan.</li>
                     </ul>
-                </div>
-
-                <div class="bg-slate-950/80 p-4 sm:p-5 rounded-xl border border-teal-500/30 shadow-inner">
-                    <h4 class="text-teal-400 font-bold font-mono-tech mb-3 flex items-center gap-2 text-sm"><i class="fa-solid fa-table"></i> TABEL METRIK KAJIAN</h4>
-                    <div class="overflow-x-auto border border-slate-800 rounded-lg">
-                        <table class="w-full text-left min-w-[500px]">
-                            <thead class="bg-slate-900 text-teal-300 font-mono-tech text-[10px] sm:text-xs uppercase border-b border-slate-800">
-                                <tr>
-                                    <th class="px-3 sm:px-4 py-3 border-r border-slate-800 w-1/3 sm:w-1/4">Kategori Metrik</th>
-                                    <th class="px-3 sm:px-4 py-3">Fokus Pembahasan Utama</th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-slate-800 text-xs sm:text-[13px]">
-                                <tr class="hover:bg-slate-900/50">
-                                    <td class="px-3 sm:px-4 py-3 font-bold text-emerald-400 border-r border-slate-800"><i class="fa-solid fa-notes-medical mr-2"></i>Medis & Terapi</td>
-                                    <td class="px-3 sm:px-4 py-3">Korelasi ayat penyembuhan fisik, kesehatan mental, & pengobatan spiritual (Ruqyah).</td>
-                                </tr>
-                                <tr class="hover:bg-slate-900/50">
-                                    <td class="px-3 sm:px-4 py-3 font-bold text-amber-400 border-r border-slate-800"><i class="fa-solid fa-scale-balanced mr-2"></i>Hukum & Waris</td>
-                                    <td class="px-3 sm:px-4 py-3">Pembahasan Faraid (harta warisan), hutang piutang, dan batasan syariat.</td>
-                                </tr>
-                                <tr class="hover:bg-slate-900/50">
-                                    <td class="px-3 sm:px-4 py-3 font-bold text-blue-400 border-r border-slate-800"><i class="fa-solid fa-users mr-2"></i>Kehidupan</td>
-                                    <td class="px-3 sm:px-4 py-3">Panduan kehidupan sosial, pernikahan, adab, dan sejarah manusia.</td>
-                                </tr>
-                                <tr class="hover:bg-slate-900/50">
-                                    <td class="px-3 sm:px-4 py-3 font-bold text-green-400 border-r border-slate-800"><i class="fa-solid fa-leaf mr-2"></i>Alam & Sains</td>
-                                    <td class="px-3 sm:px-4 py-3">Fakta semesta, astronomi, botani, zoologi, hidrologi, & ekologi alam.</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Floating Quote Widget -->
+    <!-- Floating Quotes Widget -->
     <div id="floatingQuoteWidget" class="hidden fixed top-[65%] left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-[90] w-[90%] max-w-md sm:max-w-lg bg-slate-900/95 backdrop-blur-md p-5 rounded-2xl border-2 border-yellow-600 shadow-2xl flex-col gap-4 transition-all animate-gold-glow-box" title="Widget Kutipan Acak">
         <div class="flex justify-between items-center border-b border-slate-800 pb-2.5">
             <h3 class="text-[11px] sm:text-xs font-bold text-yellow-400 uppercase tracking-wider flex items-center gap-2 font-mono-tech">
@@ -343,14 +335,13 @@
         </div>
     </div>
 
-    <!-- SHARE MODAL -->
+    <!-- Share Modal -->
     <div id="shareModal" class="fixed inset-0 z-[10010] hidden bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
         <div class="bg-slate-900 border-2 border-teal-500 rounded-2xl w-full max-w-2xl p-5 sm:p-6 shadow-2xl relative flex flex-col max-h-[90vh] overflow-hidden">
             <button onclick="closeShareModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white transition-colors cursor-pointer z-10"><i class="fa-solid fa-xmark text-xl"></i></button>
             <h3 class="text-teal-400 text-lg font-bold font-mono-tech mb-4 flex items-center gap-2"><i class="fa-solid fa-share-nodes"></i> Bagikan Ayat</h3>
             
             <div class="flex flex-col md:flex-row gap-6 overflow-y-auto custom-scroll pr-2 pb-2">
-                <!-- Kontrol Panel -->
                 <div class="w-full md:w-1/3 flex flex-col gap-4 font-sans text-sm text-slate-300">
                     <div class="bg-slate-950 p-3 rounded-xl border border-slate-800">
                         <span class="block text-xs font-bold text-slate-400 mb-2 font-mono-tech">KONTEN TEKS</span>
@@ -376,13 +367,10 @@
                     </button>
                 </div>
 
-                <!-- Preview Area -->
                 <div class="w-full md:w-2/3 bg-slate-950 border border-slate-800 rounded-xl flex items-center justify-center overflow-hidden relative min-h-[300px]">
                     <span class="absolute top-2 left-2 text-[10px] text-slate-500 font-mono-tech z-20">PRATINJAU GAMBAR</span>
                     
-                    <!-- Area yang akan dirender menjadi gambar -->
                     <div id="shareCanvasArea" class="w-full max-w-[500px] bg-slate-900 relative p-8 flex flex-col justify-center min-h-[400px] overflow-hidden" style="background-size: cover; background-position: center;">
-                        <!-- Overlay Hitam Transparan untuk keterbacaan teks jika ada gambar -->
                         <div id="shareOverlay" class="absolute inset-0 bg-slate-900/80 hidden z-0"></div>
                         
                         <div class="relative z-10 flex flex-col gap-4 text-center">
@@ -403,10 +391,9 @@
         </div>
     </div>
 
-    <!-- Right Bottom Interactive Buttons Layout -->
+    <!-- Floating Bottom Controls -->
     <div class="fixed bottom-4 right-4 z-50 flex items-center gap-2 sm:gap-2.5">
         
-        <!-- Chatbot Window -->
         <div id="chatWindow" class="w-[90vw] sm:w-96 h-[400px] sm:h-[460px] bg-slate-900 border-2 border-slate-700 rounded-2xl flex flex-col overflow-hidden hidden transition-all duration-300 shadow-2xl absolute bottom-14 sm:bottom-16 right-0 static-glow">
             <div class="bg-gradient-to-r from-slate-950 to-teal-950 p-2 sm:p-3 border-b border-slate-800 flex flex-col gap-1.5 select-none relative">
                 <div class="flex justify-between items-center">
@@ -471,8 +458,8 @@
         </button>
     </div>
 
-    <!-- Creator Modal Outside -->
-    <div id="creatorModalOutside" class="fixed inset-0 z-[10005] hidden bg-black/75 backdrop-blur-xs flex items-center justify-center p-4">
+    <!-- Creator Modal -->
+    <div id="creatorModalOutside" class="fixed inset-0 z-[10005] hidden bg-black/75 backdrop-blur-sm flex items-center justify-center p-4">
         <div class="bg-[#0b1224] border-2 border-yellow-500 rounded-2xl w-full max-w-md p-5 sm:p-6 shadow-2xl relative select-none animate-gold-glow-box">
             <button onclick="closeCreatorModalOutside()" class="absolute top-4 right-4 text-slate-400 hover:text-white transition-colors cursor-pointer z-10"><i class="fa-solid fa-xmark text-xl"></i></button>
             <div class="font-mono-tech flex flex-col items-center text-center mt-3 sm:mt-0">
@@ -509,7 +496,8 @@
         </div>
     </div>
 
-    <footer class="w-full fixed bottom-0 left-0 text-center py-3 sm:py-4 text-slate-400 dark:text-slate-500 text-[10px] sm:text-xs border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950/90 font-mono-tech transition-colors z-40">
+    <!-- Footer -->
+    <footer class="w-full fixed bottom-0 left-0 text-center py-3 sm:py-4 text-slate-600 dark:text-slate-400 text-[10px] sm:text-xs border-t border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-950/90 backdrop-blur-md font-mono-tech transition-colors z-40">
         <p>&copy; 2026 Al-Qur'an Digital Pro</p>
     </footer>
 
@@ -523,11 +511,6 @@
         let lastActiveIndex = -1;
         let longPressTimer; 
         let currentShareData = null;
-
-        const surahMetadata = {
-            1: { note: "Ummul Qur'an (Induk Al-Qur'an), mencakup intisari seluruh ajaran Islam." },
-            36: { note: "Jantung Al-Qur'an (Yasin), penekanan kuat pada kerasulan, hari kiamat dan kebangkitan." }
-        };
 
         const baseQuotes = [
             "\"Maka sesungguhnya beserta kesulitan ada kemudahan.\" (QS. Al-Insyirah: 5)",
@@ -646,9 +629,7 @@
             }
         });
 
-        setInterval(() => {
-            navigateQuote(1);
-        }, 20000);
+        setInterval(() => { navigateQuote(1); }, 20000);
 
         function bindAudioHighlightAndScrollEffect(audioEngine) {
             const boxes = document.querySelectorAll('[id^="ayat-box-"]');
@@ -781,27 +762,47 @@
 
         async function fetchAlQuran() {
             const progressBar = document.getElementById('loaderProgressBar');
+            const statusText = document.getElementById('loaderStatusText');
+            
             try {
                 progressBar.style.width = '40%';
                 const response = await fetch(API_URL);
                 if (!response.ok) throw new Error();
                 allSurahData = await response.json();
+                
+                localStorage.setItem('quran_offline_db', JSON.stringify(allSurahData));
+                
                 progressBar.style.width = '100%';
-                setTimeout(() => {
-                    document.getElementById('globalAppLoader').classList.add('opacity-0', 'hidden');
-                    document.getElementById('surah-grid').classList.remove('hidden');
-                    renderSurahList(allSurahData);
-                    renderSidebarMenu(allSurahData);
-                    document.getElementById('surah-counter').innerText = `${allSurahData.length}/114`;
-                    updateDashboardQuote();
+                finishLoad();
+            } catch (error) { 
+                console.warn("Memuat mode offline, membaca dari cache...");
+                const cachedData = localStorage.getItem('quran_offline_db');
+                if (cachedData) {
+                    allSurahData = JSON.parse(cachedData);
+                    progressBar.style.width = '100%';
+                    statusText.innerText = ">_ BERHASIL MEMUAT DARI CACHE OFFLINE";
+                    finishLoad();
+                } else {
+                    document.getElementById('globalAppLoader').innerHTML = `<p class="text-red-500 font-mono-tech mt-5 font-bold text-center">⚠️ Gagal sinkronisasi jaringan.<br>Sistem belum memiliki cache offline.<br>Harap terhubung ke internet untuk sinkronisasi pertama kali.</p>`;
+                }
+            }
+        }
 
-                    const quoteWidget = document.getElementById('floatingQuoteWidget');
-                    if (quoteWidget) {
-                        quoteWidget.classList.remove('hidden');
-                        quoteWidget.classList.add('flex');
-                    }
-                }, 500);
-            } catch (error) { document.getElementById('globalAppLoader').innerHTML = `<p class="text-red-500 font-mono-tech">⚠️ Gagal sinkronisasi data.</p>`; }
+        function finishLoad() {
+            setTimeout(() => {
+                document.getElementById('globalAppLoader').classList.add('opacity-0', 'hidden');
+                document.getElementById('surah-grid').classList.remove('hidden');
+                renderSurahList(allSurahData);
+                renderSidebarMenu(allSurahData);
+                document.getElementById('surah-counter').innerText = `${allSurahData.length}/114`;
+                updateDashboardQuote();
+
+                const quoteWidget = document.getElementById('floatingQuoteWidget');
+                if (quoteWidget) {
+                    quoteWidget.classList.remove('hidden');
+                    quoteWidget.classList.add('flex');
+                }
+            }, 500);
         }
 
         function renderSurahList(data) {
@@ -809,7 +810,7 @@
             grid.innerHTML = '';
             data.forEach((surah) => {
                 const card = document.createElement('div');
-                card.className = 'bg-white dark:bg-slate-900 p-4 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-teal-500 transition-all cursor-pointer shadow-sm';
+                card.className = 'bg-white/95 dark:bg-slate-900/85 backdrop-blur-md p-4 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-teal-500 transition-all cursor-pointer shadow-sm';
                 card.setAttribute('onclick', `openSurah(${surah.nomor})`);
                 card.title = `Buka detail ${surah.nama}`;
                 card.innerHTML = `
@@ -837,7 +838,7 @@
             surahs.forEach((surah) => {
                 const button = document.createElement('button');
                 button.id = `sidebar-btn-${surah.nomor}`;
-                button.className = 'w-full text-left px-2.5 py-2 rounded-xl text-xs flex justify-between items-center transition-all bg-slate-50/80 dark:bg-slate-950 text-slate-700 dark:text-slate-300 hover:text-teal-600 dark:hover:text-teal-400 border border-transparent';
+                button.className = 'w-full text-left px-2.5 py-2 rounded-xl text-xs flex justify-between items-center transition-all bg-slate-50/80 dark:bg-slate-900/50 text-slate-700 dark:text-slate-300 hover:text-teal-600 dark:hover:text-teal-400 border border-transparent';
                 button.setAttribute('onclick', `openSurah(${surah.nomor})`);
                 button.innerHTML = `
                     <span class="truncate pr-2"><b class="text-slate-400 dark:text-slate-600 mr-1 font-mono-tech text-[10px]">${surah.nomor}.</b> ${surah.nama}</span>
@@ -943,7 +944,7 @@
             surah.ayat.forEach((ayat) => {
                 const box = document.createElement('div');
                 box.id = `ayat-box-${ayat.nomor}`; 
-                box.className = 'bg-white dark:bg-slate-900 p-4 sm:p-5 rounded-2xl border border-slate-200 dark:border-slate-800 flex flex-col gap-3 shadow-xs relative transition-all duration-300';
+                box.className = 'bg-white/95 dark:bg-slate-900/85 backdrop-blur-md p-4 sm:p-5 rounded-2xl border border-slate-200 dark:border-slate-800 flex flex-col gap-3 shadow-xs relative transition-all duration-300';
                 
                 box.setAttribute('ontouchstart', `handlePressStart(${surah.nomor}, ${ayat.nomor})`);
                 box.setAttribute('ontouchend', `handlePressCancel()`);
@@ -1196,7 +1197,7 @@
                 const reader = new FileReader();
                 reader.onload = function(e) {
                     const canvasArea = document.getElementById('shareCanvasArea');
-                    canvasArea.style.backgroundImage = `url(\${e.target.result})`;
+                    canvasArea.style.backgroundImage = `url(${e.target.result})`;
                     document.getElementById('shareOverlay').classList.remove('hidden');
                     document.getElementById('btnRemoveBg').classList.remove('hidden');
                 }
@@ -1221,14 +1222,26 @@
             html2canvas(canvasArea, {
                 scale: 2, 
                 backgroundColor: '#0f172a', 
-                useCORS: true
+                useCORS: true,
+                allowTaint: true, 
+                foreignObjectRendering: false, 
+                logging: false
             }).then(canvas => {
                 canvasArea.style.borderRadius = originalBorderRadius;
                 
-                const link = document.createElement('a');
-                link.download = `Ayat_\${currentShareData.surahNama}_\${currentShareData.ayatNo}.png`;
-                link.href = canvas.toDataURL('image/png');
-                link.click();
+                try {
+                    const link = document.createElement('a');
+                    link.download = `Ayat_${currentShareData.surahNama}_${currentShareData.ayatNo}.png`;
+                    link.href = canvas.toDataURL('image/png');
+                    link.click();
+                } catch (saveError) {
+                    console.error("Gagal menyimpan gambar:", saveError);
+                    alert("Gagal memproses konversi gambar secara langsung. Silakan ambil screenshot area pratinjau.");
+                }
+            }).catch(err => {
+                canvasArea.style.borderRadius = originalBorderRadius;
+                console.error("html2canvas engine error:", err);
+                alert("Sistem web browser Anda mendeteksi batasan memori atau tidak mendukung fungsionalitas rendering canvas.");
             });
         }
 
@@ -1237,7 +1250,8 @@
         function formatShareText(arab, arti, surahNo, noAyat) {
             const surah = allSurahData.find(s => s.nomor == surahNo);
             const surahNama = surah ? surah.nama : '';
-            const teksLengkap = `QS. ${surahNama}: Ayat ${noAyat}\n\n${arab}\n\nArtinya: "${arti}"\n\nShared via Al-Qur'an Digital Pro`;
+            const linkAplikasi = 'https://adikds.github.io/Al-Quran-Karim/';
+            const teksLengkap = `QS. ${surahNama}: Ayat ${noAyat}\n\n${arab}\n\nArtinya: "${arti}"\n\nBaca Al-Qur'an lengkap di Al-Qur'an Digital Pro:\n${linkAplikasi}`;
             return encodeURIComponent(teksLengkap);
         }
 
@@ -1250,32 +1264,28 @@
         function shareToFacebook(arab, arti, surahNo, noAyat) {
             const surah = allSurahData.find(s => s.nomor == surahNo);
             const surahNama = surah ? surah.nama : '';
-            const teksLengkap = `QS. ${surahNama} Ayat ${noAyat}: ${arab} - Artinya: "${arti}"`;
             
-            if (navigator.share) {
-                navigator.share({
-                    title: `Kutipan Ayat ${noAyat}`,
-                    text: teksLengkap,
-                    url: window.location.href
-                }).catch(console.error);
-            } else {
-                const urlApp = encodeURIComponent(window.location.href);
-                const fbUrl = `https://www.facebook.com/sharer/sharer.php?u=${urlApp}&quote=${encodeURIComponent(teksLengkap)}`;
-                window.open(fbUrl, '_blank');
-            }
+            const linkAplikasi = 'https://adikds.github.io/Al-Quran-Karim/';
+            const teksLengkap = `QS. ${surahNama} Ayat ${noAyat}:\n${arab}\n\nArtinya: "${arti}"\n\n- Dibagikan via Al-Qur'an Digital Pro: ${linkAplikasi}`;
+            
+            const fbUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(linkAplikasi)}&quote=${encodeURIComponent(teksLengkap)}`;
+            
+            window.open(fbUrl, '_blank', 'width=600,height=400,noopener,noreferrer');
         }
 
         function shareToTwitter(arab, arti, surahNo, noAyat) {
             const surah = allSurahData.find(s => s.nomor == surahNo);
             const surahNama = surah ? surah.nama : '';
-            const teksLengkap = `QS. ${surahNama} Ayat ${noAyat}\n${arab}\nArtinya: "${arti}"`;
-            const teksMaksimal = teksLengkap.length > 250 ? teksLengkap.substring(0, 250) + "..." : teksLengkap;
-            const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(teksMaksimal)}&url=${encodeURIComponent(window.location.href)}`;
+            const linkAplikasi = 'https://adikds.github.io/Al-Quran-Karim/';
+            const teksLengkap = `QS. ${surahNama} Ayat ${noAyat}\n${arab}\nArtinya: "${arti}"\n\nApp: ${linkAplikasi}`;
+            const teksMaksimal = teksLengkap.length > 240 ? teksLengkap.substring(0, 240) + "..." : teksLengkap;
+            const url = `https://twitter.com/intent/tweet?text=${encodeURIComponent(teksMaksimal)}`;
             window.open(url, '_blank');
         }
 
         function copyToClipboard(arab, arti, noAyat) {
-            const teksLengkap = `${arab}\n\nArtinya: "${arti}" (Ayat ${noAyat})`;
+            const linkAplikasi = 'https://adikds.github.io/Al-Quran-Karim/';
+            const teksLengkap = `${arab}\n\nArtinya: "${arti}" (Ayat ${noAyat})\n\nDibagikan melalui Al-Qur'an Digital Pro: ${linkAplikasi}`;
             navigator.clipboard.writeText(teksLengkap).then(() => {
                 alert(`Ayat ${noAyat} berhasil disalin ke clipboard!`);
             }).catch(err => {
@@ -1283,7 +1293,118 @@
             });
         }
 
-        fetchAlQuran();
+        // --- SISTEM LATAR BUMI 3D (THREE.JS) ---
+        function initThreeEarth() {
+            const container = document.getElementById('earth-3d-bg');
+            if(!container) return;
+            const scene = new THREE.Scene();
+            
+            // Background dikosongkan agar menyatu dengan layout HTML
+            scene.background = null; 
+            
+            const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.z = 10;
+            
+            const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(window.devicePixelRatio);
+            container.appendChild(renderer.domElement);
+            
+            const controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true;
+            controls.dampingFactor = 0.05;
+            controls.minDistance = 5.5;
+            controls.maxDistance = 25;
+            controls.enableZoom = false; 
+            controls.enablePan = false;
+            
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
+            scene.add(ambientLight);
+            const dirLight = new THREE.DirectionalLight(0xffffff, 1.2);
+            dirLight.position.set(5, 3, 5);
+            scene.add(dirLight);
+            
+            const textureLoader = new THREE.TextureLoader();
+            const earthTexture = textureLoader.load('https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/planets/earth_atmos_2048.jpg');
+            const earthSpecular = textureLoader.load('https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/planets/earth_specular_2048.jpg');
+            const cloudsTexture = textureLoader.load('https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/planets/earth_clouds_1024.png');
+            
+            const earthGeo = new THREE.SphereGeometry(3.5, 64, 64);
+            const earthMat = new THREE.MeshStandardMaterial({
+                map: earthTexture,
+                roughnessMap: earthSpecular,
+                roughness: 0.5,
+                metalness: 0.1
+            });
+            const globe = new THREE.Mesh(earthGeo, earthMat);
+            scene.add(globe);
+            
+            const cloudGeo = new THREE.SphereGeometry(3.53, 64, 64);
+            const cloudMat = new THREE.MeshStandardMaterial({
+                map: cloudsTexture,
+                transparent: true,
+                blending: THREE.AdditiveBlending,
+                opacity: 0.8
+            });
+            const cloudMesh = new THREE.Mesh(cloudGeo, cloudMat);
+            scene.add(cloudMesh);
+            
+            const vertexShader = `
+                varying vec3 vNormal;
+                void main() {
+                    vNormal = normalize(normalMatrix * normal);
+                    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+                }
+            `;
+            const fragmentShader = `
+                varying vec3 vNormal;
+                void main() {
+                    float intensity = pow(0.7 - dot(vNormal, vec3(0, 0, 1.0)), 2.5);
+                    gl_FragColor = vec4(0.35, 0.65, 1.0, 1.0) * intensity;
+                }
+            `;
+            const atmosGeo = new THREE.SphereGeometry(3.62, 64, 64);
+            const atmosMat = new THREE.ShaderMaterial({
+                vertexShader: vertexShader,
+                fragmentShader: fragmentShader,
+                blending: THREE.AdditiveBlending,
+                side: THREE.BackSide,
+                transparent: true
+            });
+            const atmosMesh = new THREE.Mesh(atmosGeo, atmosMat);
+            scene.add(atmosMesh);
+            
+            const starsGeo = new THREE.BufferGeometry();
+            const starsCount = 1200;
+            const starPos = new Float32Array(starsCount * 3);
+            for(let i = 0; i < starsCount * 3; i++) { starPos[i] = (Math.random() - 0.5) * 120; }
+            starsGeo.setAttribute('position', new THREE.BufferAttribute(starPos, 3));
+            const starsMat = new THREE.PointsMaterial({ color: 0xffffff, size: 0.08, transparent: true, opacity: 0.7 });
+            const starField = new THREE.Points(starsGeo, starsMat);
+            scene.add(starField);
+            
+            const animate = function () {
+                requestAnimationFrame(animate);
+                globe.rotation.y += 0.0012;
+                cloudMesh.rotation.y += 0.0016;
+                starField.rotation.y += 0.0002;
+                controls.update();
+                renderer.render(scene, camera);
+            };
+            animate();
+            
+            window.addEventListener('resize', () => {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+        }
+
+        window.addEventListener('load', () => {
+            fetchAlQuran();
+            setTimeout(initThreeEarth, 800);
+        });
+        
     </script>
 </body>
 </html>
