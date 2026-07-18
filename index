@@ -76,6 +76,35 @@
 
         .toggle-checkbox:checked { right: 0; border-color: #10b981; }
         .toggle-checkbox:checked + .toggle-label { background-color: #10b981; }
+    
+        /* Orbiting Apps Styles */
+        .orbit-app-btn {
+            position: absolute;
+            top: 50%; left: 50%;
+            margin-top: -15px; margin-left: -50px;
+            background: rgba(15, 23, 42, 0.85);
+            border: 1px solid #14b8a6;
+            color: #5eead4;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            text-decoration: none;
+            white-space: nowrap;
+            pointer-events: auto;
+            box-shadow: 0 0 15px rgba(20, 184, 166, 0.4);
+            animation: floatApp 8s linear forwards;
+            display: flex; gap: 8px; align-items: center;
+            z-index: 20;
+            transition: all 0.3s;
+        }
+        .orbit-app-btn:hover { background: rgba(20, 184, 166, 0.2); transform: scale(1.1); box-shadow: 0 0 20px rgba(234, 179, 8, 0.6); border-color: rgba(234, 179, 8, 0.8); color: #fef08a;}
+        @keyframes floatApp {
+            0% { opacity: 0; transform: rotate(var(--angle)) translateX(var(--radius)) rotate(calc(-1 * var(--angle))) scale(0.5); }
+            15% { opacity: 1; transform: rotate(calc(var(--angle) + 20deg)) translateX(var(--radius)) rotate(calc(-1 * (var(--angle) + 20deg))) scale(1); }
+            85% { opacity: 1; transform: rotate(calc(var(--angle) + 100deg)) translateX(var(--radius)) rotate(calc(-1 * (var(--angle) + 100deg))) scale(1); }
+            100% { opacity: 0; transform: rotate(calc(var(--angle) + 120deg)) translateX(var(--radius)) rotate(calc(-1 * (var(--angle) + 120deg))) scale(0.5); }
+        }
     </style>
 </head>
 <body class="bg-slate-50 dark:bg-slate-950 transition-colors duration-300 min-h-screen flex flex-col font-sans relative pb-32">
@@ -100,6 +129,7 @@
 
     <!-- Screensaver -->
     <div id="islamicScreensaver" class="hidden fixed inset-0 z-[9999] bg-black/50 backdrop-blur-md flex flex-col items-center justify-center overflow-hidden font-sans select-none transition-all duration-500 opacity-0">
+        <div id="sc-orbit-apps" class="absolute inset-0 pointer-events-none z-0 overflow-hidden"></div>
         <button onclick="deactivateScreensaver()" class="absolute top-6 right-6 z-50 bg-slate-900/80 hover:bg-red-900/80 text-slate-400 hover:text-red-400 border border-slate-700 hover:border-red-500 px-4 py-2 rounded-xl text-xs font-mono-tech transition-all flex items-center gap-2 backdrop-blur-sm cursor-pointer shadow-lg">
             <i class="fa-solid fa-power-off"></i> Tutup
         </button>
@@ -412,7 +442,7 @@
             <div id="chatMessages" class="flex-1 p-2.5 sm:p-3 overflow-y-auto space-y-3 font-mono-tech text-[11px] sm:text-xs text-slate-200 bg-slate-950 custom-scroll relative">
                 <div class="bg-slate-900/80 p-2.5 rounded-xl border border-slate-800/80 leading-relaxed">
                     <span class="text-yellow-400 block font-bold mb-1">&gt;_ SISTEM DIGITAL AKTIF:</span>
-                    Assalamualaikum! Silakan ketik langsung **nama surah** untuk mencari dan menampilkan surah yang Anda tuju dengan cepat.
+                    Assalamualaikum! Silakan ketik langsung **nama surah** untuk mencari dan menampilkan surah yang Anda tuju dengan cepat, atau tanyakan apa saja seputar Islam dan Al-Qur'an.
                 </div>
             </div>
 
@@ -422,6 +452,7 @@
                 <button onclick="triggerChatShortcut('help')" class="whitespace-nowrap px-2 py-1 bg-slate-950 hover:bg-emerald-950 text-emerald-400 text-[9px] sm:text-[10px] rounded border border-emerald-900 font-bold cursor-pointer"><i class="fa-solid fa-circle-question mr-1"></i> Help System</button>
                 <button onclick="triggerChatShortcut('cari_surah')" class="whitespace-nowrap px-2 py-1 bg-slate-950 hover:bg-blue-950 text-blue-400 text-[9px] sm:text-[10px] rounded border border-blue-900 font-bold cursor-pointer"><i class="fa-solid fa-magnifying-glass mr-1"></i> Cari Surah</button>
                 <button onclick="triggerChatShortcut('programmer')" class="whitespace-nowrap px-2 py-1 bg-fuchsia-950 hover:bg-fuchsia-900 text-fuchsia-400 text-[9px] sm:text-[10px] rounded border border-fuchsia-800 font-black cursor-pointer"><i class="fa-solid fa-code mr-1"></i> Data Programmer</button>
+                <button onclick="triggerChatShortcut('my_aplikasi')" class="whitespace-nowrap px-2 py-1 bg-slate-950 hover:bg-amber-950 text-amber-400 text-[9px] sm:text-[10px] rounded border border-amber-900 font-bold cursor-pointer"><i class="fa-solid fa-layer-group mr-1"></i> My Aplikasi</button>
             </div>
 
             <div class="p-2 bg-slate-900 border-t border-slate-800 flex gap-1.5">
@@ -1062,57 +1093,237 @@
                 insertBotReply(profilePayload);
             } else if(type === 'cari_surah') {
                 insertBotReply("Ketikkan langsung kata kunci nama surah yang Anda tuju pada kolom teks chat ini.");
+            } else if(type === 'my_aplikasi') {
+                let appsHtml = '<div class="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-2">';
+                apps.forEach(app => {
+                    appsHtml += `
+                        <a href="${app.u}" target="_blank" class="flex items-center gap-2 p-2 bg-slate-900 hover:bg-slate-800 border border-teal-500/30 hover:border-teal-400 rounded-lg transition-colors text-decoration-none shadow-sm cursor-pointer">
+                            <div class="w-6 h-6 flex items-center justify-center bg-teal-950 rounded-full shrink-0 text-teal-400 text-[10px]">
+                                <i class="fa-solid ${app.i}"></i>
+                            </div>
+                            <span class="text-[9px] sm:text-[10px] font-bold text-slate-200 font-sans truncate">${app.n}</span>
+                        </a>
+                    `;
+                });
+                appsHtml += '</div>';
+                
+                let payload = `
+                    <div class="bg-[#0b1224] border border-teal-500/50 rounded-xl p-3 text-slate-200 shadow-xl mt-2">
+                        <div class="flex items-center gap-2 text-teal-400 font-bold font-mono-tech text-[10px] tracking-wider mb-1 uppercase">
+                            <i class="fa-solid fa-layer-group"></i> My Applications Directory
+                        </div>
+                        <p class="text-[9px] sm:text-[10px] text-slate-400 font-sans mb-2">Pilih aplikasi untuk membukanya di tab baru:</p>
+                        <div class="max-h-56 overflow-y-auto custom-scroll pr-1 pb-1">
+                            ${appsHtml}
+                        </div>
+                    </div>
+                `;
+                insertBotReply(payload);
             }
         }
 
-        function processChatMessage() {
+        
+        const apps = [
+            {u:"https://adikds.github.io/jarvis-ai/",i:"fa-robot",n:"JARVIS AI"},
+            {u:"https://adikds.github.io/edu-market-pro/",i:"fa-graduation-cap",n:"EduMarket Pro"},
+            {u:"https://adikds.github.io/iptv-terminal/",i:"fa-tv",n:"IPTV Terminal"},
+            {u:"https://adikds.github.io/TV-streaming-live/",i:"fa-signal",n:"TV Streaming Live"},
+            {u:"https://adikds.github.io/Al-Quran-Karim/",i:"fa-book-quran",n:"Al-Quran Karim"},
+            {u:"https://adikds.github.io/-MEGA-ATLAS-FKG/",i:"fa-tooth",n:"Mega Atlas FKG"},
+            {u:"https://adikds.github.io/SISTEM-MONITORING-SEISMIK-PERINGATAN-TSUNAMI/",i:"fa-wave-square",n:"Tsunami Alert"},
+            {u:"https://adikds.github.io/MONITORING-PREDIKSI-STATUS-EI-NI-O-LA-NI-A/",i:"fa-temperature-half",n:"El Nino La Nina"},
+            {u:"https://adikds.github.io/MONITORING-PREDIKSI-ANGIN-MUSON-INDONESIA/",i:"fa-wind",n:"Angin Muson"},
+            {u:"https://adikds.github.io/INTEGRATED-DAM-ANALYTICS-ASSESSMENT-SYSTEM/",i:"fa-water",n:"Dam Analytics"},
+            {u:"https://adikds.github.io/WAY-APU-DAM/",i:"fa-building-shield",n:"Way Apu Dam"},
+            {u:"https://adikds.github.io/EVENT-DRIVEN-ARCHITECTURE-FOR-AI-AGENTS/",i:"fa-sitemap",n:"EDA AI Agents"},
+            {u:"https://adikds.github.io/GeoStructPro-15-Essential-Geotechnical-Formulas/",i:"fa-mountain",n:"GeoStructPro 15"},
+            {u:"https://adikds.github.io/GEOSTRUCT-PRO-20-FORMULA-GEOTECHNICAL/",i:"fa-layer-group",n:"GeoStruct Pro 20"},
+            {u:"https://adikds.github.io/UNIFIED-SOIL-CLASSIFICATION-SYSTEM/",i:"fa-cubes",n:"USCS Soil"},
+            {u:"https://adikds.github.io/AERORADAR-PRO/",i:"fa-plane",n:"AeroRadar Pro"},
+            {u:"https://adikds.github.io/HYDRACANAL-PRO-GEOMETRIC-DESIGN/",i:"fa-water-ladder",n:"HydraCanal Pro"},
+            {u:"https://adikds.github.io/financial-planner/",i:"fa-chart-line",n:"Financial Planner"},
+            {u:"https://adikds.github.io/business-suite/",i:"fa-chart-bar",n:"Business Suite"},
+            {u:"https://adikds.github.io/stock-manager/",i:"fa-boxes-stacked",n:"Stock Manager"},
+            {u:"https://adikds.github.io/Aplikasi_Point_of_Sale_-POS-_atau_sistem_kasir/",i:"fa-cash-register",n:"POS Terminal Pro"},
+            {u:"https://adikds.github.io/KEUANGANKU/",i:"fa-cash-register",n:"Keuanganku"},
+            {u:"https://adikds.github.io/DARUSSYIFA-MEDIKA/",i: "fa-hospital",n:"DARUSSYIFA"},
+            {u:"https://adikds.github.io/SKIN_SYIFA_AI/",i: "fa-magnifying-glass-chart",n:"SKIN SYIFA"},
+            {u:"https://adikds.github.io/NEURO-PSYCH_AI/",i: "fa-brain",n:"NEURO-PSYCH"},
+            {u:"https://adikds.github.io/SMILE-SYIFA-AI/",i: "fa-face-smile",n:"SMILE SYIFA"},
+            {u:"https://adikds.github.io/DOKTER-AI/",i: "fa-user-doctor",n:"DOKTER AI"},
+            {u: "https://www.f15library.com/", i: "fa-book-open-reader",n: "F15 Library"},
+            {u: "https://adikds.github.io/ATLAS-GEOTEKNIK/", i: "fa-earth-americas",n: "Geotechnical"},
+            {u: "https://adikds.github.io/STATISTICS_for_ENGINEERS-/", i: "fa-chart-pie",n: "Stats Engineers"},
+            {u: "https://famelack.com/radio/id", i: "fa-radio", n: "Radio Online"},
+            {u: "https://famelack.com/tv/id", i: "fa-tv",n: "TV Famelack"},
+            {u: "https://adikds.github.io/Mega-Atlas-Kedokteran-Neurologi-Bedah-Syaraf/", i: "fa-brain",n: "Neurology"},
+            {u: "https://adikds.github.io/Adi_Newbie/", i: "fa-user-astronaut",n: "Adi Newbie" }
+        ];
+
+        function startOrbitingApps() {
+            const container = document.getElementById('sc-orbit-apps');
+            if(!container || !apps || apps.length === 0) return;
+            
+            setInterval(() => {
+                if(!isScreensaverActive) return;
+                
+                const app = apps[Math.floor(Math.random() * apps.length)];
+                const btn = document.createElement('a');
+                btn.href = app.u;
+                btn.target = '_blank';
+                btn.className = 'orbit-app-btn';
+                btn.innerHTML = `<i class="fa-solid ${app.i} text-teal-400"></i> ${app.n}`;
+                
+                const angle = Math.floor(Math.random() * 360);
+                const radius = (window.innerWidth < 600 ? 120 : 250) + Math.random() * 100;
+                
+                btn.style.setProperty('--angle', angle + 'deg');
+                btn.style.setProperty('--radius', radius + 'px');
+                
+                container.appendChild(btn);
+                
+                setTimeout(() => {
+                    if(btn.parentNode === container) container.removeChild(btn);
+                }, 8000);
+            }, 1200);
+        }
+
+        function insertAIBotReply(text) {
+            const msg = document.getElementById('chatMessages');
+            
+            const formattedText = text
+                .replace(/\*\*(.*?)\*\*/g, '<span class="text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-amber-500 font-extrabold">$1</span>')
+                .replace(/\*(.*?)\*/g, '<span class="text-cyan-300 italic">$1</span>')
+                .replace(/\n/g, '<br>');
+
+            const html = `
+                <div class="relative bg-gradient-to-br from-slate-900 via-indigo-950/60 to-teal-950/60 p-4 rounded-2xl rounded-tl-none border-l-4 border-l-cyan-400 border border-slate-700/50 shadow-[0_0_20px_rgba(34,211,238,0.15)] mb-4 mt-5 animate-cyber-glow">
+                    <div class="absolute -top-3 -left-1 bg-gradient-to-r from-cyan-500 via-teal-400 to-emerald-500 text-slate-950 text-[9px] sm:text-[10px] font-black px-3 py-1 rounded-md shadow-lg border border-teal-200/50 uppercase tracking-widest flex items-center gap-1.5">
+                        <i class="fa-solid fa-bolt text-yellow-200"></i> AI COPILOT
+                    </div>
+                    <div class="mt-1 font-sans text-[11px] sm:text-xs text-slate-200 leading-relaxed custom-scroll">
+                        ${formattedText}
+                    </div>
+                </div>
+            `;
+            msg.innerHTML += html;
+            msg.scrollTop = msg.scrollHeight;
+        }
+
+        
+        function offlineBotResponse(msg) {
+            const m = msg.toLowerCase();
+            if (m.includes('halo') || m.includes('hai') || m.includes('assalamualaikum')) return "Wa'alaikumsalam! Ada yang bisa saya bantu terkait informasi surah atau direktori aplikasi ini?";
+            if (m.includes('waktu') || m.includes('jam')) return "Waktu sistem saat ini adalah " + document.getElementById('chat-top-clock').innerText;
+            if (m.includes('tanggal') || m.includes('hari')) return "Hari ini adalah " + document.getElementById('chat-top-day').innerText;
+            if (m.includes('terima kasih') || m.includes('makasih')) return "Sama-sama! Semoga bermanfaat, Sir.";
+            if (m.includes('siapa kamu') || m.includes('nama kamu')) return "Saya adalah Hydrobot, Asisten AI pada sistem Al-Qur'an Digital Pro.";
+            if (m.includes('aplikasi') || m.includes('app') || m.includes('portfolio') || m.includes('portofolio')) {
+                setTimeout(() => triggerChatShortcut('my_aplikasi'), 500);
+                return "Membuka direktori aplikasi portofolio untuk Anda...";
+            }
+            return "Sistem AI Cloud sedang *offline* (atau API Key belum dikonfigurasi). Saat ini saya beroperasi dalam **Mode Offline** (seperti sistem Jarvis) dan hanya merespons perintah dasar. Silakan ketik nama surah secara spesifik untuk mencarinya dalam database lokal, atau klik tombol **My Aplikasi**.";
+        }
+
+        async function processChatMessage() {
             const el = document.getElementById('chatInput');
             const txt = el.value.trim();
             document.getElementById('chat-suggestions').classList.add('hidden'); 
             
             if(!txt) return;
             
-            document.getElementById('chatMessages').innerHTML += `<div class="bg-slate-800 p-2 rounded-xl text-right max-w-[85%] ml-auto text-white font-bold font-mono-tech">${txt}</div>`;
-            const textLower = txt.toLowerCase();
+            const msgContainer = document.getElementById('chatMessages');
             
-            setTimeout(() => { 
-                if (textLower.includes('programmer') || textLower.includes('hartadi') || textLower.includes('dev') || textLower.includes('kredit')) {
-                    triggerChatShortcut('programmer');
-                } else {
-                    const cleanQuery = textLower.replace('surah', '').trim();
-                    const foundSurah = allSurahData.find(s => 
-                        s.nama.toLowerCase().includes(cleanQuery) || s.arti.toLowerCase().includes(cleanQuery)
-                    );
+            msgContainer.innerHTML += `
+                <div class="bg-gradient-to-r from-slate-800 to-slate-700 p-2.5 rounded-2xl rounded-tr-none text-right max-w-[85%] ml-auto text-white font-bold font-mono-tech mb-3 border border-slate-600 shadow-md">
+                    ${txt}
+                </div>`;
+            msgContainer.scrollTop = msgContainer.scrollHeight;
+            
+            const textLower = txt.toLowerCase();
+            el.value = ''; 
 
-                    if (foundSurah) {
-                        let surahCardPayload = `
-                            <div class="bg-slate-900 border border-teal-500 rounded-xl p-3 space-y-2.5 shadow-md font-sans text-[11px] sm:text-xs">
-                                <div class="flex justify-between items-center border-b border-slate-800 pb-1.5">
-                                    <span class="bg-teal-950 text-teal-400 font-mono-tech font-bold px-2 py-0.5 rounded text-[9px] sm:text-[10px]">${foundSurah.nomor}</span>
-                                    <span class="font-arabic text-yellow-500 font-bold text-base sm:text-lg">${foundSurah.asma}</span>
-                                </div>
-                                <div>
-                                    <h5 class="text-white font-bold text-xs sm:text-sm font-mono-tech">${foundSurah.nama}</h5>
-                                    <p class="text-[10px] sm:text-[11px] text-slate-400">${foundSurah.arti} • ${foundSurah.type} (${foundSurah.ayat.length} Ayat)</p>
-                                </div>
-                                <div class="grid grid-cols-2 gap-2 pt-1 font-mono-tech">
-                                    <button onclick="openSurah(${foundSurah.nomor}); toggleChatWindow();" class="py-1.5 bg-teal-700 hover:bg-teal-600 text-white font-bold rounded-lg text-[9px] sm:text-[10px] cursor-pointer text-center transition-colors">
-                                        <i class="fa-solid fa-book-open mr-1"></i> Buka Surah
-                                    </button>
-                                    <button onclick="playSurahAudio('${foundSurah.audio}', '${foundSurah.nama}', ${foundSurah.nomor});" class="py-1.5 bg-yellow-500 hover:bg-yellow-400 text-slate-950 font-bold rounded-lg text-[9px] sm:text-[10px] cursor-pointer text-center transition-colors">
-                                        <i class="fa-solid fa-play mr-1"></i> Murottal
-                                    </button>
-                                </div>
-                            </div>
-                        `;
-                        insertBotReply(`Sistem mendeteksi Surah yang Anda tuju: ${surahCardPayload}`);
-                    } else {
-                        insertBotReply("Surah tidak ditemukan. Coba ketikkan nama surah secara spesifik (contoh: *Al-Fatihah* atau *Al-Mulk*)."); 
+            if (textLower.includes('programmer') || textLower.includes('hartadi') || textLower.includes('dev') || textLower.includes('kredit')) {
+                triggerChatShortcut('programmer');
+                return;
+            } 
+            
+            const cleanQuery = textLower.replace('surah', '').trim();
+            const foundSurah = allSurahData.find(s => 
+                s.nama.toLowerCase() === cleanQuery || s.arti.toLowerCase() === cleanQuery
+            );
+
+            if (foundSurah && cleanQuery.length > 2) {
+                let surahCardPayload = `
+                    <div class="bg-slate-900 border border-teal-500 rounded-xl p-3 space-y-2.5 shadow-md font-sans text-[11px] sm:text-xs">
+                        <div class="flex justify-between items-center border-b border-slate-800 pb-1.5">
+                            <span class="bg-teal-950 text-teal-400 font-mono-tech font-bold px-2 py-0.5 rounded text-[9px] sm:text-[10px]">${foundSurah.nomor}</span>
+                            <span class="font-arabic text-yellow-500 font-bold text-base sm:text-lg">${foundSurah.asma}</span>
+                        </div>
+                        <div>
+                            <h5 class="text-white font-bold text-xs sm:text-sm font-mono-tech">${foundSurah.nama}</h5>
+                            <p class="text-[10px] sm:text-[11px] text-slate-400">${foundSurah.arti} • ${foundSurah.type} (${foundSurah.ayat.length} Ayat)</p>
+                        </div>
+                        <div class="grid grid-cols-2 gap-2 pt-1 font-mono-tech">
+                            <button onclick="openSurah(${foundSurah.nomor}); toggleChatWindow();" class="py-1.5 bg-teal-700 hover:bg-teal-600 text-white font-bold rounded-lg text-[9px] sm:text-[10px] cursor-pointer text-center transition-colors">
+                                <i class="fa-solid fa-book-open mr-1"></i> Buka Surah
+                            </button>
+                            <button onclick="playSurahAudio('${foundSurah.audio}', '${foundSurah.nama}', ${foundSurah.nomor});" class="py-1.5 bg-yellow-500 hover:bg-yellow-400 text-slate-950 font-bold rounded-lg text-[9px] sm:text-[10px] cursor-pointer text-center transition-colors">
+                                <i class="fa-solid fa-play mr-1"></i> Murottal
+                            </button>
+                        </div>
+                    </div>
+                `;
+                insertBotReply(`Sistem mendeteksi pencarian Surah presisi: ${surahCardPayload}`);
+                return;
+            }
+
+            const typingId = 'typing-' + Date.now();
+            msgContainer.innerHTML += `
+                <div id="${typingId}" class="text-cyan-400 font-mono-tech text-[10px] animate-pulse mb-3 mt-2 flex items-center gap-2">
+                    <i class="fa-solid fa-microchip fa-spin"></i> Mentransmisikan kueri ke AI Cloud Gemini...
+                </div>`;
+            msgContainer.scrollTop = msgContainer.scrollHeight;
+
+            try {
+                // Mencoba memanggil API secara langsung, menghindari Gateway Error
+                const API_KEY = localStorage.getItem('gemini_api_key') || ''; 
+                let aiResponse = null;
+
+                if (API_KEY) {
+                    const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
+                    const sysPrompt = "Sebagai Hydrobot Asisten AI Al-Qur'an Digital Pro, berikan jawaban informatif, cerdas, ramah, dan ringkas secara Islami: " + txt;
+                    const r = await fetch(url, {
+                        method:'POST',
+                        headers:{'Content-Type':'application/json'},
+                        body:JSON.stringify({contents: [{ parts: [{ text: sysPrompt }] }]})
+                    });
+                    
+                    if(r.ok) {
+                        const d = await r.json();
+                        if(d.candidates && d.candidates.length > 0) {
+                            aiResponse = d.candidates[0].content.parts[0].text;
+                        }
                     }
                 }
-            }, 250);
-            el.value = '';
+                
+                document.getElementById(typingId).remove();
+
+                if (aiResponse) {
+                    insertAIBotReply(aiResponse);
+                } else {
+                    // Fallback Mode Offline (Sama seperti logika Jarvis)
+                    const offlineReply = offlineBotResponse(txt);
+                    insertAIBotReply(offlineReply);
+                }
+            } catch (error) {
+                document.getElementById(typingId).remove();
+                // Jika request error sama sekali (internet putus/proxy mati), gunakan fallback offline
+                const offlineReply = offlineBotResponse(txt);
+                insertAIBotReply(offlineReply);
+            }
         }
+
 
         function insertBotReply(html) {
             const msg = document.getElementById('chatMessages');
@@ -1125,6 +1336,11 @@
             isScreensaverActive = true;
             const el = document.getElementById('islamicScreensaver');
             el.classList.remove('hidden');
+            
+            const earth = document.getElementById('earth-3d-bg');
+            earth.classList.remove('opacity-15', 'dark:opacity-30', 'z-[-1]');
+            earth.classList.add('opacity-80', 'dark:opacity-90', 'z-[9998]');
+            
             setTimeout(() => { el.classList.remove('opacity-0'); el.classList.add('opacity-100'); }, 30);
             updateDateTime();
         }
@@ -1133,6 +1349,11 @@
             isScreensaverActive = false;
             const el = document.getElementById('islamicScreensaver');
             el.classList.remove('opacity-100'); el.classList.add('opacity-0');
+            
+            const earth = document.getElementById('earth-3d-bg');
+            earth.classList.add('opacity-15', 'dark:opacity-30', 'z-[-1]');
+            earth.classList.remove('opacity-80', 'dark:opacity-90', 'z-[9998]');
+            
             setTimeout(() => el.classList.add('hidden'), 500);
             resetIdleTimer();
         }
@@ -1403,6 +1624,7 @@
         window.addEventListener('load', () => {
             fetchAlQuran();
             setTimeout(initThreeEarth, 800);
+            startOrbitingApps();
         });
         
     </script>
