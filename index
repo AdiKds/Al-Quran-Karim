@@ -105,17 +105,25 @@
             85% { opacity: 1; transform: rotate(calc(var(--angle) + 100deg)) translateX(var(--radius)) rotate(calc(-1 * (var(--angle) + 100deg))) scale(1); }
             100% { opacity: 0; transform: rotate(calc(var(--angle) + 120deg)) translateX(var(--radius)) rotate(calc(-1 * (var(--angle) + 120deg))) scale(0.5); }
         }
+        
+        .mic-listening {
+            animation: pulse 1s infinite;
+            background-color: rgba(239, 68, 68, 0.2) !important;
+            border-color: #ef4444 !important;
+            color: #ef4444 !important;
+            box-shadow: 0 0 15px rgba(239, 68, 68, 0.6) !important;
+        }
     </style>
 </head>
 <body class="bg-slate-50 dark:bg-slate-950 transition-colors duration-300 min-h-screen flex flex-col font-sans relative pb-32">
 
-    <!-- 3D Earth Background Container (Fixed Opacity & Blend Mode for Text Contrast) -->
+    <!-- 3D Earth Background Container -->
     <div id="earth-3d-bg" class="fixed inset-0 z-[-1] pointer-events-none opacity-15 dark:opacity-30 transition-opacity duration-500"></div>
 
     <!-- App Loader -->
     <div id="globalAppLoader" class="fixed inset-0 z-[10000] bg-slate-950 flex flex-col items-center justify-center transition-opacity duration-700 ease-in-out">
         <div class="relative flex flex-col items-center max-w-md px-6 text-center">
-            <div class="w-24 h-24 md:w-28 md:h-28 mb-6 rounded-full border border-yellow-500/30 flex items-center justify-center relative bg-slate-900 shadow-[0_0_40px_rgba(234,179,8,0.15)]">
+            <div class="w-24 h-24 md:w-28 h-28 mb-6 rounded-full border border-yellow-500/30 flex items-center justify-center relative bg-slate-900 shadow-[0_0_40px_rgba(234,179,8,0.15)]">
                 <div class="absolute inset-0 rounded-full border-2 border-yellow-500 border-t-transparent animate-spin" style="animation-duration: 3s;"></div>
                 <i class="fa-solid fa-book-quran text-yellow-500 text-4xl md:text-5xl animate-gold-glow"></i>
             </div>
@@ -336,11 +344,10 @@
                     <h4 class="text-blue-400 font-bold font-mono-tech mb-3 flex items-center gap-2 text-sm"><i class="fa-solid fa-cubes"></i> FITUR INTEGRASI UTAMA</h4>
                     <ul class="space-y-2 list-disc list-inside">
                         <li><strong class="text-slate-200">Database Offline & Caching:</strong> Tetap fungsional dan bisa diakses saat tidak ada jaringan internet setelah sinkronisasi pertama.</li>
-                        <li><strong class="text-slate-200">Asisten Chatbot AI:</strong> Terminal navigasi pintar untuk mencari surah spesifik.</li>
+                        <li><strong class="text-slate-200">Asisten Chatbot AI (Hydrobot):</strong> Mendukung interaksi Teks-ke-Suara, Perintah Suara (Buka Surah X Ayat Y), dan Pengetahuan Universal.</li>
                         <li><strong class="text-slate-200">3D Earth Integration:</strong> Tampilan visual geospasial ala Cyberpunk HUD di semua antarmuka.</li>
-                        <li><strong class="text-slate-200">Metrik Surah Dinamis:</strong> Penjelasan korelasi surah kategori medis, waris, dan alam.</li>
+                        <li><strong class="text-slate-200">Metrik Surah Dinamis:</strong> Efek animasi dan suara saat kursor melayang (hover) di atas kartu surah.</li>
                         <li><strong class="text-emerald-400">Bookmark Pintar:</strong> Tahan lama (*long-press*) pada ayat untuk menandai bacaan terakhir.</li>
-                        <li><strong class="text-teal-400">Fitur Berbagi Ayat:</strong> Ekspor teks ayat ke format gambar yang disempurnakan.</li>
                     </ul>
                 </div>
             </div>
@@ -421,72 +428,88 @@
         </div>
     </div>
 
-    <!-- Floating Bottom Controls -->
-    <div class="fixed bottom-4 right-4 z-50 flex items-center gap-2 sm:gap-2.5">
+    <!-- Chat Window (Independen dari tombol melayang agar tetap muncul walau menu disembunyikan) -->
+    <div id="chatWindow" class="w-[90vw] sm:w-96 h-[400px] sm:h-[460px] bg-slate-900 border-2 border-slate-700 rounded-2xl flex flex-col overflow-hidden hidden transition-all duration-300 shadow-2xl fixed bottom-28 sm:bottom-32 right-4 static-glow z-[60]">
+        <div class="bg-gradient-to-r from-slate-950 to-teal-950 p-2 sm:p-3 border-b border-slate-800 flex flex-col gap-1.5 select-none relative">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center gap-2">
+                    <i class="fa-solid fa-star-and-crescent text-yellow-400 text-[10px] sm:text-xs animate-pulse"></i>
+                    <h4 class="font-mono-tech text-[10px] sm:text-xs font-black text-slate-300">HYDROBOT ASSISTANT</h4>
+                </div>
+                <button onclick="toggleChatWindow()" class="text-slate-400 hover:text-white cursor-pointer text-xs p-1"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="flex flex-col sm:flex-row justify-between items-center bg-slate-950/90 px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-xl border border-teal-500/40 font-mono-tech gap-1 shadow-inner mt-2">
+                <span id="chat-top-day" class="text-slate-200 text-[10px] sm:text-[11px] font-bold tracking-wide">Memuat Hari...</span>
+                <span id="chat-top-clock" class="text-xs sm:text-sm font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-teal-300 to-emerald-400 filter drop-shadow-[0_0_8px_rgba(34,211,238,0.4)]">00:00:00</span>
+            </div>
+        </div>
         
-        <div id="chatWindow" class="w-[90vw] sm:w-96 h-[400px] sm:h-[460px] bg-slate-900 border-2 border-slate-700 rounded-2xl flex flex-col overflow-hidden hidden transition-all duration-300 shadow-2xl absolute bottom-14 sm:bottom-16 right-0 static-glow">
-            <div class="bg-gradient-to-r from-slate-950 to-teal-950 p-2 sm:p-3 border-b border-slate-800 flex flex-col gap-1.5 select-none relative">
-                <div class="flex justify-between items-center">
-                    <div class="flex items-center gap-2">
-                        <i class="fa-solid fa-star-and-crescent text-yellow-400 text-[10px] sm:text-xs animate-pulse"></i>
-                        <h4 class="font-mono-tech text-[10px] sm:text-xs font-black text-slate-300">HYDROBOT ASSISTANT</h4>
-                    </div>
-                    <button onclick="toggleChatWindow()" class="text-slate-400 hover:text-white cursor-pointer text-xs p-1"><i class="fa-solid fa-xmark"></i></button>
-                </div>
-                <div class="flex flex-col sm:flex-row justify-between items-center bg-slate-950/90 px-2.5 py-1.5 sm:px-3 sm:py-2 rounded-xl border border-teal-500/40 font-mono-tech gap-1 shadow-inner mt-2">
-                    <span id="chat-top-day" class="text-slate-200 text-[10px] sm:text-[11px] font-bold tracking-wide">Memuat Hari...</span>
-                    <span id="chat-top-clock" class="text-xs sm:text-sm font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 via-teal-300 to-emerald-400 filter drop-shadow-[0_0_8px_rgba(34,211,238,0.4)]">00:00:00</span>
-                </div>
-            </div>
-            
-            <div id="chatMessages" class="flex-1 p-2.5 sm:p-3 overflow-y-auto space-y-3 font-mono-tech text-[11px] sm:text-xs text-slate-200 bg-slate-950 custom-scroll relative">
-                <div class="bg-slate-900/80 p-2.5 rounded-xl border border-slate-800/80 leading-relaxed">
-                    <span class="text-yellow-400 block font-bold mb-1">&gt;_ SISTEM DIGITAL AKTIF:</span>
-                    Assalamualaikum! Silakan ketik langsung **nama surah** untuk mencari dan menampilkan surah yang Anda tuju dengan cepat, atau tanyakan apa saja seputar Islam dan Al-Qur'an.
-                </div>
-            </div>
-
-            <div id="chat-suggestions" class="hidden mx-2 p-1 bg-slate-950 border border-slate-800 rounded-lg max-h-24 overflow-y-auto custom-scroll font-mono-tech text-[10px] sm:text-[11px] space-y-0.5 z-50"></div>
-
-            <div class="p-2 bg-slate-900 border-t border-slate-800 flex gap-1.5 overflow-x-auto custom-scroll shrink-0">
-                <button onclick="triggerChatShortcut('help')" class="whitespace-nowrap px-2 py-1 bg-slate-950 hover:bg-emerald-950 text-emerald-400 text-[9px] sm:text-[10px] rounded border border-emerald-900 font-bold cursor-pointer"><i class="fa-solid fa-circle-question mr-1"></i> Help System</button>
-                <button onclick="triggerChatShortcut('cari_surah')" class="whitespace-nowrap px-2 py-1 bg-slate-950 hover:bg-blue-950 text-blue-400 text-[9px] sm:text-[10px] rounded border border-blue-900 font-bold cursor-pointer"><i class="fa-solid fa-magnifying-glass mr-1"></i> Cari Surah</button>
-                <button onclick="triggerChatShortcut('programmer')" class="whitespace-nowrap px-2 py-1 bg-fuchsia-950 hover:bg-fuchsia-900 text-fuchsia-400 text-[9px] sm:text-[10px] rounded border border-fuchsia-800 font-black cursor-pointer"><i class="fa-solid fa-code mr-1"></i> Data Programmer</button>
-                <button onclick="triggerChatShortcut('my_aplikasi')" class="whitespace-nowrap px-2 py-1 bg-slate-950 hover:bg-amber-950 text-amber-400 text-[9px] sm:text-[10px] rounded border border-amber-900 font-bold cursor-pointer"><i class="fa-solid fa-layer-group mr-1"></i> My Aplikasi</button>
-            </div>
-
-            <div class="p-2 bg-slate-900 border-t border-slate-800 flex gap-1.5">
-                <input type="text" id="chatInput" oninput="showChatInputSuggestions()" onkeydown="if(event.key==='Enter') processChatMessage()" placeholder="Ketik nama surah atau 'programmer'..." class="flex-1 bg-slate-950 border border-slate-700 rounded-lg p-2 text-[11px] sm:text-xs text-white focus:outline-none focus:border-cyan-400 font-mono-tech">
-                <button onclick="processChatMessage()" class="bg-teal-700 hover:bg-teal-600 text-white px-3 sm:px-4 rounded-lg text-xs font-bold cursor-pointer flex items-center justify-center"><i class="fa-solid fa-paper-plane"></i></button>
+        <div id="chatMessages" class="flex-1 p-2.5 sm:p-3 overflow-y-auto space-y-3 font-mono-tech text-[11px] sm:text-xs text-slate-200 bg-slate-950 custom-scroll relative">
+            <div id="chat-welcome-msg" class="bg-slate-900/80 p-2.5 rounded-xl border border-slate-800/80 leading-relaxed">
+                <span class="text-yellow-400 block font-bold mb-1">&gt;_ SISTEM DIGITAL AKTIF:</span>
+                Assalamualaikum! Silakan ketik langsung **nama surah** untuk mencari dan menampilkan surah yang Anda tuju dengan cepat, atau tanyakan apa saja seputar Islam dan Al-Qur'an.
             </div>
         </div>
 
-        <button onclick="openScreensaverSettings()" class="bg-slate-900 border border-purple-500/50 w-9 h-9 sm:w-10 sm:h-10 rounded-full shadow-lg flex items-center justify-center text-slate-400 hover:text-purple-400 cursor-pointer hover:scale-105 transition-all" title="Pengaturan Timer Screensaver">
-            <i class="fa-solid fa-gear text-xs"></i>
-        </button>
+        <div id="chat-suggestions" class="hidden mx-2 p-1 bg-slate-950 border border-slate-800 rounded-lg max-h-24 overflow-y-auto custom-scroll font-mono-tech text-[10px] sm:text-[11px] space-y-0.5 z-50"></div>
 
-        <button id="btnFloatingAutoScToggle" onclick="toggleFloatingAutoScBtn()" class="bg-slate-900 border border-emerald-500/80 w-10 h-10 sm:w-11 sm:h-11 rounded-full shadow-lg flex items-center justify-center text-emerald-400 cursor-pointer hover:scale-105 transition-transform" title="Auto Screensaver: ON">
-            <i id="iconFloatingAutoSc" class="fa-solid fa-desktop text-[11px] sm:text-sm"></i>
-        </button>
+        <div class="p-2 bg-slate-900 border-t border-slate-800 flex gap-1.5 overflow-x-auto custom-scroll shrink-0">
+            <button onclick="triggerChatShortcut('help')" class="whitespace-nowrap px-2 py-1 bg-slate-950 hover:bg-emerald-950 text-emerald-400 text-[9px] sm:text-[10px] rounded border border-emerald-900 font-bold cursor-pointer"><i class="fa-solid fa-circle-question mr-1"></i> Help System</button>
+            <button onclick="triggerChatShortcut('cari_surah')" class="whitespace-nowrap px-2 py-1 bg-slate-950 hover:bg-blue-950 text-blue-400 text-[9px] sm:text-[10px] rounded border border-blue-900 font-bold cursor-pointer"><i class="fa-solid fa-magnifying-glass mr-1"></i> Cari Surah</button>
+            <button onclick="triggerChatShortcut('programmer')" class="whitespace-nowrap px-2 py-1 bg-fuchsia-950 hover:bg-fuchsia-900 text-fuchsia-400 text-[9px] sm:text-[10px] rounded border border-fuchsia-800 font-black cursor-pointer"><i class="fa-solid fa-code mr-1"></i> Data Programmer</button>
+            <button onclick="triggerChatShortcut('my_aplikasi')" class="whitespace-nowrap px-2 py-1 bg-slate-950 hover:bg-amber-950 text-amber-400 text-[9px] sm:text-[10px] rounded border border-amber-900 font-bold cursor-pointer"><i class="fa-solid fa-layer-group mr-1"></i> My Aplikasi</button>
+        </div>
+
+        <div class="p-2 bg-slate-900 border-t border-slate-800 flex gap-1.5">
+            <button id="chatMicBtn" onclick="toggleVoice()" class="bg-slate-800 hover:bg-slate-700 text-teal-400 px-3 rounded-lg text-xs cursor-pointer transition-all shadow-inner" title="Perintah Suara (Buka Surah Yasin ayat 5)"><i class="fa-solid fa-microphone"></i></button>
+            <input type="text" id="chatInput" oninput="showChatInputSuggestions()" onkeydown="if(event.key==='Enter') processChatMessage()" placeholder="Ketik nama surah atau tanya AI Copilot..." class="flex-1 bg-slate-950 border border-slate-700 rounded-lg p-2 text-[11px] sm:text-xs text-white focus:outline-none focus:border-cyan-400 font-mono-tech transition-all">
+            <button onclick="processChatMessage()" class="bg-teal-700 hover:bg-teal-600 text-white px-3 sm:px-4 rounded-lg text-xs font-bold cursor-pointer flex items-center justify-center"><i class="fa-solid fa-paper-plane"></i></button>
+        </div>
+    </div>
+
+    <!-- Floating Bottom Controls Container dengan posisi dinamis agar tidak menabrak footer -->
+    <div class="fixed bottom-16 sm:bottom-20 right-4 z-50 flex items-center gap-2 sm:gap-2.5 flex-row-reverse">
         
-        <button onclick="toggleFloatingQuotes()" class="bg-slate-900 dark:bg-slate-800 border border-teal-500 w-10 h-10 sm:w-11 sm:h-11 rounded-full shadow-lg flex items-center justify-center text-teal-400 cursor-pointer hover:scale-105 transition-transform" title="Buka/Tutup Quotes">
-            <i class="fa-solid fa-quote-left text-[11px] sm:text-sm"></i>
+        <!-- Toggle Menu Hide/Unhide -->
+        <button onclick="toggleAllFloatingButtons()" id="btnToggleFloating" class="bg-slate-800 border border-slate-600 w-10 h-10 sm:w-11 sm:h-11 rounded-full shadow-lg flex items-center justify-center text-slate-400 hover:text-white cursor-pointer z-[60] transition-transform active:scale-90" title="Hide/Unhide Menu">
+            <i class="fa-solid fa-angles-right text-sm" id="iconToggleFloating"></i>
         </button>
 
-        <button onclick="goToLastRead()" class="bg-indigo-900 hover:bg-indigo-800 border border-indigo-500 w-10 h-10 sm:w-11 sm:h-11 rounded-full shadow-[0_0_15px_rgba(79,70,229,0.4)] flex items-center justify-center text-indigo-300 cursor-pointer hover:scale-105 transition-transform relative group" title="Lanjut Bacaan Terakhir">
-            <i class="fa-solid fa-bookmark text-[11px] sm:text-sm"></i>
-            <span class="absolute -top-1 -right-1 flex h-3 w-3">
-                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
-                <span class="relative inline-flex rounded-full h-3 w-3 bg-indigo-500 border border-indigo-200"></span>
-            </span>
-        </button>
+        <!-- Wrapper Susunan Tombol Menu Dinamis -->
+        <div id="floatingButtonsWrapper" class="flex flex-row-reverse items-center gap-2 sm:gap-2.5 transition-all duration-300">
+            
+            <button onclick="toggleChatWindow()" class="bg-slate-950 hover:bg-slate-900 border-2 border-yellow-500 w-11 h-11 sm:w-12 sm:h-12 rounded-full shadow-lg flex items-center justify-center text-lg sm:text-xl cursor-pointer transition-transform active:scale-90" title="Buka Asisten Chat Muslim">
+                <div class="relative flex items-center justify-center text-yellow-500">
+                    <i class="fa-solid fa-comment-sms text-sm sm:text-base absolute -top-1 -right-1 opacity-40"></i>
+                    <i class="fa-solid fa-user-astronaut text-xs sm:text-sm"></i>
+                </div>
+            </button>
+            
+            <button onclick="goToLastRead()" class="bg-indigo-900 hover:bg-indigo-800 border border-indigo-500 w-10 h-10 sm:w-11 sm:h-11 rounded-full shadow-[0_0_15px_rgba(79,70,229,0.4)] flex items-center justify-center text-indigo-300 cursor-pointer hover:scale-105 transition-transform relative group" title="Lanjut Bacaan Terakhir">
+                <i class="fa-solid fa-bookmark text-[11px] sm:text-sm"></i>
+                <span class="absolute -top-1 -right-1 flex h-3 w-3">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-indigo-400 opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-3 w-3 bg-indigo-500 border border-indigo-200"></span>
+                </span>
+            </button>
 
-        <button onclick="toggleChatWindow()" class="bg-slate-950 hover:bg-slate-900 border-2 border-yellow-500 w-11 h-11 sm:w-12 sm:h-12 rounded-full shadow-lg flex items-center justify-center text-lg sm:text-xl cursor-pointer transition-transform active:scale-90" title="Buka Asisten Chat Muslim">
-            <div class="relative flex items-center justify-center text-yellow-500">
-                <i class="fa-solid fa-comment-sms text-sm sm:text-base absolute -top-1 -right-1 opacity-40"></i>
-                <i class="fa-solid fa-user-astronaut text-xs sm:text-sm"></i>
-            </div>
-        </button>
+            <!-- Fitur Baru: Audio Mute Melayang -->
+            <button id="btnFloatingMute" onclick="toggleMuteAudio()" class="bg-slate-900 hover:bg-slate-800 border border-sky-500 w-10 h-10 sm:w-11 sm:h-11 rounded-full shadow-lg flex items-center justify-center text-sky-400 cursor-pointer hover:scale-105 transition-all" title="Mute/Unmute Audio">
+                <i id="iconFloatingMute" class="fa-solid fa-volume-high text-[11px] sm:text-sm"></i>
+            </button>
+
+            <button onclick="toggleFloatingQuotes()" class="bg-slate-900 dark:bg-slate-800 border border-teal-500 w-10 h-10 sm:w-11 sm:h-11 rounded-full shadow-lg flex items-center justify-center text-teal-400 cursor-pointer hover:scale-105 transition-transform" title="Buka/Tutup Quotes">
+                <i class="fa-solid fa-quote-left text-[11px] sm:text-sm"></i>
+            </button>
+
+            <button id="btnFloatingAutoScToggle" onclick="toggleFloatingAutoScBtn()" class="bg-slate-900 border border-emerald-500/80 w-10 h-10 sm:w-11 sm:h-11 rounded-full shadow-lg flex items-center justify-center text-emerald-400 cursor-pointer hover:scale-105 transition-transform" title="Auto Screensaver: ON">
+                <i id="iconFloatingAutoSc" class="fa-solid fa-desktop text-[11px] sm:text-sm"></i>
+            </button>
+            
+            <button onclick="openScreensaverSettings()" class="bg-slate-900 border border-purple-500/50 w-9 h-9 sm:w-10 sm:h-10 rounded-full shadow-lg flex items-center justify-center text-slate-400 hover:text-purple-400 cursor-pointer hover:scale-105 transition-all" title="Pengaturan Timer Screensaver">
+                <i class="fa-solid fa-gear text-xs"></i>
+            </button>
+        </div>
     </div>
 
     <!-- Creator Modal -->
@@ -533,6 +556,132 @@
     </footer>
 
     <script>
+        // ==========================================
+        // TEXT-TO-SPEECH (TTS) & VOICE RECOGNITION
+        // ==========================================
+        const synth = window.speechSynthesis;
+        let botVoice = null;
+        let recognizing = false;
+        
+        // VARIABEL GLOBAL MUTE (Dimutasi dari tombol melayang Mute)
+        let isAudioMuted = false;
+
+        function loadVoices() {
+            const voices = synth.getVoices();
+            botVoice = voices.find(v => (v.name.includes('Indonesian') || v.name.includes('ID') || v.name.includes('Female'))) || voices[0];
+        }
+        if (synth.onvoiceschanged !== undefined) { synth.onvoiceschanged = loadVoices; }
+        loadVoices();
+
+        function speakBot(text) {
+            if (!synth) return;
+            synth.cancel(); // Hentikan suara yang sedang berjalan (menghindari spam audio)
+            
+            // CEK STATUS MUTE SEBELUM BERBICARA
+            if (isAudioMuted) return; 
+            
+            // Bersihkan format Markdown sebelum dibacakan
+            const cleanText = text.replace(/\*/g, '').replace(/_/g, '').replace(/<[^>]*>?/gm, '');
+            const utterance = new SpeechSynthesisUtterance(cleanText);
+            
+            if (botVoice) utterance.voice = botVoice;
+            utterance.rate = 1.0;
+            utterance.pitch = 1.05;
+            synth.speak(utterance);
+        }
+
+        function getFormalGreeting() {
+            const hour = new Date().getHours();
+            if (hour >= 4 && hour < 11) return "Assalamualaikum, selamat pagi";
+            if (hour >= 11 && hour < 15) return "Assalamualaikum, selamat siang";
+            if (hour >= 15 && hour < 18) return "Assalamualaikum, selamat sore";
+            return "Assalamualaikum, selamat malam";
+        }
+
+        function toggleVoice() {
+            if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+                alert("Voice Recognition tidak didukung di browser ini."); return;
+            }
+            const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+            const rec = new SpeechRec(); 
+            rec.lang = 'id-ID';
+            
+            const micBtn = document.getElementById('chatMicBtn');
+            const chatInput = document.getElementById('chatInput');
+
+            if (!recognizing) {
+                rec.start(); 
+                recognizing = true;
+                micBtn.classList.add('mic-listening');
+                chatInput.placeholder = "Mendengarkan (Buka surah Yasin ayat 5)...";
+                speakBot("Mendengarkan perintah suara Anda.");
+            } else {
+                rec.stop(); 
+                recognizing = false;
+                micBtn.classList.remove('mic-listening');
+                chatInput.placeholder = "Ketik nama surah atau tanya AI Copilot...";
+            }
+
+            rec.onresult = (e) => {
+                const transcript = e.results[0][0].transcript;
+                chatInput.value = transcript;
+                processChatMessage(transcript);
+            };
+            rec.onend = () => {
+                recognizing = false;
+                micBtn.classList.remove('mic-listening');
+                chatInput.placeholder = "Ketik nama surah atau tanya AI Copilot...";
+            };
+        }
+
+        // ==========================================
+        // FUNGSI MENU MELAYANG DINAMIS (HIDE/UNHIDE & MUTE)
+        // ==========================================
+        function toggleAllFloatingButtons() {
+            const wrapper = document.getElementById('floatingButtonsWrapper');
+            const icon = document.getElementById('iconToggleFloating');
+            
+            if (wrapper.classList.contains('hidden')) {
+                wrapper.classList.remove('hidden');
+                wrapper.classList.add('flex');
+                icon.classList.replace('fa-angles-left', 'fa-angles-right');
+            } else {
+                wrapper.classList.add('hidden');
+                wrapper.classList.remove('flex');
+                icon.classList.replace('fa-angles-right', 'fa-angles-left');
+            }
+        }
+
+        function toggleMuteAudio() {
+            const audioEl = document.getElementById('globalAudio');
+            const icon = document.getElementById('iconFloatingMute');
+            const btn = document.getElementById('btnFloatingMute');
+            
+            isAudioMuted = !isAudioMuted;
+            
+            // Mute / Unmute Pemutar Murottal 
+            if (audioEl) {
+                audioEl.muted = isAudioMuted;
+            }
+            
+            // Ganti Indikator Visual dan Matikan TTS jika Mute Aktif
+            if (isAudioMuted) {
+                icon.classList.replace('fa-volume-high', 'fa-volume-xmark');
+                btn.classList.replace('border-sky-500', 'border-red-500');
+                btn.classList.replace('text-sky-400', 'text-red-500');
+                
+                // Matikan seketika jika AI sedang berbicara
+                if (window.speechSynthesis) window.speechSynthesis.cancel();
+            } else {
+                icon.classList.replace('fa-volume-xmark', 'fa-volume-high');
+                btn.classList.replace('border-red-500', 'border-sky-500');
+                btn.classList.replace('text-red-500', 'text-sky-400');
+            }
+        }
+
+        // ==========================================
+        // AL-QURAN DIGITAL CORE LOGIC
+        // ==========================================
         const API_URL = 'https://raw.githubusercontent.com/bachors/Al-Quran-ID-API/refs/heads/master/offline/data.json';
         let allSurahData = [];
         let isScreensaverActive = false;
@@ -542,6 +691,7 @@
         let lastActiveIndex = -1;
         let longPressTimer; 
         let currentShareData = null;
+        let hoverTimeout;
 
         const baseQuotes = [
             "\"Maka sesungguhnya beserta kesulitan ada kemudahan.\" (QS. Al-Insyirah: 5)",
@@ -701,6 +851,10 @@
             document.getElementById('audioPlayerWidget').classList.remove('hidden');
             document.getElementById('audioPlayerWidget').classList.add('flex');
             audioEl.src = finalUrl;
+            
+            // Sync mute state globally
+            audioEl.muted = isAudioMuted; 
+            
             audioEl.play();
             lastActiveIndex = -1;
             bindAudioHighlightAndScrollEffect(audioEl);
@@ -828,6 +982,21 @@
                 document.getElementById('surah-counter').innerText = `${allSurahData.length}/114`;
                 updateDashboardQuote();
 
+                // Ubah Teks Welcome pada Panel Chat dengan Sapaan Waktu
+                const greetingStr = getFormalGreeting();
+                const welcomeMsg = document.getElementById('chat-welcome-msg');
+                if (welcomeMsg) {
+                    welcomeMsg.innerHTML = `
+                        <span class="text-yellow-400 block font-bold mb-1">&gt;_ HYDROBOT ASSISTANT AKTIF:</span>
+                        ${greetingStr}! Gunakan <strong class="text-cyan-400">perintah suara</strong> seperti "Buka surah Yasin ayat 5" atau ketik nama surah untuk mencari dengan cepat.
+                    `;
+                }
+
+                // AI Berbicara Setelah Sistem Siap
+                setTimeout(() => {
+                    speakBot(`${greetingStr}. Sistem Al-Quran Digital Pro Cyber Edition, siap digunakan.`);
+                }, 1000);
+
                 const quoteWidget = document.getElementById('floatingQuoteWidget');
                 if (quoteWidget) {
                     quoteWidget.classList.remove('hidden');
@@ -836,13 +1005,28 @@
             }, 500);
         }
 
+        // Animasi & Suara Hover Kartu JARVIS
+        function handleSurahHover(nama, arti) {
+            clearTimeout(hoverTimeout);
+            hoverTimeout = setTimeout(() => {
+                speakBot(`Surat ${nama}, yang berarti ${arti}`);
+            }, 750); // Jeda 750ms agar suara tidak numpuk saat menggerakkan kursor dengan cepat
+        }
+
+        function handleSurahLeave() {
+            clearTimeout(hoverTimeout);
+        }
+
         function renderSurahList(data) {
             const grid = document.getElementById('surah-grid');
             grid.innerHTML = '';
             data.forEach((surah) => {
                 const card = document.createElement('div');
-                card.className = 'bg-white/95 dark:bg-slate-900/85 backdrop-blur-md p-4 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-teal-500 transition-all cursor-pointer shadow-sm';
+                // Menambahkan kelas hover pembesaran ala Jarvis
+                card.className = 'bg-white/95 dark:bg-slate-900/85 backdrop-blur-md p-4 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-teal-500 hover:-translate-y-1 hover:shadow-[0_0_20px_rgba(20,184,166,0.5)] transition-all duration-300 cursor-pointer shadow-sm';
                 card.setAttribute('onclick', `openSurah(${surah.nomor})`);
+                card.setAttribute('onmouseenter', `handleSurahHover('${surah.nama}', '${surah.arti}')`);
+                card.setAttribute('onmouseleave', `handleSurahLeave()`);
                 card.title = `Buka detail ${surah.nama}`;
                 card.innerHTML = `
                     <div class="flex justify-between w-full items-center">
@@ -1073,6 +1257,7 @@
         function triggerChatShortcut(type) {
             if(type === 'help') {
                 insertBotReply("<strong>[HELP ADAPTIF]:</strong> Gunakan bilah menu 114 surah di kiri melayang atau ketik langsung nama surah di kolom input chat untuk mencarinya.");
+                speakBot("Gunakan bilah menu di sebelah kiri, atau ketik langsung nama surah di kolom input untuk mencarinya.");
             } else if(type === 'programmer') {
                 let profilePayload = `
                     <div class="bg-[#0b1224] border-2 border-yellow-500 rounded-xl p-3 text-slate-200 shadow-xl animate-gold-glow-box">
@@ -1091,8 +1276,10 @@
                     </div>
                 `;
                 insertBotReply(profilePayload);
+                speakBot("Memperkenalkan Bapak Mohamad Hartadi, Insinyur Geoteknik dan Pengembang Sistem Aplikasi Terintegrasi.");
             } else if(type === 'cari_surah') {
                 insertBotReply("Ketikkan langsung kata kunci nama surah yang Anda tuju pada kolom teks chat ini.");
+                speakBot("Silakan ketik atau sebutkan nama surah yang Anda cari.");
             } else if(type === 'my_aplikasi') {
                 let appsHtml = '<div class="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-2">';
                 apps.forEach(app => {
@@ -1119,6 +1306,7 @@
                     </div>
                 `;
                 insertBotReply(payload);
+                speakBot("Menampilkan direktori aplikasi ekosistem terpadu milik Mohamad Hartadi.");
             }
         }
 
@@ -1210,7 +1398,6 @@
             msg.scrollTop = msg.scrollHeight;
         }
 
-        
         function offlineBotResponse(msg) {
             const m = msg.toLowerCase();
             if (m.includes('halo') || m.includes('hai') || m.includes('assalamualaikum')) return "Wa'alaikumsalam! Ada yang bisa saya bantu terkait informasi surah atau direktori aplikasi ini?";
@@ -1222,18 +1409,24 @@
                 setTimeout(() => triggerChatShortcut('my_aplikasi'), 500);
                 return "Membuka direktori aplikasi portofolio untuk Anda...";
             }
-            return "Sistem AI Cloud sedang *offline* (atau API Key belum dikonfigurasi). Saat ini saya beroperasi dalam **Mode Offline** (seperti sistem Jarvis) dan hanya merespons perintah dasar. Silakan ketik nama surah secara spesifik untuk mencarinya dalam database lokal, atau klik tombol **My Aplikasi**.";
+            return "Maaf, sistem AI tidak dapat menemukan informasi di database dan pencarian online gagal. Silakan periksa koneksi atau pertimbangkan pengaturan API Google Gemini.";
         }
 
-        async function processChatMessage() {
+        async function processChatMessage(voiceInput = null) {
             const el = document.getElementById('chatInput');
-            const txt = el.value.trim();
+            let txt = '';
+            
+            if (typeof voiceInput === 'string' && voiceInput.trim() !== '') {
+                txt = voiceInput.trim();
+            } else {
+                txt = el.value.trim();
+            }
+
             document.getElementById('chat-suggestions').classList.add('hidden'); 
             
             if(!txt) return;
             
             const msgContainer = document.getElementById('chatMessages');
-            
             msgContainer.innerHTML += `
                 <div class="bg-gradient-to-r from-slate-800 to-slate-700 p-2.5 rounded-2xl rounded-tr-none text-right max-w-[85%] ml-auto text-white font-bold font-mono-tech mb-3 border border-slate-600 shadow-md">
                     ${txt}
@@ -1243,50 +1436,99 @@
             const textLower = txt.toLowerCase();
             el.value = ''; 
 
+            // Cek perintah suara "Buka surat X ayat Y" ala JARVIS
+            const voiceCmdRegex = /buka\s+(?:surat|surah)\s+([a-zA-Z\s]+?)(?:\s+ayat\s+(\d+))?$/i;
+            const match = textLower.match(voiceCmdRegex);
+            
+            if(match) {
+                const querySurah = match[1].replace(/[-']/g, ' ').replace(/\s+/g, ' ').trim();
+                const ayatNo = match[2]; 
+                
+                // Cari surah dengan regex toleran pada nama 
+                const foundSurah = allSurahData.find(s => {
+                    const cleanDBName = s.nama.toLowerCase().replace(/[-']/g, ' ').replace(/\s+/g, ' ').trim();
+                    return cleanDBName === querySurah;
+                });
+
+                if(foundSurah) {
+                    const responseBot = `Membuka surah ${foundSurah.nama}` + (ayatNo ? ` ayat ke ${ayatNo}` : '');
+                    speakBot(responseBot);
+                    
+                    openSurah(foundSurah.nomor);
+                    
+                    if (document.getElementById('chatWindow').classList.contains('hidden') === false) {
+                        toggleChatWindow(); 
+                    }
+                    
+                    if(ayatNo) {
+                        setTimeout(() => {
+                            const box = document.getElementById(`ayat-box-${ayatNo}`);
+                            if(box) {
+                                box.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                                box.classList.add('audio-active-highlight');
+                                
+                                const bLabel = document.createElement('div');
+                                bLabel.className = "absolute top-[-12px] left-4 bg-teal-500 text-white px-3 py-1 rounded-lg text-[10px] font-bold shadow-lg z-20 animate-pulse font-mono-tech";
+                                bLabel.innerHTML = `<i class='fa-solid fa-location-crosshairs mr-1'></i> Ayat ${ayatNo} Ditemukan`;
+                                box.appendChild(bLabel);
+                                
+                                setTimeout(() => {
+                                    box.classList.remove('audio-active-highlight');
+                                    if(bLabel && bLabel.parentNode) bLabel.parentNode.removeChild(bLabel);
+                                }, 4000);
+                            } else {
+                                speakBot(`Maaf, ayat ${ayatNo} tidak ditemukan di surah ${foundSurah.nama}`);
+                            }
+                        }, 800);
+                    }
+                    return;
+                }
+            }
+
             if (textLower.includes('programmer') || textLower.includes('hartadi') || textLower.includes('dev') || textLower.includes('kredit')) {
                 triggerChatShortcut('programmer');
                 return;
             } 
             
             const cleanQuery = textLower.replace('surah', '').trim();
-            const foundSurah = allSurahData.find(s => 
+            const foundSurahFast = allSurahData.find(s => 
                 s.nama.toLowerCase() === cleanQuery || s.arti.toLowerCase() === cleanQuery
             );
 
-            if (foundSurah && cleanQuery.length > 2) {
+            if (foundSurahFast && cleanQuery.length > 2) {
                 let surahCardPayload = `
                     <div class="bg-slate-900 border border-teal-500 rounded-xl p-3 space-y-2.5 shadow-md font-sans text-[11px] sm:text-xs">
                         <div class="flex justify-between items-center border-b border-slate-800 pb-1.5">
-                            <span class="bg-teal-950 text-teal-400 font-mono-tech font-bold px-2 py-0.5 rounded text-[9px] sm:text-[10px]">${foundSurah.nomor}</span>
-                            <span class="font-arabic text-yellow-500 font-bold text-base sm:text-lg">${foundSurah.asma}</span>
+                            <span class="bg-teal-950 text-teal-400 font-mono-tech font-bold px-2 py-0.5 rounded text-[9px] sm:text-[10px]">${foundSurahFast.nomor}</span>
+                            <span class="font-arabic text-yellow-500 font-bold text-base sm:text-lg">${foundSurahFast.asma}</span>
                         </div>
                         <div>
-                            <h5 class="text-white font-bold text-xs sm:text-sm font-mono-tech">${foundSurah.nama}</h5>
-                            <p class="text-[10px] sm:text-[11px] text-slate-400">${foundSurah.arti} • ${foundSurah.type} (${foundSurah.ayat.length} Ayat)</p>
+                            <h5 class="text-white font-bold text-xs sm:text-sm font-mono-tech">${foundSurahFast.nama}</h5>
+                            <p class="text-[10px] sm:text-[11px] text-slate-400">${foundSurahFast.arti} • ${foundSurahFast.type} (${foundSurahFast.ayat.length} Ayat)</p>
                         </div>
                         <div class="grid grid-cols-2 gap-2 pt-1 font-mono-tech">
-                            <button onclick="openSurah(${foundSurah.nomor}); toggleChatWindow();" class="py-1.5 bg-teal-700 hover:bg-teal-600 text-white font-bold rounded-lg text-[9px] sm:text-[10px] cursor-pointer text-center transition-colors">
+                            <button onclick="openSurah(${foundSurahFast.nomor}); toggleChatWindow();" class="py-1.5 bg-teal-700 hover:bg-teal-600 text-white font-bold rounded-lg text-[9px] sm:text-[10px] cursor-pointer text-center transition-colors">
                                 <i class="fa-solid fa-book-open mr-1"></i> Buka Surah
                             </button>
-                            <button onclick="playSurahAudio('${foundSurah.audio}', '${foundSurah.nama}', ${foundSurah.nomor});" class="py-1.5 bg-yellow-500 hover:bg-yellow-400 text-slate-950 font-bold rounded-lg text-[9px] sm:text-[10px] cursor-pointer text-center transition-colors">
+                            <button onclick="playSurahAudio('${foundSurahFast.audio}', '${foundSurahFast.nama}', ${foundSurahFast.nomor});" class="py-1.5 bg-yellow-500 hover:bg-yellow-400 text-slate-950 font-bold rounded-lg text-[9px] sm:text-[10px] cursor-pointer text-center transition-colors">
                                 <i class="fa-solid fa-play mr-1"></i> Murottal
                             </button>
                         </div>
                     </div>
                 `;
                 insertBotReply(`Sistem mendeteksi pencarian Surah presisi: ${surahCardPayload}`);
+                speakBot(`Ditemukan. Surah ${foundSurahFast.nama}. Silakan tekan tombol buka surah.`);
                 return;
             }
 
             const typingId = 'typing-' + Date.now();
             msgContainer.innerHTML += `
                 <div id="${typingId}" class="text-cyan-400 font-mono-tech text-[10px] animate-pulse mb-3 mt-2 flex items-center gap-2">
-                    <i class="fa-solid fa-microchip fa-spin"></i> Mentransmisikan kueri ke AI Cloud Gemini...
+                    <i class="fa-solid fa-microchip fa-spin"></i> Mentransmisikan kueri ke AI Copilot...
                 </div>`;
             msgContainer.scrollTop = msgContainer.scrollHeight;
 
             try {
-                // Mencoba memanggil API secara langsung, menghindari Gateway Error
                 const API_KEY = localStorage.getItem('gemini_api_key') || ''; 
                 let aiResponse = null;
 
@@ -1307,20 +1549,39 @@
                     }
                 }
                 
-                document.getElementById(typingId).remove();
+                const elType = document.getElementById(typingId);
+                if (elType) elType.remove();
 
                 if (aiResponse) {
                     insertAIBotReply(aiResponse);
+                    speakBot(aiResponse);
                 } else {
-                    // Fallback Mode Offline (Sama seperti logika Jarvis)
-                    const offlineReply = offlineBotResponse(txt);
-                    insertAIBotReply(offlineReply);
+                    // IMPLEMENTASI COPILOT AI INTERNET (WIKIPEDIA API SEPERTI JARVIS)
+                    const searchUrl = `https://id.wikipedia.org/w/api.php?action=query&format=json&prop=extracts&exsentences=4&exintro=1&explaintext=1&generator=search&gsrsearch=${encodeURIComponent(txt)}&gsrlimit=1&origin=*`;
+                    
+                    const wikiResp = await fetch(searchUrl);
+                    const wikiData = await wikiResp.json();
+                    
+                    if (wikiData.query && wikiData.query.pages) {
+                        const pages = wikiData.query.pages;
+                        const pageId = Object.keys(pages)[0];
+                        const extract = pages[pageId].extract;
+                        
+                        const reply = `**[HASIL PENELUSURAN INTERNET]**\nBerdasarkan ensiklopedia global:\n\n*${extract}*`;
+                        insertAIBotReply(reply);
+                        speakBot(extract);
+                    } else {
+                        const offlineReply = offlineBotResponse(txt);
+                        insertAIBotReply(offlineReply);
+                        speakBot(offlineReply); 
+                    }
                 }
             } catch (error) {
-                document.getElementById(typingId).remove();
-                // Jika request error sama sekali (internet putus/proxy mati), gunakan fallback offline
+                const elType = document.getElementById(typingId);
+                if (elType) elType.remove();
                 const offlineReply = offlineBotResponse(txt);
                 insertAIBotReply(offlineReply);
+                speakBot(offlineReply);
             }
         }
 
@@ -1520,7 +1781,6 @@
             if(!container) return;
             const scene = new THREE.Scene();
             
-            // Background dikosongkan agar menyatu dengan layout HTML
             scene.background = null; 
             
             const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
