@@ -306,6 +306,9 @@
                 </button>
 
                 <div class="flex items-center justify-center gap-2">
+                    <button onclick="openVoiceSettingsModal()" class="bg-indigo-700 hover:bg-indigo-600 dark:bg-slate-800 dark:hover:bg-slate-700 text-white dark:text-indigo-400 border border-indigo-500/30 dark:border-slate-700 transition-all cursor-pointer shadow-xs p-2 w-9 h-9 flex items-center justify-center rounded-xl" title="Pengaturan Tema Suara AI">
+                        <i class="fa-solid fa-headset text-sm"></i>
+                    </button>
                     <button onclick="openHelpModal()" class="bg-slate-900 dark:bg-slate-800 hover:bg-slate-800 text-teal-400 dark:text-teal-300 text-xs font-bold p-2 w-9 h-9 flex items-center justify-center rounded-xl border border-teal-500/30 dark:border-slate-700 shadow-xs cursor-pointer">
                         <i class="fa-solid fa-circle-question text-sm"></i>
                     </button>
@@ -396,6 +399,24 @@
                     <tbody id="quotesDbTableBody" class="divide-y divide-slate-800/50 block sm:table-row-group"></tbody>
                 </table>
             </div>
+        </div>
+    </div>
+
+    <!-- Voice Settings Modal -->
+    <div id="voiceSettingsModal" class="fixed inset-0 z-[10005] hidden bg-black/80 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="bg-slate-900 border-2 border-indigo-500 rounded-2xl w-full max-w-sm p-6 shadow-2xl relative flex flex-col">
+            <button onclick="closeVoiceSettingsModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white transition-colors cursor-pointer z-10"><i class="fa-solid fa-xmark text-xl"></i></button>
+            <h3 class="text-indigo-400 text-base sm:text-lg font-bold font-mono-tech mb-2 flex items-center gap-2 mt-2 sm:mt-0"><i class="fa-solid fa-headset"></i> Tema Suara AI</h3>
+            <p class="text-xs text-slate-400 mb-4 font-sans">Pilih gaya suara asisten Hydrobot yang tersedia pada perangkat Anda.</p>
+            
+            <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 mb-6">
+                <label class="block text-slate-300 font-mono-tech text-[11px] sm:text-sm font-bold mb-2">Pilih Suara:</label>
+                <select id="voiceSelect" onchange="changeBotVoice()" class="w-full bg-slate-900 border border-slate-700 rounded-lg p-2 text-sm text-white focus:outline-none focus:border-indigo-400 custom-scroll">
+                    <option value="">Memuat daftar suara...</option>
+                </select>
+            </div>
+            
+            <button onclick="closeVoiceSettingsModal()" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3 text-sm rounded-xl transition-colors shadow-lg cursor-pointer">Tutup & Simpan</button>
         </div>
     </div>
 
@@ -702,13 +723,50 @@
         let botVoice = null;
         let recognizing = false;
         let isAudioMuted = false;
+        let availableVoices = [];
 
         function loadVoices() {
-            const voices = synth.getVoices();
-            botVoice = voices.find(v => (v.name.includes('Indonesian') || v.name.includes('ID') || v.name.includes('Female'))) || voices[0];
+            availableVoices = synth.getVoices();
+            if(availableVoices.length === 0) return;
+            
+            const voiceSelect = document.getElementById('voiceSelect');
+            if(voiceSelect) {
+                voiceSelect.innerHTML = '';
+                availableVoices.forEach((v, i) => {
+                    const option = document.createElement('option');
+                    option.value = i;
+                    option.textContent = `${v.name} (${v.lang})`;
+                    voiceSelect.appendChild(option);
+                });
+            }
+
+            const savedVoiceIndex = localStorage.getItem('botVoiceIndex');
+            if(savedVoiceIndex !== null && availableVoices[savedVoiceIndex]) {
+                botVoice = availableVoices[savedVoiceIndex];
+                if(voiceSelect) voiceSelect.value = savedVoiceIndex;
+            } else {
+                botVoice = availableVoices.find(v => (v.name.includes('Indonesian') || v.name.includes('ID') || v.name.includes('Female'))) || availableVoices[0];
+                if(voiceSelect) voiceSelect.value = availableVoices.indexOf(botVoice);
+            }
         }
+        
         if (synth.onvoiceschanged !== undefined) { synth.onvoiceschanged = loadVoices; }
         loadVoices();
+
+        function changeBotVoice() {
+            const voiceSelect = document.getElementById('voiceSelect');
+            const selectedIndex = voiceSelect.value;
+            botVoice = availableVoices[selectedIndex];
+            localStorage.setItem('botVoiceIndex', selectedIndex);
+            speakBot("Gaya tema suara telah berhasil diubah.");
+        }
+
+        function openVoiceSettingsModal() {
+            document.getElementById('voiceSettingsModal').classList.remove('hidden');
+        }
+        function closeVoiceSettingsModal() {
+            document.getElementById('voiceSettingsModal').classList.add('hidden');
+        }
 
         function speakBot(text) {
             if (!synth) return;
@@ -926,8 +984,7 @@
             if (event.target.tagName === 'INPUT' || event.target.tagName === 'TEXTAREA') return;
             const quoteWidget = document.getElementById('floatingQuoteWidget');
             if ((quoteWidget && !quoteWidget.classList.contains('hidden')) || isScreensaverActive) {
-                if (event.key === 'ArrowLeft') navigateQuote(-1);
-                else if (event.key === 'ArrowRight') navigateQuote(1);
+                if (event.key === 'ArrowLeft') { navigateQuote(-1); } else if (event.key === 'ArrowRight') { navigateQuote(1); }
             }
         });
 
@@ -998,25 +1055,21 @@
             const dayStr = `${daysArr[sekarang.getDay()]}, ${sekarang.getDate().toString().padStart(2, '0')} ${monthsArr[sekarang.getMonth()]} ${sekarang.getFullYear()}`;
             const timeStr = `${sekarang.getHours().toString().padStart(2, '0')}:${sekarang.getMinutes().toString().padStart(2, '0')}:${sekarang.getSeconds().toString().padStart(2, '0')}`;
             
-            // 1. Dashboard Utama
             const elDashDate = document.getElementById('dashboard-date');
             if (elDashDate) elDashDate.innerText = dayStr;
             const elDashTime = document.getElementById('dashboard-time');
             if (elDashTime) elDashTime.innerText = timeStr;
             
-            // 2. Chatbot AI
             const elChatDay = document.getElementById('chat-top-day');
             if (elChatDay) elChatDay.innerText = dayStr;
             const elChatClock = document.getElementById('chat-top-clock');
             if (elChatClock) elChatClock.innerText = timeStr + " WIB";
 
-            // 3. Mode Screensaver
             const elScClock = document.getElementById('scClockDisplay');
             if (elScClock) elScClock.innerText = timeStr;
             const elScDate = document.getElementById('scDateDisplay');
             if (elScDate) elScDate.innerText = dayStr + " | Waktu Lokal";
 
-            // 4. Loading Awal
             const elLoaderDate = document.getElementById('loader-date');
             if (elLoaderDate) elLoaderDate.innerText = dayStr;
             const elLoaderTime = document.getElementById('loader-time');
