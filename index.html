@@ -160,6 +160,34 @@
             color: #ef4444 !important;
             box-shadow: 0 0 15px rgba(239, 68, 68, 0.6) !important;
         }
+
+        /* ==========================================
+           TAJWEED COLORS & INTERACTIVE CLASSES
+           ========================================== */
+        .tajweed-word {
+            position: relative;
+            display: inline-block;
+            cursor: help;
+            border-bottom: 2px dotted rgba(255,255,255,0.2);
+            transition: all 0.3s ease;
+        }
+
+        .tajweed-word:hover {
+            transform: scale(1.05);
+            background-color: rgba(255, 255, 255, 0.08);
+            border-radius: 4px;
+        }
+
+        /* Warna Metrik Tajwid Lengkap */
+        .tj-ghunnah { color: #ef4444; text-shadow: 0 0 8px rgba(239, 68, 68, 0.4); } /* Merah */
+        .tj-qalqalah { color: #3b82f6; text-shadow: 0 0 8px rgba(59, 130, 246, 0.4); } /* Biru */
+        .tj-mad { color: #f59e0b; text-shadow: 0 0 8px rgba(245, 158, 11, 0.4); } /* Kuning/Oranye */
+        .tj-ikhfa, .tj-ikhfa-syafawi { color: #10b981; text-shadow: 0 0 8px rgba(16, 185, 129, 0.4); } /* Hijau */
+        .tj-idgham-bi, .tj-idgham-mimi { color: #d946ef; text-shadow: 0 0 8px rgba(217, 70, 239, 0.4); } /* Fuchsia/Pink */
+        .tj-idgham-bila { color: #8b5cf6; text-shadow: 0 0 8px rgba(139, 92, 246, 0.4); } /* Ungu */
+        .tj-iqlab { color: #06b6d4; text-shadow: 0 0 8px rgba(6, 182, 212, 0.4); } /* Cyan */
+        .tj-idzhar, .tj-idzhar-syafawi { color: #0ea5e9; text-shadow: 0 0 8px rgba(14, 165, 233, 0.4); } /* Sky Blue */
+
     </style>
 </head>
 <body class="bg-slate-50 dark:bg-slate-950 transition-colors duration-300 min-h-screen flex flex-col font-sans relative pb-32">
@@ -236,10 +264,9 @@
         </div>
     </div>
 
-    <!-- Audio Player (DIPERBAIKI UNTUK PC - Memastikan tombol pause/volume tidak terpotong) -->
+    <!-- Audio Player -->
     <div id="audioPlayerWidget" class="fixed top-24 lg:top-20 left-1/2 transform -translate-x-1/2 z-[100] bg-slate-900 border border-teal-500 p-2 sm:p-3 rounded-xl shadow-[0_0_20px_rgba(20,184,166,0.3)] hidden items-center gap-2 sm:gap-3 animate-cyber-glow w-[95%] max-w-md md:max-w-2xl md:w-[600px] lg:w-[700px]" title="Pemutar Murottal Interaktif">
         <div class="bg-teal-800 text-white px-3 py-1.5 sm:py-2 rounded-lg text-[10px] sm:text-xs font-bold whitespace-nowrap min-w-[80px] sm:min-w-[120px] text-center shadow-inner overflow-hidden text-ellipsis" id="audioSurahTitle">Murottal</div>
-        <!-- Perbaikan pada elemen audio: min-width diperbesar (320px) agar kontrol bawaan PC tampil sempurna -->
         <audio id="globalAudio" controls controlsList="nodownload" class="h-10 sm:h-12 outline-none flex-1 w-full bg-slate-100 dark:bg-slate-800 rounded-lg" style="min-width: 320px; color-scheme: dark;"></audio>
         <button onclick="closeAudioPlayer()" class="w-8 h-8 sm:w-10 sm:h-10 shrink-0 bg-slate-800 hover:bg-red-500 text-slate-300 hover:text-white border border-slate-700 hover:border-red-400 rounded-lg flex items-center justify-center cursor-pointer shadow-md transition-colors" title="Tutup Audio">
             <i class="fa-solid fa-xmark sm:text-lg"></i>
@@ -402,8 +429,8 @@
         </div>
     </div>
 
+    <!-- Modifikasi Bagian Help System / Pusat Bantuan Terlengkap -->
     <div id="helpModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-[10005] flex items-center justify-center p-4 hidden">
-        <!-- Help Content -->
         <div class="bg-slate-900 border-2 border-teal-500 p-5 sm:p-6 rounded-2xl max-w-4xl w-full flex flex-col gap-4 max-h-[90vh] overflow-hidden shadow-2xl relative">
             <div class="flex justify-between items-center border-b-2 border-slate-800 pb-3 select-none shrink-0 mt-2 sm:mt-0">
                 <h3 class="font-mono-tech text-sm sm:text-base font-black text-teal-400 uppercase tracking-wide flex items-center gap-2">
@@ -412,20 +439,58 @@
                 <button onclick="closeHelpModal()" class="absolute top-4 right-4 sm:static text-slate-400 hover:text-red-400 p-1 cursor-pointer transition-colors"><i class="fa-solid fa-xmark text-xl sm:text-2xl"></i></button>
             </div>
             <div class="overflow-y-auto custom-scroll space-y-4 sm:space-y-6 pr-2 font-sans text-[13px] sm:text-sm text-slate-300 pb-4">
-                <div class="bg-slate-950/80 p-4 sm:p-5 rounded-xl border border-slate-800 shadow-inner">
-                    <h4 class="text-emerald-400 font-bold font-mono-tech mb-2 flex items-center gap-2 text-sm"><i class="fa-solid fa-microchip"></i> DESKRIPSI APLIKASI</h4>
-                    <p class="leading-relaxed">Al-Qur'an Digital Pro - Cyber Islamic Edition adalah platform mushaf digital luring (*offline*) berkinerja tinggi. Aplikasi ini mengintegrasikan fungsi bacaan Al-Qur'an 114 surah, pemutar murottal dengan fitur sinkronisasi teks dinamis otomatis, serta kajian metrik komprehensif.</p>
-                </div>
+                
                 <div class="bg-slate-950/80 p-4 sm:p-5 rounded-xl border border-blue-400/80 shadow-inner">
                     <h4 class="text-blue-400 font-bold font-mono-tech mb-3 flex items-center gap-2 text-sm"><i class="fa-solid fa-cubes"></i> FITUR INTEGRASI UTAMA</h4>
                     <ul class="space-y-2 list-disc list-inside">
-                        <li><strong class="text-slate-200">Database Offline & Caching:</strong> Tetap fungsional dan bisa diakses saat tidak ada jaringan internet setelah sinkronisasi pertama.</li>
-                        <li><strong class="text-slate-200">Asisten Chatbot AI (Hydrobot):</strong> Mendukung interaksi Teks-ke-Suara, Perintah Suara (Buka Surah X Ayat Y), dan Pengetahuan Universal beserta referensinya.</li>
-                        <li><strong class="text-slate-200">3D Earth Integration:</strong> Tampilan visual geospasial ala Cyberpunk HUD di semua antarmuka.</li>
-                        <li><strong class="text-slate-200">Metrik Surah Dinamis:</strong> Efek animasi dan suara saat kursor melayang (hover) di atas kartu surah.</li>
+                        <li><strong class="text-slate-200">Database Offline & Caching:</strong> Fungsional tanpa internet pasca sinkronisasi pertama.</li>
+                        <li><strong class="text-slate-200">Asisten Chatbot AI (Hydrobot):</strong> Interaksi Teks/Suara (Buka Surah X Ayat Y).</li>
                         <li><strong class="text-emerald-400">Bookmark Pintar:</strong> Tahan lama (*long-press*) pada ayat untuk menandai bacaan terakhir.</li>
+                        <li><strong class="text-yellow-400">Tajwid Regex Cerdas:</strong> Tooltip dinamis tajwid anti-potong yang menempel otomatis pada huruf hijaiyah.</li>
                     </ul>
                 </div>
+
+                <!-- METRIK TAJWID LENGKAP -->
+                <div class="bg-slate-950/80 p-4 sm:p-5 rounded-xl border border-yellow-500/80 shadow-inner">
+                    <h4 class="text-yellow-400 font-bold font-mono-tech mb-3 flex items-center gap-2 text-sm"><i class="fa-solid fa-book-open-reader"></i> METRIK PANDUAN TAJWID</h4>
+                    <p class="text-xs mb-3 text-slate-400 font-sans">Arahkan kursor (hover) atau sentuh kotak teks di bawah ini untuk melihat contoh metrik tajwid aktif:</p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3" dir="rtl">
+                        <div class="p-3 border border-slate-800 rounded-lg bg-slate-900 flex justify-between items-center shadow-sm">
+                            <span class="font-arabic text-3xl tajweed-word tj-ghunnah" data-tajweed="Ghunnah (Dengung 2-3 Harakat)" onmouseenter="showTajweedTooltip(this, event)" onmouseleave="hideTajweedTooltip()">إِنَّ</span>
+                            <span class="font-mono-tech text-[10px] text-slate-400 text-left" dir="ltr">Ghunnah (Merah)</span>
+                        </div>
+                        <div class="p-3 border border-slate-800 rounded-lg bg-slate-900 flex justify-between items-center shadow-sm">
+                            <span class="font-arabic text-3xl tajweed-word tj-qalqalah" data-tajweed="Qalqalah (Dipantulkan)" onmouseenter="showTajweedTooltip(this, event)" onmouseleave="hideTajweedTooltip()">يَجْعَلْ</span>
+                            <span class="font-mono-tech text-[10px] text-slate-400 text-left" dir="ltr">Qalqalah (Biru)</span>
+                        </div>
+                        <div class="p-3 border border-slate-800 rounded-lg bg-slate-900 flex justify-between items-center shadow-sm">
+                            <span class="font-arabic text-3xl tajweed-word tj-mad" data-tajweed="Mad Wajib/Jaiz (Panjang 4-5 Harakat)" onmouseenter="showTajweedTooltip(this, event)" onmouseleave="hideTajweedTooltip()">جَآءَ</span>
+                            <span class="font-mono-tech text-[10px] text-slate-400 text-left" dir="ltr">Mad (Oranye)</span>
+                        </div>
+                        <div class="p-3 border border-slate-800 rounded-lg bg-slate-900 flex justify-between items-center shadow-sm">
+                            <span class="font-arabic text-3xl tajweed-word tj-ikhfa" data-tajweed="Ikhfa Haqiqi (Samar & Dengung)" onmouseenter="showTajweedTooltip(this, event)" onmouseleave="hideTajweedTooltip()">عَنْ</span>
+                            <span class="font-mono-tech text-[10px] text-slate-400 text-left" dir="ltr">Ikhfa Haqiqi (Hijau)</span>
+                        </div>
+                        <div class="p-3 border border-slate-800 rounded-lg bg-slate-900 flex justify-between items-center shadow-sm">
+                            <span class="font-arabic text-3xl tajweed-word tj-idgham-bi" data-tajweed="Idgham Bighunnah (Lebur + Dengung)" onmouseenter="showTajweedTooltip(this, event)" onmouseleave="hideTajweedTooltip()">مَنْ</span>
+                            <span class="font-mono-tech text-[10px] text-slate-400 text-left" dir="ltr">Idgham Bighunnah (Fuchsia)</span>
+                        </div>
+                        <div class="p-3 border border-slate-800 rounded-lg bg-slate-900 flex justify-between items-center shadow-sm">
+                            <span class="font-arabic text-3xl tajweed-word tj-idgham-bila" data-tajweed="Idgham Bilaghunnah (Lebur Tanpa Dengung)" onmouseenter="showTajweedTooltip(this, event)" onmouseleave="hideTajweedTooltip()">مِنْ</span>
+                            <span class="font-mono-tech text-[10px] text-slate-400 text-left" dir="ltr">Idgham Bilaghunnah (Ungu)</span>
+                        </div>
+                        <div class="p-3 border border-slate-800 rounded-lg bg-slate-900 flex justify-between items-center shadow-sm">
+                            <span class="font-arabic text-3xl tajweed-word tj-iqlab" data-tajweed="Iqlab (Dengung berubah jadi Mim)" onmouseenter="showTajweedTooltip(this, event)" onmouseleave="hideTajweedTooltip()">مِنْۢ</span>
+                            <span class="font-mono-tech text-[10px] text-slate-400 text-left" dir="ltr">Iqlab (Cyan)</span>
+                        </div>
+                        <div class="p-3 border border-slate-800 rounded-lg bg-slate-900 flex justify-between items-center shadow-sm">
+                            <span class="font-arabic text-3xl tajweed-word tj-idzhar" data-tajweed="Idzhar Halqi (Dibaca Jelas)" onmouseenter="showTajweedTooltip(this, event)" onmouseleave="hideTajweedTooltip()">مِنْ</span>
+                            <span class="font-mono-tech text-[10px] text-slate-400 text-left" dir="ltr">Idzhar (Sky Blue)</span>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
@@ -489,7 +554,6 @@
                         <div class="relative z-10 flex flex-col gap-4 text-center">
                             <span id="shareSurahInfo" class="text-teal-400 font-mono-tech text-xs font-bold tracking-widest border-b border-teal-500/30 pb-2 mx-auto inline-block">Surah Info</span>
                             
-                            <!-- Perbaikan baris (line-height) teks Arab pada fitur Bagikan -->
                             <p id="shareAyatText" class="font-arabic text-3xl md:text-4xl text-slate-100 py-2" style="line-height: 2.8;" dir="rtl"></p>
                             
                             <p id="shareTerjemahText" class="text-sm md:text-base text-slate-300 italic leading-relaxed"></p>
@@ -544,7 +608,7 @@
         </div>
     </div>
 
-    <!-- Floating Bottom Controls Container dengan posisi dinamis agar tidak menabrak footer -->
+    <!-- Floating Bottom Controls Container -->
     <div class="fixed bottom-16 sm:bottom-20 right-4 z-50 flex items-center gap-2 sm:gap-2.5 flex-row-reverse">
         
         <!-- Toggle Menu Hide/Unhide -->
@@ -627,6 +691,9 @@
         </div>
     </div>
 
+    <!-- GLOBAL TOOLTIP TAJWID (JANGAN DIHAPUS) -->
+    <div id="globalTajweedTooltip" class="fixed z-[10050] hidden opacity-0 bg-gradient-to-br from-slate-900 to-teal-950 text-teal-300 px-3 py-2 rounded-xl border border-teal-500 shadow-[0_0_15px_rgba(20,184,166,0.5)] font-mono-tech text-[10px] sm:text-xs transition-opacity duration-200 pointer-events-none whitespace-nowrap text-center"></div>
+
     <!-- Footer -->
     <footer class="w-full fixed bottom-0 left-0 text-center py-3 sm:py-4 text-slate-600 dark:text-slate-400 text-[10px] sm:text-xs border-t border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-950/90 backdrop-blur-md font-mono-tech transition-colors z-40">
         <p>&copy; 2026 Al-Qur'an Digital Pro</p>
@@ -639,8 +706,6 @@
         const synth = window.speechSynthesis;
         let botVoice = null;
         let recognizing = false;
-        
-        // VARIABEL GLOBAL MUTE (Dimutasi dari tombol melayang Mute)
         let isAudioMuted = false;
 
         function loadVoices() {
@@ -652,15 +717,10 @@
 
         function speakBot(text) {
             if (!synth) return;
-            synth.cancel(); // Hentikan suara yang sedang berjalan (menghindari spam audio)
-            
-            // CEK STATUS MUTE SEBELUM BERBICARA
+            synth.cancel(); 
             if (isAudioMuted) return; 
-            
-            // Bersihkan format Markdown sebelum dibacakan
             const cleanText = text.replace(/\*/g, '').replace(/_/g, '').replace(/<[^>]*>?/gm, '');
             const utterance = new SpeechSynthesisUtterance(cleanText);
-            
             if (botVoice) utterance.voice = botVoice;
             utterance.rate = 1.0;
             utterance.pitch = 1.05;
@@ -712,7 +772,7 @@
         }
 
         // ==========================================
-        // FUNGSI MENU MELAYANG DINAMIS (HIDE/UNHIDE & MUTE)
+        // FUNGSI MENU MELAYANG DINAMIS
         // ==========================================
         function toggleAllFloatingButtons() {
             const wrapper = document.getElementById('floatingButtonsWrapper');
@@ -735,19 +795,12 @@
             const btn = document.getElementById('btnFloatingMute');
             
             isAudioMuted = !isAudioMuted;
+            if (audioEl) audioEl.muted = isAudioMuted;
             
-            // Mute / Unmute Pemutar Murottal 
-            if (audioEl) {
-                audioEl.muted = isAudioMuted;
-            }
-            
-            // Ganti Indikator Visual dan Matikan TTS jika Mute Aktif
             if (isAudioMuted) {
                 icon.classList.replace('fa-volume-high', 'fa-volume-xmark');
                 btn.classList.replace('border-sky-500', 'border-red-500');
                 btn.classList.replace('text-sky-400', 'text-red-500');
-                
-                // Matikan seketika jika AI sedang berbicara
                 if (window.speechSynthesis) window.speechSynthesis.cancel();
             } else {
                 icon.classList.replace('fa-volume-xmark', 'fa-volume-high');
@@ -876,14 +929,10 @@
 
         document.addEventListener('keydown', function(event) {
             if (event.target.tagName === 'INPUT' || event.target.tagName === 'TEXTAREA') return;
-            
             const quoteWidget = document.getElementById('floatingQuoteWidget');
             if ((quoteWidget && !quoteWidget.classList.contains('hidden')) || isScreensaverActive) {
-                if (event.key === 'ArrowLeft') {
-                    navigateQuote(-1);
-                } else if (event.key === 'ArrowRight') {
-                    navigateQuote(1);
-                }
+                if (event.key === 'ArrowLeft') navigateQuote(-1);
+                else if (event.key === 'ArrowRight') navigateQuote(1);
             }
         });
 
@@ -928,10 +977,7 @@
             document.getElementById('audioPlayerWidget').classList.remove('hidden');
             document.getElementById('audioPlayerWidget').classList.add('flex');
             audioEl.src = finalUrl;
-            
-            // Sync mute state globally
             audioEl.muted = isAudioMuted; 
-            
             audioEl.play();
             lastActiveIndex = -1;
             bindAudioHighlightAndScrollEffect(audioEl);
@@ -953,30 +999,14 @@
             const dayStr = `${daysArr[sekarang.getDay()]}, ${sekarang.getDate().toString().padStart(2, '0')} ${monthsArr[sekarang.getMonth()]} ${sekarang.getFullYear()}`;
             const timeStr = `${sekarang.getHours().toString().padStart(2, '0')}:${sekarang.getMinutes().toString().padStart(2, '0')}:${sekarang.getSeconds().toString().padStart(2, '0')}`;
             
-            const elDashDate = document.getElementById('dashboard-date');
-            if (elDashDate) elDashDate.innerText = dayStr;
-            
-            const elDashTime = document.getElementById('dashboard-time');
-            if (elDashTime) elDashTime.innerText = timeStr;
-            
-            const elChatDay = document.getElementById('chat-top-day');
-            if (elChatDay) elChatDay.innerText = dayStr;
-            
-            const elChatClock = document.getElementById('chat-top-clock');
-            if (elChatClock) elChatClock.innerText = timeStr + " WIB";
-
-            const elScClock = document.getElementById('scClockDisplay');
-            if (elScClock) elScClock.innerText = timeStr;
-            
-            const elScDate = document.getElementById('scDateDisplay');
-            if (elScDate) elScDate.innerText = dayStr + " | Waktu Lokal";
-
-            // Update Tanggal & Waktu di UI Loader
-            const elLoaderDate = document.getElementById('loader-date');
-            if (elLoaderDate) elLoaderDate.innerText = dayStr;
-            
-            const elLoaderTime = document.getElementById('loader-time');
-            if (elLoaderTime) elLoaderTime.innerText = timeStr;
+            const els = ['dashboard-date', 'dashboard-time', 'chat-top-day', 'chat-top-clock', 'scClockDisplay', 'scDateDisplay', 'loader-date', 'loader-time'];
+            els.forEach(id => {
+                const el = document.getElementById(id);
+                if(el) {
+                    if(id.includes('date') || id.includes('day')) el.innerText = id === 'scDateDisplay' ? dayStr + " | Waktu Lokal" : dayStr;
+                    if(id.includes('time') || id.includes('clock')) el.innerText = id === 'chat-top-clock' ? timeStr + " WIB" : timeStr;
+                }
+            });
         }
         
         updateDateTime(); 
@@ -1032,15 +1062,12 @@
         async function fetchAlQuran() {
             const progressBar = document.getElementById('loaderProgressBar');
             const statusText = document.getElementById('loaderStatusText');
-            
             try {
                 progressBar.style.width = '40%';
                 const response = await fetch(API_URL);
                 if (!response.ok) throw new Error();
                 allSurahData = await response.json();
-                
                 localStorage.setItem('quran_offline_db', JSON.stringify(allSurahData));
-                
                 progressBar.style.width = '100%';
                 finishLoad();
             } catch (error) { 
@@ -1066,47 +1093,31 @@
                 document.getElementById('surah-counter').innerText = `${allSurahData.length}/114`;
                 updateDashboardQuote();
 
-                // Ubah Teks Welcome pada Panel Chat dengan Sapaan Waktu
                 const greetingStr = getFormalGreeting();
                 const welcomeMsg = document.getElementById('chat-welcome-msg');
                 if (welcomeMsg) {
-                    welcomeMsg.innerHTML = `
-                        <span class="text-yellow-400 block font-bold mb-1">&gt;_ HYDROBOT ASSISTANT AKTIF:</span>
-                        ${greetingStr}! Gunakan <strong class="text-cyan-400">perintah suara</strong> seperti "Buka surah Yasin ayat 5" atau ketik nama surah untuk mencari dengan cepat.
-                    `;
+                    welcomeMsg.innerHTML = `<span class="text-yellow-400 block font-bold mb-1">&gt;_ HYDROBOT ASSISTANT AKTIF:</span>${greetingStr}! Gunakan <strong class="text-cyan-400">perintah suara</strong> seperti "Buka surah Yasin ayat 5" atau ketik nama surah untuk mencari dengan cepat.`;
                 }
 
-                // AI Berbicara Setelah Sistem Siap
-                setTimeout(() => {
-                    speakBot(`${greetingStr}. Sistem Al-Quran Digital Pro Cyber Edition, siap digunakan.`);
-                }, 1000);
+                setTimeout(() => { speakBot(`${greetingStr}. Sistem Al-Quran Digital Pro Cyber Edition, siap digunakan.`); }, 1000);
 
                 const quoteWidget = document.getElementById('floatingQuoteWidget');
-                if (quoteWidget) {
-                    quoteWidget.classList.remove('hidden');
-                    quoteWidget.classList.add('flex');
-                }
+                if (quoteWidget) { quoteWidget.classList.remove('hidden'); quoteWidget.classList.add('flex'); }
             }, 500);
         }
 
-        // Animasi & Suara Hover Kartu JARVIS
         function handleSurahHover(nama, arti) {
             clearTimeout(hoverTimeout);
-            hoverTimeout = setTimeout(() => {
-                speakBot(`Surat ${nama}, yang berarti ${arti}`);
-            }, 750); // Jeda 750ms agar suara tidak numpuk saat menggerakkan kursor dengan cepat
+            hoverTimeout = setTimeout(() => { speakBot(`Surat ${nama}, yang berarti ${arti}`); }, 750); 
         }
 
-        function handleSurahLeave() {
-            clearTimeout(hoverTimeout);
-        }
+        function handleSurahLeave() { clearTimeout(hoverTimeout); }
 
         function renderSurahList(data) {
             const grid = document.getElementById('surah-grid');
             grid.innerHTML = '';
             data.forEach((surah) => {
                 const card = document.createElement('div');
-                // Menambahkan kelas hover pembesaran ala Jarvis
                 card.className = 'bg-white/95 dark:bg-slate-900/85 backdrop-blur-md p-4 rounded-xl border border-slate-200 dark:border-slate-800 hover:border-teal-500 hover:-translate-y-1 hover:shadow-[0_0_20px_rgba(20,184,166,0.5)] transition-all duration-300 cursor-pointer shadow-sm';
                 card.setAttribute('onclick', `openSurah(${surah.nomor})`);
                 card.setAttribute('onmouseenter', `handleSurahHover('${surah.nama}', '${surah.arti}')`);
@@ -1154,9 +1165,7 @@
             renderSurahList(filtered);
         }
 
-        function handlePressStart(surahNo, ayatNo) {
-            longPressTimer = setTimeout(() => { showBookmarkAction(surahNo, ayatNo); }, 500);
-        }
+        function handlePressStart(surahNo, ayatNo) { longPressTimer = setTimeout(() => { showBookmarkAction(surahNo, ayatNo); }, 500); }
         function handlePressCancel() { clearTimeout(longPressTimer); }
 
         function showBookmarkAction(surahNo, ayatNo) {
@@ -1188,34 +1197,116 @@
 
         function goToLastRead() {
             const data = localStorage.getItem('lastReadData');
-            if(!data) {
-                alert('Belum ada penanda bacaan terakhir. Tekan lama pada ayat untuk menandainya.');
-                return;
-            }
-            
+            if(!data) { alert('Belum ada penanda bacaan terakhir. Tekan lama pada ayat untuk menandainya.'); return; }
             const parsed = JSON.parse(data);
-            
             if (currentSelectedSurahNomor !== parsed.surah || document.getElementById('surah-detail-section').classList.contains('hidden')) {
                 openSurah(parsed.surah);
             }
-            
             setTimeout(() => {
                 const box = document.getElementById(`ayat-box-${parsed.ayat}`);
                 if(box) {
                     box.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                    
                     box.classList.add('audio-active-highlight');
                     const bLabel = document.createElement('div');
                     bLabel.className = "absolute top-[-12px] left-4 bg-yellow-500 text-slate-900 px-3 py-1 rounded-lg text-[10px] font-bold shadow-lg z-20 animate-pulse font-mono-tech border border-yellow-300";
                     bLabel.innerHTML = "<i class='fa-solid fa-location-dot mr-1'></i> Lanjutan Terakhir Dibaca";
                     box.appendChild(bLabel);
-
                     setTimeout(() => {
                         box.classList.remove('audio-active-highlight');
                         if(bLabel && bLabel.parentNode) bLabel.parentNode.removeChild(bLabel);
                     }, 4000);
                 }
             }, 600);
+        }
+
+        // ==========================================
+        // DYNAMIC GLOBAL JS TOOLTIP
+        // ==========================================
+        function showTajweedTooltip(el, event) {
+            const tooltip = document.getElementById('globalTajweedTooltip');
+            tooltip.innerHTML = el.getAttribute('data-tajweed');
+            
+            tooltip.classList.remove('hidden');
+            tooltip.style.display = 'block';
+            tooltip.style.opacity = '0';
+            
+            const rect = el.getBoundingClientRect();
+            const tooltipRect = tooltip.getBoundingClientRect();
+            
+            // Posisi Default (di atas elemen)
+            let top = rect.top - tooltipRect.height - 8;
+            let left = rect.left + (rect.width / 2) - (tooltipRect.width / 2);
+            
+            // Cegah Terpotong Bagian Atas
+            if (top < 10) top = rect.bottom + 8;
+            
+            // Cegah Terpotong Bagian Kiri/Kanan
+            if (left < 10) left = 10;
+            if (left + tooltipRect.width > window.innerWidth - 10) {
+                left = window.innerWidth - tooltipRect.width - 10;
+            }
+            
+            tooltip.style.top = top + 'px';
+            tooltip.style.left = left + 'px';
+            
+            setTimeout(() => tooltip.style.opacity = '1', 10);
+        }
+
+        function hideTajweedTooltip() {
+            const tooltip = document.getElementById('globalTajweedTooltip');
+            tooltip.style.opacity = '0';
+            setTimeout(() => {
+                tooltip.style.display = 'none';
+                tooltip.classList.add('hidden');
+            }, 200);
+        }
+
+        // ==========================================
+        // TAJWEED PARSER ENGINE (REGEX-BASED LENGKAP)
+        // ==========================================
+        function applyTajweedFormat(arabicText) {
+            let text = arabicText;
+
+            // Template Fungsi Terapkan Tag
+            const spanStart = (className, tooltip) => `<span class="tajweed-word ${className}" data-tajweed="${tooltip}" onmouseenter="showTajweedTooltip(this, event)" onmouseleave="hideTajweedTooltip()" ontouchstart="showTajweedTooltip(this, event)">`;
+            const spanEnd = `</span>`;
+
+            // URUTAN EKSEKUSI SANGAT PENTING (Rule Spesifik dulu sebelum Umum)
+            
+            // 1. Mad Wajib/Jaiz (Tanda Bendera)
+            text = text.replace(/([ٓ])/g, `${spanStart('tj-mad', 'Mad Wajib/Jaiz (Panjang 4-5 Harakat)')}$1${spanEnd}`);
+
+            // 2. Qalqalah (Ba, Jim, Dal, Tha, Qaf Sukun)
+            text = text.replace(/([بجطدق]ْ)/g, `${spanStart('tj-qalqalah', 'Qalqalah (Dipantulkan)')}$1${spanEnd}`);
+
+            // 3. Ghunnah (Mim/Nun bertasydid)
+            text = text.replace(/([نم]ّ[ًٌٍَُِ]?)/g, `${spanStart('tj-ghunnah', 'Ghunnah Musyaddadah (Dengung 2-3 Harakat)')}$1${spanEnd}`);
+
+            // 4. Iqlab (Nun Sukun/Tanwin bertemu Ba)
+            text = text.replace(/([\u0600-\u06FF][ًٌٍ]|نْ|ۢ)(?=\s*ب)/g, `${spanStart('tj-iqlab', 'Iqlab (Dengung berubah jadi Mim)')}$1${spanEnd}`);
+
+            // 5. Idgham Bighunnah (Nun Sukun/Tanwin bertemu Ya, Nun, Mim, Waw)
+            text = text.replace(/([\u0600-\u06FF][ًٌٍ]|نْ)(?=\s*[يمنو])/g, `${spanStart('tj-idgham-bi', 'Idgham Bighunnah (Dilebur dengan Dengung)')}$1${spanEnd}`);
+
+            // 6. Idgham Bilaghunnah (Nun Sukun/Tanwin bertemu Lam, Ra)
+            text = text.replace(/([\u0600-\u06FF][ًٌٍ]|نْ)(?=\s*[لر])/g, `${spanStart('tj-idgham-bila', 'Idgham Bilaghunnah (Dilebur Tanpa Dengung)')}$1${spanEnd}`);
+
+            // 7. Ikhfa Haqiqi (Nun Sukun/Tanwin bertemu 15 huruf)
+            text = text.replace(/([\u0600-\u06FF][ًٌٍ]|نْ)(?=\s*[تثجدذزسشصضطظفقك])/g, `${spanStart('tj-ikhfa', 'Ikhfa Haqiqi (Samar-samar & Dengung)')}$1${spanEnd}`);
+
+            // 8. Idzhar Halqi (Nun Sukun/Tanwin bertemu huruf tenggorokan)
+            text = text.replace(/([\u0600-\u06FF][ًٌٍ]|نْ)(?=\s*[ءأإحهعغخ])/g, `${spanStart('tj-idzhar', 'Idzhar Halqi (Dibaca Jelas & Terang)')}$1${spanEnd}`);
+
+            // 9. Ikhfa Syafawi (Mim Sukun bertemu Ba)
+            text = text.replace(/(مْ)(?=\s*ب)/g, `${spanStart('tj-ikhfa-syafawi', 'Ikhfa Syafawi (Samar di Bibir & Dengung)')}$1${spanEnd}`);
+
+            // 10. Idgham Mimi (Mim Sukun bertemu Mim)
+            text = text.replace(/(مْ)(?=\s*م)/g, `${spanStart('tj-idgham-mimi', 'Idgham Mimi (Dilebur & Dengung)')}$1${spanEnd}`);
+
+            // 11. Idzhar Syafawi (Mim Sukun bertemu selain Mim & Ba)
+            text = text.replace(/(مْ)(?=\s*[أإءتثجحخدذرزسشصضطظعغفقكلنهوي])/g, `${spanStart('tj-idzhar-syafawi', 'Idzhar Syafawi (Dibaca Jelas di Bibir)')}$1${spanEnd}`);
+
+            return text;
         }
 
         function openSurah(nomorSurah) {
@@ -1254,8 +1345,9 @@
 
                 const safeAr = ayat.ar.replace(/'/g, "\\\'").replace(/"/g, "&quot;");
                 const safeId = ayat.id.replace(/'/g, "\\\'").replace(/"/g, "&quot;");
+                
+                const tajweedAr = applyTajweedFormat(ayat.ar);
 
-                // Perbaikan line-height (style="line-height: 2.8;") pada teks Arab
                 box.innerHTML = `
                     <div id="bookmark-action-${surah.nomor}-${ayat.nomor}" class="hidden absolute top-[-15px] right-4 bg-indigo-600 hover:bg-indigo-500 text-white px-3 py-1.5 rounded-xl text-xs font-bold shadow-xl z-20 cursor-pointer border-2 border-indigo-400 transition-all" onclick="saveLastRead(${surah.nomor}, ${ayat.nomor}, event)">
                         <i class="fa-solid fa-bookmark mr-1 text-yellow-400"></i> Jadikan Terakhir Dibaca
@@ -1287,7 +1379,7 @@
                     </div>
                     
                     <div class="pointer-events-none">
-                        <p class="font-arabic text-2xl sm:text-3xl md:text-4xl text-right text-slate-900 dark:text-slate-100 mb-2 selection:bg-teal-500/30" style="line-height: 2.8;" dir="rtl">${ayat.ar}</p>
+                        <p class="font-arabic text-2xl sm:text-3xl md:text-4xl text-right text-slate-900 dark:text-slate-100 mb-2 selection:bg-teal-500/30 pointer-events-auto" style="line-height: 2.8;" dir="rtl">${tajweedAr}</p>
                     </div>
                     <div class="pt-3 pointer-events-none">
                         <p class="text-[11px] sm:text-xs text-teal-600 dark:text-teal-400 italic mb-1.5">${ayat.tr}</p>
@@ -1395,7 +1487,6 @@
             }
         }
 
-        
         const apps = [
             {u:"https://adikds.github.io/jarvis-ai/",i:"fa-robot",n:"JARVIS AI"},
             {u:"https://adikds.github.io/edu-market-pro/",i:"fa-graduation-cap",n:"EduMarket Pro"},
@@ -1436,47 +1527,33 @@
         function startOrbitingApps() {
             const container = document.getElementById('sc-orbit-apps');
             if(!container || !apps || apps.length === 0) return;
-            
             setInterval(() => {
                 if(!isScreensaverActive) return;
-                
                 const app = apps[Math.floor(Math.random() * apps.length)];
                 const btn = document.createElement('a');
-                btn.href = app.u;
-                btn.target = '_blank';
-                btn.className = 'orbit-app-btn';
+                btn.href = app.u; btn.target = '_blank'; btn.className = 'orbit-app-btn';
                 btn.innerHTML = `<i class="fa-solid ${app.i} text-teal-400"></i> ${app.n}`;
-                
                 const angle = Math.floor(Math.random() * 360);
                 const radius = (window.innerWidth < 600 ? 120 : 250) + Math.random() * 100;
-                
                 btn.style.setProperty('--angle', angle + 'deg');
                 btn.style.setProperty('--radius', radius + 'px');
-                
                 container.appendChild(btn);
-                
-                setTimeout(() => {
-                    if(btn.parentNode === container) container.removeChild(btn);
-                }, 8000);
+                setTimeout(() => { if(btn.parentNode === container) container.removeChild(btn); }, 8000);
             }, 1200);
         }
 
         function insertAIBotReply(text) {
             const msg = document.getElementById('chatMessages');
-            
             const formattedText = text
                 .replace(/\*\*(.*?)\*\*/g, '<span class="text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-amber-500 font-extrabold">$1</span>')
-                .replace(/\*(.*?)\*/g, '<span class="text-cyan-300 italic">$1</span>')
+                .replace(/\*(.*?)\*/g, '<span class="text-fuchsia-300 italic">$1</span>')
                 .replace(/\n/g, '<br>');
-
             const html = `
-                <div class="relative bg-gradient-to-br from-slate-900 via-indigo-950/60 to-teal-950/60 p-4 rounded-2xl rounded-tl-none border-l-4 border-l-cyan-400 border border-slate-700/50 shadow-[0_0_20px_rgba(34,211,238,0.15)] mb-4 mt-5 animate-cyber-glow">
-                    <div class="absolute -top-3 -left-1 bg-gradient-to-r from-cyan-500 via-teal-400 to-emerald-500 text-slate-950 text-[9px] sm:text-[10px] font-black px-3 py-1 rounded-md shadow-lg border border-teal-200/50 uppercase tracking-widest flex items-center gap-1.5">
-                        <i class="fa-solid fa-bolt text-yellow-200"></i> AI COPILOT
+                <div class="relative bg-gradient-to-br from-slate-900 via-indigo-900/40 to-fuchsia-900/30 p-4 rounded-2xl rounded-tl-none border-l-4 border-l-fuchsia-500 border border-indigo-500/50 shadow-[0_0_20px_rgba(217,70,239,0.2)] mb-5 mt-4">
+                    <div class="absolute -top-3 -left-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-fuchsia-500 text-white text-[9px] sm:text-[10px] font-black px-3 py-1 rounded-md shadow-lg border border-fuchsia-300/50 uppercase tracking-widest flex items-center gap-1.5 animate-pulse">
+                        <i class="fa-solid fa-robot text-yellow-300"></i> HYDROBOT AI
                     </div>
-                    <div class="mt-1 font-sans text-[11px] sm:text-xs text-slate-200 leading-relaxed custom-scroll">
-                        ${formattedText}
-                    </div>
+                    <div class="mt-2 font-sans text-[11px] sm:text-xs text-slate-100 leading-relaxed custom-scroll">${formattedText}</div>
                 </div>
             `;
             msg.innerHTML += html;
@@ -1501,19 +1578,18 @@
             const el = document.getElementById('chatInput');
             let txt = '';
             
-            if (typeof voiceInput === 'string' && voiceInput.trim() !== '') {
-                txt = voiceInput.trim();
-            } else {
-                txt = el.value.trim();
-            }
+            if (typeof voiceInput === 'string' && voiceInput.trim() !== '') txt = voiceInput.trim();
+            else txt = el.value.trim();
 
             document.getElementById('chat-suggestions').classList.add('hidden'); 
-            
             if(!txt) return;
             
             const msgContainer = document.getElementById('chatMessages');
             msgContainer.innerHTML += `
-                <div class="bg-gradient-to-r from-slate-800 to-slate-700 p-2.5 rounded-2xl rounded-tr-none text-right max-w-[85%] ml-auto text-white font-bold font-mono-tech mb-3 border border-slate-600 shadow-md">
+                <div class="bg-gradient-to-l from-emerald-600 to-teal-800 p-3 rounded-2xl rounded-tr-none text-right max-w-[85%] ml-auto text-white font-bold font-mono-tech mb-4 border border-teal-400/50 shadow-[0_0_15px_rgba(16,185,129,0.3)] animate-cyber-glow">
+                    <div class="text-[8px] text-teal-200 mb-1 flex justify-end items-center gap-1">
+                        <i class="fa-solid fa-user"></i> PENGGUNA
+                    </div>
                     ${txt}
                 </div>`;
             msgContainer.scrollTop = msgContainer.scrollHeight;
@@ -1521,7 +1597,6 @@
             const textLower = txt.toLowerCase();
             el.value = ''; 
 
-            // Cek perintah suara "Buka surat X ayat Y" ala JARVIS
             const voiceCmdRegex = /buka\s+(?:surat|surah)\s+([a-zA-Z\s]+?)(?:\s+ayat\s+(\d+))?$/i;
             const match = textLower.match(voiceCmdRegex);
             
@@ -1529,7 +1604,6 @@
                 const querySurah = match[1].replace(/[-']/g, ' ').replace(/\s+/g, ' ').trim();
                 const ayatNo = match[2]; 
                 
-                // Cari surah dengan regex toleran pada nama 
                 const foundSurah = allSurahData.find(s => {
                     const cleanDBName = s.nama.toLowerCase().replace(/[-']/g, ' ').replace(/\s+/g, ' ').trim();
                     return cleanDBName === querySurah;
@@ -1538,12 +1612,9 @@
                 if(foundSurah) {
                     const responseBot = `Membuka surah ${foundSurah.nama}` + (ayatNo ? ` ayat ke ${ayatNo}` : '');
                     speakBot(responseBot);
-                    
                     openSurah(foundSurah.nomor);
                     
-                    if (document.getElementById('chatWindow').classList.contains('hidden') === false) {
-                        toggleChatWindow(); 
-                    }
+                    if (document.getElementById('chatWindow').classList.contains('hidden') === false) toggleChatWindow(); 
                     
                     if(ayatNo) {
                         setTimeout(() => {
@@ -1551,19 +1622,15 @@
                             if(box) {
                                 box.scrollIntoView({ behavior: 'smooth', block: 'center' });
                                 box.classList.add('audio-active-highlight');
-                                
                                 const bLabel = document.createElement('div');
                                 bLabel.className = "absolute top-[-12px] left-4 bg-teal-500 text-white px-3 py-1 rounded-lg text-[10px] font-bold shadow-lg z-20 animate-pulse font-mono-tech";
                                 bLabel.innerHTML = `<i class='fa-solid fa-location-crosshairs mr-1'></i> Ayat ${ayatNo} Ditemukan`;
                                 box.appendChild(bLabel);
-                                
                                 setTimeout(() => {
                                     box.classList.remove('audio-active-highlight');
                                     if(bLabel && bLabel.parentNode) bLabel.parentNode.removeChild(bLabel);
                                 }, 4000);
-                            } else {
-                                speakBot(`Maaf, ayat ${ayatNo} tidak ditemukan di surah ${foundSurah.nama}`);
-                            }
+                            } else { speakBot(`Maaf, ayat ${ayatNo} tidak ditemukan di surah ${foundSurah.nama}`); }
                         }, 800);
                     }
                     return;
@@ -1571,14 +1638,11 @@
             }
 
             if (textLower.includes('programmer') || textLower.includes('hartadi') || textLower.includes('dev') || textLower.includes('kredit')) {
-                triggerChatShortcut('programmer');
-                return;
+                triggerChatShortcut('programmer'); return;
             } 
             
             const cleanQuery = textLower.replace('surah', '').trim();
-            const foundSurahFast = allSurahData.find(s => 
-                s.nama.toLowerCase() === cleanQuery || s.arti.toLowerCase() === cleanQuery
-            );
+            const foundSurahFast = allSurahData.find(s => s.nama.toLowerCase() === cleanQuery || s.arti.toLowerCase() === cleanQuery);
 
             if (foundSurahFast && cleanQuery.length > 2) {
                 let surahCardPayload = `
@@ -1616,21 +1680,13 @@
             try {
                 const API_KEY = localStorage.getItem('gemini_api_key') || ''; 
                 let aiResponse = null;
-
                 if (API_KEY) {
                     const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${API_KEY}`;
                     const sysPrompt = "Sebagai Hydrobot Asisten AI Al-Qur'an Digital Pro, berikan jawaban informatif, cerdas, ramah, dan ringkas secara Islami. Penting: Jika Anda mengambil fakta dari sumber luar atau internet, WAJIB cantumkan link URL sumbernya (misal Wikipedia, Google, dll) di akhir jawaban Anda dalam format HTML <a>: " + txt;
-                    const r = await fetch(url, {
-                        method:'POST',
-                        headers:{'Content-Type':'application/json'},
-                        body:JSON.stringify({contents: [{ parts: [{ text: sysPrompt }] }]})
-                    });
-                    
+                    const r = await fetch(url, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({contents: [{ parts: [{ text: sysPrompt }] }]}) });
                     if(r.ok) {
                         const d = await r.json();
-                        if(d.candidates && d.candidates.length > 0) {
-                            aiResponse = d.candidates[0].content.parts[0].text;
-                        }
+                        if(d.candidates && d.candidates.length > 0) aiResponse = d.candidates[0].content.parts[0].text;
                     }
                 }
                 
@@ -1638,16 +1694,12 @@
                 if (elType) elType.remove();
 
                 if (aiResponse) {
-                    // Menyematkan sumber Referensi Penelusuran Google secara otomatis di akhir balasan AI Gemini
                     const googleSearchUrl = `https://www.google.com/search?q=${encodeURIComponent(txt)}`;
                     aiResponse += `\n\n<br><a href="${googleSearchUrl}" target="_blank" class="text-cyan-400 hover:text-cyan-300 font-bold underline inline-flex items-center gap-1.5 mt-2"><i class="fa-brands fa-google"></i> Sumber: Penelusuran Terkait AI</a>`;
-                    
                     insertAIBotReply(aiResponse);
                     speakBot(aiResponse);
                 } else {
-                    // Penelusuran Sumber Alternatif (Wikipedia API)
                     const searchUrl = `https://id.wikipedia.org/w/api.php?action=query&format=json&prop=extracts&exsentences=4&exintro=1&explaintext=1&generator=search&gsrsearch=${encodeURIComponent(txt)}&gsrlimit=1&origin=*`;
-                    
                     const wikiResp = await fetch(searchUrl);
                     const wikiData = await wikiResp.json();
                     
@@ -1655,11 +1707,8 @@
                         const pages = wikiData.query.pages;
                         const pageId = Object.keys(pages)[0];
                         const extract = pages[pageId].extract;
-                        
-                        // Ekstraksi Tautan Wikipedia
                         const pageTitle = pages[pageId].title;
                         const sourceUrl = `https://id.wikipedia.org/wiki/${encodeURIComponent(pageTitle.replace(/ /g, '_'))}`;
-                        
                         const reply = `**[HASIL PENELUSURAN INTERNET]**\nBerdasarkan ensiklopedia global:\n\n*${extract}*\n\n<br><a href="${sourceUrl}" target="_blank" class="text-cyan-400 hover:text-cyan-300 font-bold underline mt-2 inline-flex items-center gap-1.5"><i class="fa-solid fa-link"></i> Sumber: Wikipedia (${pageTitle})</a>`;
                         insertAIBotReply(reply);
                         speakBot(extract);
@@ -1721,49 +1770,37 @@
         function openShareModal(surahNo, ayatNo) {
             const surah = allSurahData.find(s => s.nomor == surahNo);
             const ayat = surah.ayat.find(a => a.nomor == ayatNo);
-            
             if(!surah || !ayat) return;
 
             currentShareData = {
                 surahNama: surah.nama,
                 surahNo: surah.nomor,
                 ayatNo: ayat.nomor,
-                teksArab: ayat.ar,
+                teksArab: applyTajweedFormat(ayat.ar),
                 teksTerjemah: ayat.id
             };
 
             document.querySelector('input[name="shareOption"][value="both"]').checked = true;
             removeBgImage();
-            
             updateSharePreview();
             document.getElementById('shareModal').classList.remove('hidden');
         }
 
-        function closeShareModal() {
-            document.getElementById('shareModal').classList.add('hidden');
-        }
+        function closeShareModal() { document.getElementById('shareModal').classList.add('hidden'); }
 
         function updateSharePreview() {
             if(!currentShareData) return;
-            
             const option = document.querySelector('input[name="shareOption"]:checked').value;
             const elArab = document.getElementById('shareAyatText');
             const elTerjemah = document.getElementById('shareTerjemahText');
             
             document.getElementById('shareSurahInfo').innerText = `QS. ${currentShareData.surahNama}: ${currentShareData.ayatNo}`;
-            elArab.innerText = currentShareData.teksArab;
+            elArab.innerHTML = currentShareData.teksArab;
             elTerjemah.innerText = currentShareData.teksTerjemah;
 
-            if (option === 'ayat') {
-                elArab.style.display = 'block';
-                elTerjemah.style.display = 'none';
-            } else if (option === 'terjemah') {
-                elArab.style.display = 'none';
-                elTerjemah.style.display = 'block';
-            } else {
-                elArab.style.display = 'block';
-                elTerjemah.style.display = 'block';
-            }
+            if (option === 'ayat') { elArab.style.display = 'block'; elTerjemah.style.display = 'none'; } 
+            else if (option === 'terjemah') { elArab.style.display = 'none'; elTerjemah.style.display = 'block'; } 
+            else { elArab.style.display = 'block'; elTerjemah.style.display = 'block'; }
         }
 
         function handleBgUpload(event) {
@@ -1791,31 +1828,21 @@
         function downloadShareImage() {
             const canvasArea = document.getElementById('shareCanvasArea');
             const originalBorderRadius = canvasArea.style.borderRadius;
-            
             canvasArea.style.borderRadius = '0px'; 
-            
             html2canvas(canvasArea, {
-                scale: 2, 
-                backgroundColor: '#0f172a', 
-                useCORS: true,
-                allowTaint: true, 
-                foreignObjectRendering: false, 
-                logging: false
+                scale: 2, backgroundColor: '#0f172a', useCORS: true, allowTaint: true, foreignObjectRendering: false, logging: false
             }).then(canvas => {
                 canvasArea.style.borderRadius = originalBorderRadius;
-                
                 try {
                     const link = document.createElement('a');
                     link.download = `Ayat_${currentShareData.surahNama}_${currentShareData.ayatNo}.png`;
                     link.href = canvas.toDataURL('image/png');
                     link.click();
                 } catch (saveError) {
-                    console.error("Gagal menyimpan gambar:", saveError);
                     alert("Gagal memproses konversi gambar secara langsung. Silakan ambil screenshot area pratinjau.");
                 }
             }).catch(err => {
                 canvasArea.style.borderRadius = originalBorderRadius;
-                console.error("html2canvas engine error:", err);
                 alert("Sistem web browser Anda mendeteksi batasan memori atau tidak mendukung fungsionalitas rendering canvas.");
             });
         }
@@ -1839,12 +1866,9 @@
         function shareToFacebook(arab, arti, surahNo, noAyat) {
             const surah = allSurahData.find(s => s.nomor == surahNo);
             const surahNama = surah ? surah.nama : '';
-            
             const linkAplikasi = 'https://adikds.github.io/Al-Quran-Karim/';
             const teksLengkap = `QS. ${surahNama} Ayat ${noAyat}:\n${arab}\n\nArtinya: "${arti}"\n\n- Dibagikan via Al-Qur'an Digital Pro: ${linkAplikasi}`;
-            
             const fbUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(linkAplikasi)}&quote=${encodeURIComponent(teksLengkap)}`;
-            
             window.open(fbUrl, '_blank', 'width=600,height=400,noopener,noreferrer');
         }
 
